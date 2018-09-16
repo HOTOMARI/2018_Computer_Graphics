@@ -1,1 +1,1 @@
-# 2018_Computer_Graphics
+# Computer_Graphics
