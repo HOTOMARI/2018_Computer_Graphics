@@ -38,9 +38,9 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	// 배경 사각형 셋팅
 	for (int i = 0; i < 100; ++i) {
 		background_rect[i].alive = true;
-		background_rect[i].R = 0;
-		background_rect[i].G = 0;
-		background_rect[i].B = 1;
+		background_rect[i].R = rand()%255/255.0;
+		background_rect[i].G = rand() % 255 / 255.0;
+		background_rect[i].B = rand() % 255 / 255.0;
 		background_rect[i].rect.left = rand() % 800 - 400;
 		background_rect[i].rect.right = background_rect[i].rect.left + 20;
 		background_rect[i].rect.top = -1 * (rand() % 600) + 300;
