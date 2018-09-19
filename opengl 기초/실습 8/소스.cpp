@@ -50,38 +50,36 @@ GLvoid DrawScene() // 출력 함수
 		int j = 720;
 		if (t->type == 0) {
 			//반시계 정방향
-			for (i = 0; i < t->dgree && i < 1080; ++i) {
+			for (i = 0; i < t->dgree && i < 900; ++i) {
 				glColor3f(1, 1, 1);
 				glBegin(GL_POINTS);
 				glVertex2f(i / 7 * cos(i*PI / 180) + t->x, i / 7 * sin(i*PI / 180) + t->y);
 				glEnd();
 			}
 			//시계 역방향
-			if (t->dgree >= 1080) {
-				for (i = 0; i > -1 * (t->dgree - 1080) && i > -900; --i) {
+			if (t->dgree >= 900) {
+				for (i = 900; (900-i)<t->dgree-900 && i > 0; --i) {
 					glColor3f(1, 1, 1);
 					glBegin(GL_POINTS);
-					glVertex2f((900 + i) / 7 * cos((900 + i)*PI / 180) + t->x + 282,
-						(900 + i) / 7 * sin((900 + i)*PI / 180) + t->y);
+					glVertex2f( -(i / 7 * cos(i*PI / 180)) + t->x-255, -(i / 7 * sin(i*PI / 180)) + t->y);
 					glEnd();
 				}
 			}
 		}
 		else {
 			//시계 정방향
-			for (i = 0; i > -1 * t->dgree && i > -1080; --i) {
+			for (i = 0; i > -1 * t->dgree && i > -900; --i) {
 				glColor3f(1, 1, 1);
 				glBegin(GL_POINTS);
 				glVertex2f(i / 7 * cos(i*PI / 180)+ t->x, i / 7 * sin(i*PI / 180) + t->y);
 				glEnd();
 			}
 			//시계 역방향
-			if (t->dgree >= 1080) {
-				for (i = 0; i > -1 * (t->dgree - 1080) && i > -900; --i) {
+			if (t->dgree >= 900) {
+				for (i = 900; (900 - i) < t->dgree - 900 && i > 0; --i) {
 					glColor3f(1, 1, 1);
 					glBegin(GL_POINTS);
-					glVertex2f(-1*(900 + i) / 7 * cos((900 + i)*PI / 180) + t->x - 282,
-						(900 + i) / 7 * sin((900 + i)*PI / 180) + t->y);
+					glVertex2f((i / 7 * cos(i*PI / 180)) + t->x + 255, -(i / 7 * sin(i*PI / 180)) + t->y);
 					glEnd();
 				}
 			}
@@ -108,7 +106,7 @@ GLvoid Mouse(int button, int state, int x, int y) {
 			head->y = -1 * y + 300;
 			head->r = 0;
 			head->dgree = 0;
-			head->type = rand() % 2;
+			head->type = rand()%2;
 			limit++;
 		}
 		else {
@@ -123,7 +121,7 @@ GLvoid Mouse(int button, int state, int x, int y) {
 				t->y = -1 * y + 300;
 				t->r = 0;
 				t->dgree = 0;
-				t->type = rand() % 2;
+				t->type = rand()%2;
 				limit++;
 			}
 		}
@@ -136,7 +134,8 @@ GLvoid Timerfunction(int value) {
 	case 1:
 		Shape* t = head;
 		while (t != NULL) {
-			t->dgree = t->dgree + 5;
+			if(t->dgree<1800)
+				t->dgree = t->dgree + 5;
 			t = t->next;
 		}
 		glutPostRedisplay();

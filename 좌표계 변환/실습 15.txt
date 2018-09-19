@@ -1,0 +1,14 @@
+3d 디지털 시계 만들기
+
+x축으로 30도 y축으로 30도 로 초기화
+키보드 명령에 의해 y축 회전
+
+#include <time.h>
+
+time_t		now=time(0);
+struct tm curr_time;
+localtaime_s(&curr_time, &now);
+
+curr_time.tm_hour;	//시간
+curr_time.tm_min;	//분
+curr_time.tm_sec;	//초

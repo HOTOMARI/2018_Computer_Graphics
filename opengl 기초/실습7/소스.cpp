@@ -55,7 +55,7 @@ GLvoid DrawScene() // 출력 함수
 			}
 			else {
 				if (i % 4==0) {
-					glColor3f(1, 1, 0);
+					glColor3f(rand()%255/255.0, rand() % 255 / 255.0, rand() % 255 / 255.0);
 					glBegin(GL_POINTS);
 					glVertex2f(t->r*cos(i*PI / 180) + t->x, t->r*sin(i*PI / 180) + t->y);
 					glEnd();
