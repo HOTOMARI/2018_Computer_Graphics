@@ -73,6 +73,18 @@ GLvoid DrawScene() // 출력 함수
 		}
 		break;
 	case 2:
+		// 왼쪽부분
+		glBegin(GL_POLYGON);
+		glVertex3f(-0.5 * 400 + moveX - ((transformSize - 1) * 100), 0.5 * 300 + moveY, 0);
+		glVertex3f(-0.5 * 400 + moveX - ((transformSize - 1) * 100), -0.5 * 300 + moveY, 0);
+		glVertex3f(0 + moveX, 0 + moveY, 0);
+		glEnd();
+		// 오른쪽부분
+		glBegin(GL_POLYGON);
+		glVertex3f(0 + moveX, 0, 0);
+		glVertex3f(0.5 * 400 + moveX + ((transformSize - 1) * 100), 0.5 * 300 + moveY, 0);
+		glVertex3f(0.5 * 400 + moveX + ((transformSize - 1) * 100), -0.5 * 300 + moveY, 0);
+		glEnd();
 		break;
 	case 3:
 		break;
@@ -118,9 +130,9 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		transformSize += 0.05;
 		break;
 	case 'S':
-		if (transformSize > 0.05) {
+		//if (transformSize > 0.05) {
 			transformSize -= 0.05;
-		}
+		//}
 		break;
 	case 'r':
 		moveX += 20;
