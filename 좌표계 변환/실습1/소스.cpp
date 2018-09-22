@@ -87,6 +87,12 @@ GLvoid DrawScene() // 출력 함수
 		glEnd();
 		break;
 	case 3:
+		glBegin(GL_POLYGON);
+		glVertex3f(-0.5 * 400 + moveX - ((transformSize - 1) * 100), 0.5 * 300 + moveY, 0);
+		glVertex3f(-0.5 * 400 + moveX - ((transformSize - 1) * 100), -0.5 * 300 + moveY, 0);
+		glVertex3f(0.5 * 400 + moveX + ((transformSize - 1) * 100), -0.5 * 300 + moveY, 0);
+		glVertex3f(0.5 * 400 + moveX + ((transformSize - 1) * 100), 0.5 * 300 + moveY, 0);
+		glEnd();
 		break;
 	}
 
