@@ -59,16 +59,16 @@ GLvoid DrawScene() // 출력 함수
 	case 0:
 		for (int i = -400 ; i < 400; ++i) {
 			glBegin(GL_LINES);
-			glVertex3f(i, cos(((i*transformSize) + moveX) / 180.0 * PI) * 200 + moveY, 0);
-			glVertex3f(i + 1, cos(((i + 1)*transformSize + moveX) / 180.0 * PI) * 200 + moveY, 0);
+			glVertex3f(i, sin(((i*transformSize) + moveX) / 180.0 * PI) * 200 + moveY, 0);
+			glVertex3f(i + 1, sin(((i + 1)*transformSize + moveX) / 180.0 * PI) * 200 + moveY, 0);
 			glEnd();
 		}
 		break;
 	case 1:
 		for (int i = -800; i < 800; ++i) {
 			glBegin(GL_LINES);
-			glVertex3f(200 * sin(((i*transformSize) + moveX) / 180.0 * PI) + i, cos(((i*transformSize)+ moveX) / 180.0 * PI) * 200 + moveY, 0);
-			glVertex3f(200*sin(((i + 1)*transformSize + moveX) / 180.0 * PI) + i+1, cos(((i + 1)*transformSize + moveX) / 180.0 * PI) * 200 + moveY, 0);
+			glVertex3f(200 * cos(((i*transformSize) + moveX) / 180.0 * PI) + i, sin(((i*transformSize)+ moveX) / 180.0 * PI) * 200 + moveY, 0);
+			glVertex3f(200*cos(((i + 1)*transformSize + moveX) / 180.0 * PI) + i+1, sin(((i + 1)*transformSize + moveX) / 180.0 * PI) * 200 + moveY, 0);
 			glEnd();
 		}
 		break;
