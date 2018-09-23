@@ -164,6 +164,14 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'E':
 		shape.position_shape -= 5;
 		break;
+	case 's':
+		if (shape.is_now_morp) {
+			shape.is_now_morp = false;
+		}
+		else {
+			shape.is_now_morp = true;
+		}
+		break;
 	case 'y':
 		moveY++;
 		break;
@@ -194,7 +202,20 @@ GLvoid SpecialKeyboard(int key, int x, int y)
 GLvoid Timerfunction(int value) {
 	switch (value) {
 	case 1:
-
+		if (shape.is_now_morp) {
+			if (shape.morp_bigger) {
+				shape.size++;
+				if (shape.size > 40) {
+					shape.morp_bigger = false;
+				}
+			}
+			else {
+				shape.size--;
+				if (shape.size < 10) {
+					shape.morp_bigger = true;
+				}
+			}
+		}
 		glutPostRedisplay();
 		glutTimerFunc(animation_speed / 60, Timerfunction, 1);
 		break;
