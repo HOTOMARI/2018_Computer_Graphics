@@ -10,6 +10,15 @@ GLvoid Keyboard(unsigned char, int, int);
 GLvoid SpecialKeyboard(int, int, int);
 GLvoid Timerfunction(int);
 
+struct Shape {
+	bool is_triangle = true;
+	bool is_now_morp = false;
+	bool morp_bigger = true;
+	float size = 20;
+	float cx, cy;
+	int rotate_shape = 0;
+};
+
 
 int shape_mode = 0;	// 0 원 1 사인 2 회오리 3 지그재그 4 경로그리기
 
@@ -17,6 +26,8 @@ int animation_speed = 1000;
 
 float moveX = 0, moveY = 0;
 float transformSize = 1;
+
+Shape shape;
 
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
 {
@@ -34,7 +45,8 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	glutKeyboardFunc(Keyboard);	// 키보드 입력 받기
 	glutSpecialFunc(SpecialKeyboard);	// 키보드 특수버튼 입력 받기
 
-	srand(time(NULL));
+	shape.cx = 0;
+	shape.cy = 200;
 
 	glutMainLoop(); // 이벤트 처리 시작 
 }
@@ -47,6 +59,7 @@ GLvoid DrawScene() // 출력 함수
 	glPointSize(3.0);
 
 	// 중심선
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	glVertex3f(0, 300, 0);
 	glVertex3f(0, -300, 0);
@@ -61,6 +74,25 @@ GLvoid DrawScene() // 출력 함수
 			glBegin(GL_LINES);
 			glVertex3f(200 * cos(i / 180.0 * PI), 200 * sin(i / 180.0 * PI), 0);
 			glVertex3f(200 * cos((i + 1) / 180.0 * PI), 200 * sin((i + 1) / 180.0 * PI), 0);
+			glEnd();
+		}
+		glColor3f(1.0, 1.0, 0);
+		if (shape.is_triangle) {
+			glBegin(GL_POLYGON);
+			glVertex3f(shape.cx + (shape.size * cos(90.0 / 180.0 * PI)), 
+				shape.cy + (shape.size * sin(90.0 / 180.0 * PI)), 0);
+			glVertex3f(shape.cx + (shape.size * cos(210.0 / 180.0 * PI)),
+				shape.cy + (shape.size * sin(210.0 / 180.0 * PI)), 0);
+			glVertex3f(shape.cx + (shape.size * cos(330.0 / 180.0 * PI)),
+				shape.cy + (shape.size * sin(330.0 / 180.0 * PI)), 0);
+			glEnd();
+		}
+		else {
+			glBegin(GL_POLYGON);
+			glVertex3f(shape.cx + (shape.size * -1.0), shape.cy + (shape.size * 1.0), 0);
+			glVertex3f(shape.cx + (shape.size * -1.0), shape.cy + (shape.size * -1.0), 0);
+			glVertex3f(shape.cx + (shape.size * 1.0), shape.cy + (shape.size * -1.0), 0);
+			glVertex3f(shape.cx + (shape.size * 1.0), shape.cy + (shape.size * 1.0), 0);
 			glEnd();
 		}
 		break;
@@ -100,13 +132,21 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 		glutLeaveMainLoop();
 		break;
+	case 't':
+		if (shape.is_triangle) {
+			shape.is_triangle = false;
+		}
+		else {
+			shape.is_triangle = true;
+		}
+		break;
 	case 'y':
 		moveY++;
 		break;
 	case 'Y':
 		moveY--;
 		break;
-	case 0:
+	case '0':
 		break;
 	case '1':
 		break;
