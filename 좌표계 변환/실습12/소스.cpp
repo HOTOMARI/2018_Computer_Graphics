@@ -54,7 +54,27 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(-400, 0, 0);
 	glEnd();
 
-	
+	switch (shape_mode)
+	{
+	case 0:
+		for (int i = 0; i < 360; ++i) {
+			glBegin(GL_LINES);
+			glVertex3f(200 * cos(i / 180.0 * PI), 200 * sin(i / 180.0 * PI), 0);
+			glVertex3f(200 * cos((i + 1) / 180.0 * PI), 200 * sin((i + 1) / 180.0 * PI), 0);
+			glEnd();
+		}
+		break;
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	case 4:
+		break;
+	default:
+		break;
+	}
 
 
 	glutSwapBuffers(); // 화면에 출력하기 
