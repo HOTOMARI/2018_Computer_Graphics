@@ -100,6 +100,14 @@ GLvoid DrawScene() // 출력 함수
 		glTranslated(shape.position_shape, 200 * sin(shape.position_shape / 180.0 * PI), 0);
 		break;
 	case 2:
+		glRotatef(90, 0, 0, 1.0);
+		for (int i = -800; i < 800; ++i) {
+			glBegin(GL_LINES);
+			glVertex3f(200 * cos(i / 180.0 * PI) + i, 200 * sin(i / 180.0 * PI), 0);
+			glVertex3f(200 * cos((i + 1) / 180.0 * PI) + i + 1, 200 * sin((i + 1) / 180.0 * PI), 0);
+			glEnd();
+		}
+		glRotatef(-90, 0, 0, 1.0);
 		break;
 	case 3:
 		break;
