@@ -17,6 +17,7 @@ struct Shape {
 	float size = 20;
 	float cx, cy;
 	int rotate_shape = 0;
+	int position_shape = 90;
 };
 
 
@@ -45,8 +46,8 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	glutKeyboardFunc(Keyboard);	// 키보드 입력 받기
 	glutSpecialFunc(SpecialKeyboard);	// 키보드 특수버튼 입력 받기
 
-	shape.cx = 0;
-	shape.cy = 200;
+	//shape.cx = 0;
+	//shape.cy = 200;
 
 	glutMainLoop(); // 이벤트 처리 시작 
 }
@@ -79,6 +80,8 @@ GLvoid DrawScene() // 출력 함수
 			glEnd();
 		}
 		glColor3f(1.0, 1.0, 0);
+		glTranslated(200 * cos(shape.position_shape / 180.0 * PI), 
+			200 * sin(shape.position_shape / 180.0 * PI), 0);
 		glRotatef(shape.rotate_shape, 0, 0, 1.0);
 		if (shape.is_triangle) {
 			glBegin(GL_POLYGON);
@@ -146,12 +149,20 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'r':
 		if (shape_mode == 0) {
 			shape.rotate_shape += 5;
+			shape.position_shape += 5;
 		}
 		break;
 	case 'R':
 		if (shape_mode == 0) {
 			shape.rotate_shape -= 5;
+			shape.position_shape -= 5;
 		}
+		break;
+	case 'e':
+		shape.position_shape += 5;
+		break;
+	case 'E':
+		shape.position_shape -= 5;
 		break;
 	case 'y':
 		moveY++;
