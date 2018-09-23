@@ -26,7 +26,7 @@ int shape_mode = 0;	// 0 원 1 사인 2 회오리 3 지그재그 4 경로그리기
 int animation_speed = 1000;
 
 float moveX = 0, moveY = 0;
-float transformSize = 1;
+float global_rotate = 0;
 
 Shape shape;
 
@@ -70,6 +70,7 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(-400, 0, 0);
 	glEnd();
 
+	glRotatef(global_rotate, 0, 1.0, 0);
 	switch (shape_mode)
 	{
 	case 0:
@@ -173,10 +174,10 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 'y':
-		moveY++;
+		global_rotate += 5;
 		break;
 	case 'Y':
-		moveY--;
+		global_rotate -= 5;
 		break;
 	case '0':
 		break;
