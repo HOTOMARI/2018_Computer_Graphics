@@ -80,25 +80,9 @@ GLvoid DrawScene() // 출력 함수
 			glVertex3f(200 * cos((i + 1) / 180.0 * PI), 200 * sin((i + 1) / 180.0 * PI), 0);
 			glEnd();
 		}
-		glColor3f(1.0, 1.0, 0);
 		glTranslated(200 * cos(shape.position_shape / 180.0 * PI), 
 			200 * sin(shape.position_shape / 180.0 * PI), 0);
 		glRotatef(shape.rotate_shape, 0, 0, 1.0);
-		if (shape.is_triangle) {
-			glBegin(GL_POLYGON);
-			glVertex3f(shape.size * cos(90.0 / 180.0 * PI), shape.size * sin(90.0 / 180.0 * PI), 0);
-			glVertex3f(shape.size * cos(210.0 / 180.0 * PI), shape.size * sin(210.0 / 180.0 * PI), 0);
-			glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
-			glEnd();
-		}
-		else {
-			glBegin(GL_POLYGON);
-			glVertex3f(shape.size * -1.0, shape.size * 1.0, 0);
-			glVertex3f(shape.size * -1.0, shape.size * -1.0, 0);
-			glVertex3f(shape.size * 1.0, shape.size * -1.0, 0);
-			glVertex3f(shape.size * 1.0, shape.size * 1.0, 0);
-			glEnd();
-		}
 		break;
 	case 1:
 		for (int i = -400; i < 400; ++i) {
@@ -116,6 +100,23 @@ GLvoid DrawScene() // 출력 함수
 		break;
 	default:
 		break;
+	}
+	if (shape.is_triangle) {
+		glColor3f(1.0, 1.0, 0);
+		glBegin(GL_POLYGON);
+		glVertex3f(shape.size * cos(90.0 / 180.0 * PI), shape.size * sin(90.0 / 180.0 * PI), 0);
+		glVertex3f(shape.size * cos(210.0 / 180.0 * PI), shape.size * sin(210.0 / 180.0 * PI), 0);
+		glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
+		glEnd();
+	}
+	else {
+		glColor3f(1.0, 1.0, 0);
+		glBegin(GL_POLYGON);
+		glVertex3f(shape.size * -1.0, shape.size * 1.0, 0);
+		glVertex3f(shape.size * -1.0, shape.size * -1.0, 0);
+		glVertex3f(shape.size * 1.0, shape.size * -1.0, 0);
+		glVertex3f(shape.size * 1.0, shape.size * 1.0, 0);
+		glEnd();
 	}
 
 	glPopMatrix();
