@@ -55,9 +55,11 @@ GLvoid DrawScene() // 출력 함수
 {
 	glClearColor(0, 0, 0, 1); // 바탕색을 지정 
 	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
+	glMatrixMode(GL_MODELVIEW);
 
 	glPointSize(3.0);
 
+	glPushMatrix();
 	// 중심선
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
@@ -77,6 +79,7 @@ GLvoid DrawScene() // 출력 함수
 			glEnd();
 		}
 		glColor3f(1.0, 1.0, 0);
+		glRotatef(shape.rotate_shape, 0, 0, 1.0);
 		if (shape.is_triangle) {
 			glBegin(GL_POLYGON);
 			glVertex3f(shape.cx + (shape.size * cos(90.0 / 180.0 * PI)), 
@@ -108,7 +111,7 @@ GLvoid DrawScene() // 출력 함수
 		break;
 	}
 
-
+	glPopMatrix();
 	glutSwapBuffers(); // 화면에 출력하기 
 }
 
@@ -138,6 +141,16 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		}
 		else {
 			shape.is_triangle = true;
+		}
+		break;
+	case 'r':
+		if (shape_mode == 0) {
+			shape.rotate_shape += 5;
+		}
+		break;
+	case 'R':
+		if (shape_mode == 0) {
+			shape.rotate_shape -= 5;
 		}
 		break;
 	case 'y':
