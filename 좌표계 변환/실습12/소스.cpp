@@ -9,13 +9,13 @@ GLvoid Mouse(int, int, int, int);
 GLvoid Keyboard(unsigned char, int, int);
 GLvoid SpecialKeyboard(int, int, int);
 GLvoid Timerfunction(int);
+void InitialShape();
 
 struct Shape {
 	bool is_triangle = true;
 	bool is_now_morp = false;
 	bool morp_bigger = true;
 	float size = 20;
-	float cx, cy;
 	int rotate_shape = 0;
 	int position_shape = 90;
 };
@@ -86,24 +86,27 @@ GLvoid DrawScene() // 출력 함수
 		glRotatef(shape.rotate_shape, 0, 0, 1.0);
 		if (shape.is_triangle) {
 			glBegin(GL_POLYGON);
-			glVertex3f(shape.cx + (shape.size * cos(90.0 / 180.0 * PI)), 
-				shape.cy + (shape.size * sin(90.0 / 180.0 * PI)), 0);
-			glVertex3f(shape.cx + (shape.size * cos(210.0 / 180.0 * PI)),
-				shape.cy + (shape.size * sin(210.0 / 180.0 * PI)), 0);
-			glVertex3f(shape.cx + (shape.size * cos(330.0 / 180.0 * PI)),
-				shape.cy + (shape.size * sin(330.0 / 180.0 * PI)), 0);
+			glVertex3f(shape.size * cos(90.0 / 180.0 * PI), shape.size * sin(90.0 / 180.0 * PI), 0);
+			glVertex3f(shape.size * cos(210.0 / 180.0 * PI), shape.size * sin(210.0 / 180.0 * PI), 0);
+			glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 			glEnd();
 		}
 		else {
 			glBegin(GL_POLYGON);
-			glVertex3f(shape.cx + (shape.size * -1.0), shape.cy + (shape.size * 1.0), 0);
-			glVertex3f(shape.cx + (shape.size * -1.0), shape.cy + (shape.size * -1.0), 0);
-			glVertex3f(shape.cx + (shape.size * 1.0), shape.cy + (shape.size * -1.0), 0);
-			glVertex3f(shape.cx + (shape.size * 1.0), shape.cy + (shape.size * 1.0), 0);
+			glVertex3f(shape.size * -1.0, shape.size * 1.0, 0);
+			glVertex3f(shape.size * -1.0, shape.size * -1.0, 0);
+			glVertex3f(shape.size * 1.0, shape.size * -1.0, 0);
+			glVertex3f(shape.size * 1.0, shape.size * 1.0, 0);
 			glEnd();
 		}
 		break;
 	case 1:
+		for (int i = -400; i < 400; ++i) {
+			glBegin(GL_LINES);
+			glVertex3f(i, 200 * sin(i / 180.0 * PI), 0);
+			glVertex3f(i + 1, 200 * sin((i + 1) / 180.0 * PI), 0);
+			glEnd();
+		}
 		break;
 	case 2:
 		break;
@@ -180,14 +183,24 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		global_rotate -= 5;
 		break;
 	case '0':
+		shape_mode = 0;
+		InitialShape();
 		break;
 	case '1':
+		shape_mode = 1;
+		InitialShape();
 		break;
 	case '2':
+		shape_mode = 2;
+		InitialShape();
 		break;
 	case '3':
+		shape_mode = 3;
+		InitialShape();
 		break;
 	case '4':
+		shape_mode = 4;
+		InitialShape();
 		break;
 	}
 	glutPostRedisplay();
@@ -196,7 +209,6 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 GLvoid SpecialKeyboard(int key, int x, int y)
 {
 	switch (key) {
-
 	}
 }
 
@@ -221,4 +233,15 @@ GLvoid Timerfunction(int value) {
 		glutTimerFunc(animation_speed / 60, Timerfunction, 1);
 		break;
 	}
+}
+
+void InitialShape()
+{
+	shape.is_triangle = true;
+	shape.is_now_morp = false;
+	shape.morp_bigger = true;
+	shape.size = 20;
+	shape.rotate_shape = 0;
+	shape.position_shape = 90;
+	global_rotate = 0;
 }
