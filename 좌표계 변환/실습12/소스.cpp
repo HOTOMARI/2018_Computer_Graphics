@@ -17,7 +17,7 @@ struct Shape {
 	bool morp_bigger = true;
 	float size = 20;
 	int rotate_shape = 0;
-	int position_shape = 90;
+	int position_shape = 0;
 };
 
 
@@ -80,7 +80,7 @@ GLvoid DrawScene() // 출력 함수
 			glVertex3f(200 * cos((i + 1) / 180.0 * PI), 200 * sin((i + 1) / 180.0 * PI), 0);
 			glEnd();
 		}
-		glTranslated(200 * cos(shape.position_shape / 180.0 * PI), 
+		glTranslated(200 * cos(shape.position_shape / 180.0 * PI),
 			200 * sin(shape.position_shape / 180.0 * PI), 0);
 		glRotatef(shape.rotate_shape, 0, 0, 1.0);
 		break;
@@ -91,6 +91,13 @@ GLvoid DrawScene() // 출력 함수
 			glVertex3f(i + 1, 200 * sin((i + 1) / 180.0 * PI), 0);
 			glEnd();
 		}
+		if (shape.position_shape > 400 + shape.size) {
+			shape.position_shape = -400;
+		}
+		else if (shape.position_shape < -400 - shape.size) {
+			shape.position_shape = 400;
+		}
+		glTranslated(shape.position_shape, 200 * sin(shape.position_shape / 180.0 * PI), 0);
 		break;
 	case 2:
 		break;
@@ -243,6 +250,6 @@ void InitialShape()
 	shape.morp_bigger = true;
 	shape.size = 20;
 	shape.rotate_shape = 0;
-	shape.position_shape = 90;
+	shape.position_shape = 0;
 	global_rotate = 0;
 }
