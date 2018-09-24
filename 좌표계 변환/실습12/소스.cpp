@@ -118,6 +118,34 @@ GLvoid DrawScene() // 출력 함수
 		glRotatef(-90, 0, 0, 1.0);
 		break;
 	case 3:
+		for (int i = 1; i < 800; ++i) {
+			glBegin(GL_LINES);
+			if (i % 100 != 99) {
+				if (i / 100 % 2 == 0) {
+					glVertex3f(i - 400, 100 - (i % 100) * 2, 0);
+					glVertex3f((i + 1) - 400, 100 - ((i + 1) % 100) * 2, 0);
+				}
+				else {
+					glVertex3f(i - 400, -100 + (i % 100) * 2, 0);
+					glVertex3f((i + 1) - 400, -100 + ((i + 1) % 100) * 2, 0);
+				}
+			}
+			glEnd();
+		}
+		if (shape.position_shape > 800 + shape.size) {
+			shape.position_shape = 0;
+		}
+		else if (shape.position_shape < 0 - shape.size) {
+			shape.position_shape = 800;
+		}
+		if (shape.position_shape % 100 != 99) {
+			if (shape.position_shape / 100 % 2 == 0) {
+				glTranslated(shape.position_shape - 400, 100 - (shape.position_shape % 100) * 2, 0);
+			}
+			else {
+				glTranslated(shape.position_shape - 400, -100 + (shape.position_shape % 100) * 2, 0);
+			}
+		}
 		break;
 	case 4:
 		break;
