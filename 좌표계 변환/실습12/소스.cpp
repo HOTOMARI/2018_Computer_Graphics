@@ -7,7 +7,7 @@ GLvoid DrawScene();
 GLvoid Reshape(int, int);
 GLvoid Mouse(int, int, int, int);
 GLvoid Keyboard(unsigned char, int, int);
-GLvoid SpecialKeyboard(int, int, int);
+GLvoid Motion(int, int);
 GLvoid Timerfunction(int);
 void InitialShape();
 
@@ -19,9 +19,14 @@ struct Shape {
 	int rotate_shape = 0;
 	int position_shape = 0;
 };
+struct Line {
+	float startX, startY, endX, endY;
+	bool is_live = false;
+};
 
 
 int shape_mode = 0;	// 0 원 1 사인 2 회오리 3 지그재그 4 경로그리기
+int line_index = -1;
 
 int animation_speed = 1000;
 
@@ -29,6 +34,7 @@ float moveX = 0, moveY = 0;
 float global_rotate = 0;
 
 Shape shape;
+Line lines[4];
 
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
 {
@@ -44,7 +50,7 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	glutTimerFunc(animation_speed / 60, Timerfunction, 2);
 	glutMouseFunc(Mouse);		// 마우스 버튼 입력 받기
 	glutKeyboardFunc(Keyboard);	// 키보드 입력 받기
-	glutSpecialFunc(SpecialKeyboard);	// 키보드 특수버튼 입력 받기
+	glutPassiveMotionFunc(Motion);		// 마우스 움직임 받기
 
 	//shape.cx = 0;
 	//shape.cy = 200;
@@ -148,6 +154,14 @@ GLvoid DrawScene() // 출력 함수
 		}
 		break;
 	case 4:
+		for (int j = 0; j < 4; ++j) {
+			if (lines[j].is_live) {
+				glBegin(GL_LINES);
+				glVertex3f(lines[j].startX, lines[j].startY, 0);
+				glVertex3f(lines[j].endX, lines[j].endY, 0);
+				glEnd();
+			}
+		}
 		break;
 	default:
 		break;
@@ -182,6 +196,36 @@ GLvoid Reshape(int w, int h) // 다시 그리기 함수
 
 GLvoid Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (shape_mode == 4 && line_index >= 4) {
+			line_index = -1;
+			for (int i = 0; i < 4; ++i) {
+				lines[i].is_live = false;
+			}
+		}
+		if (shape_mode == 4 && line_index < 4) {
+			if (line_index == -1) {
+				line_index++;
+				if (lines[line_index].is_live == false) {
+					lines[line_index].is_live = true;
+					lines[line_index].startX = x - 400;
+					lines[line_index].startY = -1 * y + 300;
+					lines[line_index].endX = x - 400;
+					lines[line_index].endY = -1 * y + 300;
+				}
+			}
+			else {
+				lines[line_index].endX = x - 400;
+				lines[line_index].endY = -1 * y + 300;
+				line_index++;
+				if (lines[line_index].is_live == false) {
+					lines[line_index].is_live = true;
+					lines[line_index].startX = x - 400;
+					lines[line_index].startY = -1 * y + 300;
+					lines[line_index].endX = x - 400;
+					lines[line_index].endY = -1 * y + 300;
+				}
+			}
+		}
 	}
 	glutPostRedisplay();
 }
@@ -258,9 +302,11 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	glutPostRedisplay();
 }
 
-GLvoid SpecialKeyboard(int key, int x, int y)
+GLvoid Motion(int x, int y)
 {
-	switch (key) {
+	if (line_index >= 0 && line_index <= 4 && shape_mode == 4) {
+		lines[line_index].endX = x - 400;
+		lines[line_index].endY = -1 * y + 300;
 	}
 }
 
@@ -296,4 +342,5 @@ void InitialShape()
 	shape.rotate_shape = 0;
 	shape.position_shape = 0;
 	global_rotate = 0;
+	line_index = -1;
 }
