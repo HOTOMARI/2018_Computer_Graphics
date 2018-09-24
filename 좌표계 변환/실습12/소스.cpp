@@ -18,6 +18,9 @@ struct Shape {
 	float size = 20;
 	int rotate_shape = 0;
 	int position_shape = 0;
+
+	int on_which_line = 0;
+	float movestack_drewline = 0;
 };
 struct Line {
 	float startX, startY, endX, endY;
@@ -27,10 +30,11 @@ struct Line {
 
 int shape_mode = 0;	// 0 원 1 사인 2 회오리 3 지그재그 4 경로그리기
 int line_index = -1;
+bool drewline_moveswitch = false;
 
 int animation_speed = 1000;
 
-float moveX = 0, moveY = 0;
+float DeltaX = 0, DeltaY = 0;
 float global_rotate = 0;
 
 Shape shape;
@@ -162,6 +166,20 @@ GLvoid DrawScene() // 출력 함수
 				glEnd();
 			}
 		}
+		if (drewline_moveswitch) {
+			DeltaX = lines[shape.on_which_line].endX - lines[shape.on_which_line].startX;
+			DeltaY = lines[shape.on_which_line].endY - lines[shape.on_which_line].startY;
+			glTranslated(lines[shape.on_which_line].startX + (DeltaX / 60.0*shape.movestack_drewline),
+				lines[shape.on_which_line].startY + (DeltaY / 60.0*shape.movestack_drewline), 0);
+			shape.movestack_drewline = shape.movestack_drewline ++;
+			if (shape.movestack_drewline == 60 - 1) {
+				shape.movestack_drewline = 0;
+				shape.on_which_line++;
+				if (shape.on_which_line > 3) {
+					shape.on_which_line = 0;
+				}
+			}
+		}
 		break;
 	default:
 		break;
@@ -198,6 +216,9 @@ GLvoid Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		if (shape_mode == 4 && line_index >= 4) {
 			line_index = -1;
+			shape.on_which_line = 0;
+			shape.movestack_drewline = 0;
+			drewline_moveswitch = false;
 			for (int i = 0; i < 4; ++i) {
 				lines[i].is_live = false;
 			}
@@ -226,6 +247,9 @@ GLvoid Mouse(int button, int state, int x, int y) {
 				}
 			}
 		}
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		drewline_moveswitch = true;
 	}
 	glutPostRedisplay();
 }
@@ -259,10 +283,14 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 'e':
-		shape.position_shape += 5;
+		if (shape_mode != 4) {
+			shape.position_shape += 5;
+		}
 		break;
 	case 'E':
-		shape.position_shape -= 5;
+		if (shape_mode != 4) {
+			shape.position_shape -= 5;
+		}
 		break;
 	case 's':
 		if (shape.is_now_morp) {
@@ -343,4 +371,7 @@ void InitialShape()
 	shape.position_shape = 0;
 	global_rotate = 0;
 	line_index = -1;
+	shape.on_which_line = 0;
+	shape.movestack_drewline = 0;
+	drewline_moveswitch = false;
 }
