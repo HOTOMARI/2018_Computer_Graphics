@@ -18,11 +18,11 @@ struct Shape {
 	int position_shape = 0;
 
 	int on_which_line = 0;
-	float movestack_drewline = 0;
+	int movestack = 0;
 };
 struct Line {
 	float startX, startY, endX, endY;
-	bool is_live = false;
+	bool is_live = true;
 };
 
 
@@ -49,8 +49,7 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	glutCreateWindow("Tiles"); // 윈도우 생성 (윈도우 이름) 
 	glutDisplayFunc(DrawScene); // 출력 함수의 지정 
 	glutReshapeFunc(Reshape); // 다시 그리기 함수 지정 
-	glutTimerFunc(1000 / 60, Timerfunction, 1);	// 타이머 셋팅
-	glutTimerFunc(animation_speed / 60, Timerfunction, 2);
+	glutTimerFunc(animation_speed / 60, Timerfunction, 1);
 	glutKeyboardFunc(Keyboard);	// 키보드 입력 받기
 
 	//shape.cx = 0;
@@ -86,12 +85,27 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
 
+	//glRotatef(smallTriangle_rotate, 0, 1.0, 0);
+	if (shape.movestack<=60) {
+		glTranslated(shape.size * cos(90.0 / 180.0 * PI) + ((shape.size * cos(210.0 / 180.0 * PI) - shape.size * cos(90.0 / 180.0 * PI)) / 60.0*(shape.movestack - 0)),
+			shape.size * sin(90.0 / 180.0 * PI) + ((shape.size * sin(210.0 / 180.0 * PI) - shape.size * sin(90.0 / 180.0 * PI)) / 60.0*(shape.movestack - 0)), 0);
+	}
+	else if (shape.movestack <= 120) {
+		glTranslated(shape.size * cos(210.0 / 180.0 * PI) + ((shape.size * cos(330.0 / 180.0 * PI) - shape.size * cos(210.0 / 180.0 * PI)) / 60.0*(shape.movestack - 60)),
+			shape.size * sin(210.0 / 180.0 * PI) + ((shape.size * sin(330.0 / 180.0 * PI) - shape.size * sin(210.0 / 180.0 * PI)) / 60.0*(shape.movestack - 60)), 0);
+	}
+	else if (shape.movestack <= 180) {
+		glTranslated(shape.size * cos(330.0 / 180.0 * PI) + ((shape.size * cos(90.0 / 180.0 * PI) - shape.size * cos(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)),
+			shape.size * sin(330.0 / 180.0 * PI) + ((shape.size * sin(90.0 / 180.0 * PI) - shape.size * sin(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)), 0);
+	}
+
 	glColor3f(1.0, 1.0, 0);
 	glBegin(GL_POLYGON);
 	glVertex3f(20 * cos(90.0 / 180.0 * PI), 20 * sin(90.0 / 180.0 * PI), 0);
 	glVertex3f(20 * cos(210.0 / 180.0 * PI), 20 * sin(210.0 / 180.0 * PI), 0);
 	glVertex3f(20 * cos(330.0 / 180.0 * PI), 20 * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
+	glPopMatrix();
 
 	glRotatef(90, 0, 1.0, 0);
 	glColor3f(1.0, 1.0, 1.0);
@@ -101,13 +115,13 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
 
+	glRotatef(smallTriangle_rotate, 0, 1.0, 0);
 	glColor3f(0, 1.0, 1.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(20 * cos(90.0 / 180.0 * PI), 20 * sin(90.0 / 180.0 * PI), 0);
 	glVertex3f(20 * cos(210.0 / 180.0 * PI), 20 * sin(210.0 / 180.0 * PI), 0);
 	glVertex3f(20 * cos(330.0 / 180.0 * PI), 20 * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
-	glPopMatrix();
 
 	glPopMatrix();
 	glutSwapBuffers(); // 화면에 출력하기 
@@ -128,76 +142,32 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 		glutLeaveMainLoop();
 		break;
-	case 't':
-		if (shape.is_triangle) {
-			shape.is_triangle = false;
-		}
-		else {
-			shape.is_triangle = true;
-		}
-		break;
-	case 'r':
-		if (shape_mode == 0) {
-			shape.rotate_shape += 5;
-			shape.position_shape += 5;
-		}
-		break;
-	case 'R':
-		if (shape_mode == 0) {
-			shape.rotate_shape -= 5;
-			shape.position_shape -= 5;
-		}
-		break;
-	case 'e':
-		if (shape_mode != 4) {
-			shape.position_shape += 5;
-		}
-		break;
-	case 'E':
-		if (shape_mode != 4) {
-			shape.position_shape -= 5;
-		}
-		break;
 	case 's':
-		if (shape.is_now_morp) {
-			shape.is_now_morp = false;
-		}
-		else {
-			shape.is_now_morp = true;
-		}
+		shape.size++;
+		break;
+	case 'S':
+		shape.size--;
 		break;
 	case 'y':
 		bigTriangle_rotate += 5;
-		smallTriangle_rotate += 5;
+		smallTriangle_rotate += 1;
 		break;
 	case 'Y':
 		bigTriangle_rotate -= 5;
-		smallTriangle_rotate += 5;
+		smallTriangle_rotate += 1;
 		break;
 	}
-	glutPostRedisplay();
+	
 }
 
 
 GLvoid Timerfunction(int value) {
-	switch (value) {
+	switch (value)
+	{
 	case 1:
-		if (shape.is_now_morp) {
-			if (shape.morp_bigger) {
-				shape.size++;
-				if (shape.size > 250) {
-					shape.morp_bigger = false;
-				}
-			}
-			else {
-				shape.size--;
-				if (shape.size < 150) {
-					shape.morp_bigger = true;
-				}
-			}
-		}
-		glutPostRedisplay();
+		shape.movestack = (shape.movestack + 1) % 180;
 		glutTimerFunc(animation_speed / 60, Timerfunction, 1);
+		glutPostRedisplay();
 		break;
 	}
 }
@@ -213,6 +183,6 @@ void InitialShape()
 	bigTriangle_rotate = 0;
 	line_index = -1;
 	shape.on_which_line = 0;
-	shape.movestack_drewline = 0;
+	shape.movestack = 0;
 	drewline_moveswitch = false;
 }
