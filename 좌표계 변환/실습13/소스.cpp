@@ -85,7 +85,6 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
 
-	//glRotatef(smallTriangle_rotate, 0, 1.0, 0);
 	if (shape.movestack<=60) {
 		glTranslated(shape.size * cos(90.0 / 180.0 * PI) + ((shape.size * cos(210.0 / 180.0 * PI) - shape.size * cos(90.0 / 180.0 * PI)) / 60.0*(shape.movestack - 0)),
 			shape.size * sin(90.0 / 180.0 * PI) + ((shape.size * sin(210.0 / 180.0 * PI) - shape.size * sin(90.0 / 180.0 * PI)) / 60.0*(shape.movestack - 0)), 0);
@@ -108,6 +107,7 @@ GLvoid DrawScene() // 출력 함수
 	glPopMatrix();
 
 	glRotatef(90, 0, 1.0, 0);
+
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(shape.size * cos(90.0 / 180.0 * PI), shape.size * sin(90.0 / 180.0 * PI), 0);
@@ -115,7 +115,19 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
 
-	glRotatef(smallTriangle_rotate, 0, 1.0, 0);
+	if (shape.movestack <= 60) {
+		glTranslated(shape.size * cos(90.0 / 180.0 * PI) + ((shape.size * cos(210.0 / 180.0 * PI) - shape.size * cos(90.0 / 180.0 * PI)) / 60.0*(shape.movestack - 0)),
+			shape.size * sin(90.0 / 180.0 * PI) + ((shape.size * sin(210.0 / 180.0 * PI) - shape.size * sin(90.0 / 180.0 * PI)) / 60.0*(shape.movestack - 0)), 0);
+	}
+	else if (shape.movestack <= 120) {
+		glTranslated(shape.size * cos(210.0 / 180.0 * PI) + ((shape.size * cos(330.0 / 180.0 * PI) - shape.size * cos(210.0 / 180.0 * PI)) / 60.0*(shape.movestack - 60)),
+			shape.size * sin(210.0 / 180.0 * PI) + ((shape.size * sin(330.0 / 180.0 * PI) - shape.size * sin(210.0 / 180.0 * PI)) / 60.0*(shape.movestack - 60)), 0);
+	}
+	else if (shape.movestack <= 180) {
+		glTranslated(shape.size * cos(330.0 / 180.0 * PI) + ((shape.size * cos(90.0 / 180.0 * PI) - shape.size * cos(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)),
+			shape.size * sin(330.0 / 180.0 * PI) + ((shape.size * sin(90.0 / 180.0 * PI) - shape.size * sin(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)), 0);
+	}
+
 	glColor3f(0, 1.0, 1.0);
 	glBegin(GL_POLYGON);
 	glVertex3f(20 * cos(90.0 / 180.0 * PI), 20 * sin(90.0 / 180.0 * PI), 0);
