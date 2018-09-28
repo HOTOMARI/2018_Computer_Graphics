@@ -10,34 +10,15 @@ GLvoid Timerfunction(int);
 void InitialShape();
 
 struct Shape {
-	bool is_triangle = true;
-	bool is_now_morp = false;
-	bool morp_bigger = true;
 	float size = 150;
-	int rotate_shape = 0;
-	int position_shape = 0;
-
-	int on_which_line = 0;
 	int movestack = 0;
 };
-struct Line {
-	float startX, startY, endX, endY;
-	bool is_live = true;
-};
-
-
-int shape_mode = 0;	// 0 원 1 사인 2 회오리 3 지그재그 4 경로그리기
-int line_index = -1;
-bool drewline_moveswitch = false;
 
 int animation_speed = 1000;
 
-float DeltaX = 0, DeltaY = 0;
 float bigTriangle_rotate = 0;
-float smallTriangle_rotate = 0;
 
 Shape shape;
-Line lines[4];
 
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
 {
@@ -51,9 +32,6 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	glutReshapeFunc(Reshape); // 다시 그리기 함수 지정 
 	glutTimerFunc(animation_speed / 60, Timerfunction, 1);
 	glutKeyboardFunc(Keyboard);	// 키보드 입력 받기
-
-	//shape.cx = 0;
-	//shape.cy = 200;
 
 	glutMainLoop(); // 이벤트 처리 시작 
 }
@@ -155,18 +133,16 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		glutLeaveMainLoop();
 		break;
 	case 's':
-		shape.size++;
+		shape.size += 5;
 		break;
 	case 'S':
-		shape.size--;
+		shape.size -= 5;
 		break;
 	case 'y':
 		bigTriangle_rotate += 5;
-		smallTriangle_rotate += 1;
 		break;
 	case 'Y':
 		bigTriangle_rotate -= 5;
-		smallTriangle_rotate += 1;
 		break;
 	}
 	
@@ -186,15 +162,7 @@ GLvoid Timerfunction(int value) {
 
 void InitialShape()
 {
-	shape.is_triangle = true;
-	shape.is_now_morp = false;
-	shape.morp_bigger = true;
 	shape.size = 20;
-	shape.rotate_shape = 0;
-	shape.position_shape = 0;
 	bigTriangle_rotate = 0;
-	line_index = -1;
-	shape.on_which_line = 0;
 	shape.movestack = 0;
-	drewline_moveswitch = false;
 }
