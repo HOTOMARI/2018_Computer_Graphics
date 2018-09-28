@@ -33,7 +33,8 @@ bool drewline_moveswitch = false;
 int animation_speed = 1000;
 
 float DeltaX = 0, DeltaY = 0;
-float global_rotate = 0;
+float bigTriangle_rotate = 0;
+float smallTriangle_rotate = 0;
 
 Shape shape;
 Line lines[4];
@@ -76,7 +77,7 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(-400, 0, 0);
 	glEnd();
 
-	glRotatef(global_rotate, 0, 1.0, 0);
+	glRotatef(bigTriangle_rotate, 0, 1.0, 0);
 	glPushMatrix();
 
 	glBegin(GL_LINE_LOOP);
@@ -85,21 +86,28 @@ GLvoid DrawScene() // 출력 함수
 	glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
 
+	glColor3f(1.0, 1.0, 0);
+	glBegin(GL_POLYGON);
+	glVertex3f(20 * cos(90.0 / 180.0 * PI), 20 * sin(90.0 / 180.0 * PI), 0);
+	glVertex3f(20 * cos(210.0 / 180.0 * PI), 20 * sin(210.0 / 180.0 * PI), 0);
+	glVertex3f(20 * cos(330.0 / 180.0 * PI), 20 * sin(330.0 / 180.0 * PI), 0);
+	glEnd();
+
 	glRotatef(90, 0, 1.0, 0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(shape.size * cos(90.0 / 180.0 * PI), shape.size * sin(90.0 / 180.0 * PI), 0);
 	glVertex3f(shape.size * cos(210.0 / 180.0 * PI), shape.size * sin(210.0 / 180.0 * PI), 0);
 	glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
 	glEnd();
+
+	glColor3f(0, 1.0, 1.0);
+	glBegin(GL_POLYGON);
+	glVertex3f(20 * cos(90.0 / 180.0 * PI), 20 * sin(90.0 / 180.0 * PI), 0);
+	glVertex3f(20 * cos(210.0 / 180.0 * PI), 20 * sin(210.0 / 180.0 * PI), 0);
+	glVertex3f(20 * cos(330.0 / 180.0 * PI), 20 * sin(330.0 / 180.0 * PI), 0);
+	glEnd();
 	glPopMatrix();
-
-	//glColor3f(1.0, 1.0, 0);
-	//glBegin(GL_POLYGON);
-	//glVertex3f(shape.size * cos(90.0 / 180.0 * PI), shape.size * sin(90.0 / 180.0 * PI), 0);
-	//glVertex3f(shape.size * cos(210.0 / 180.0 * PI), shape.size * sin(210.0 / 180.0 * PI), 0);
-	//glVertex3f(shape.size * cos(330.0 / 180.0 * PI), shape.size * sin(330.0 / 180.0 * PI), 0);
-	//glEnd();
-
 
 	glPopMatrix();
 	glutSwapBuffers(); // 화면에 출력하기 
@@ -159,30 +167,12 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 		}
 		break;
 	case 'y':
-		global_rotate += 5;
+		bigTriangle_rotate += 5;
+		smallTriangle_rotate += 5;
 		break;
 	case 'Y':
-		global_rotate -= 5;
-		break;
-	case '0':
-		shape_mode = 0;
-		InitialShape();
-		break;
-	case '1':
-		shape_mode = 1;
-		InitialShape();
-		break;
-	case '2':
-		shape_mode = 2;
-		InitialShape();
-		break;
-	case '3':
-		shape_mode = 3;
-		InitialShape();
-		break;
-	case '4':
-		shape_mode = 4;
-		InitialShape();
+		bigTriangle_rotate -= 5;
+		smallTriangle_rotate += 5;
 		break;
 	}
 	glutPostRedisplay();
@@ -220,7 +210,7 @@ void InitialShape()
 	shape.size = 20;
 	shape.rotate_shape = 0;
 	shape.position_shape = 0;
-	global_rotate = 0;
+	bigTriangle_rotate = 0;
 	line_index = -1;
 	shape.on_which_line = 0;
 	shape.movestack_drewline = 0;
