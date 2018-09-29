@@ -15,6 +15,7 @@ struct Shape {
 	int type = 0;		// 0 원뿔 1 육면체 2 구 3 도넛 4 주전자
 	float R, G, B;
 	int rotate_degree;
+	int axis;			// 1 x축 2 y축 2 3축
 	float x, y;
 
 	bool rotate_left;
@@ -54,6 +55,8 @@ GLvoid DrawScene() // 출력 함수
 			glPushMatrix();
 			glColor3f(shapes[i].R, shapes[i].G, shapes[i].B);
 			glTranslated(shapes[i].x, shapes[i].y, 0);
+			glRotatef(shapes[i].rotate_degree, shapes[i].axis / 1, shapes[i].axis / 2, shapes[i].axis / 3);
+
 			switch (shapes[i].type) {
 			case 0:
 				glutWireCone(shapes[i].base, shapes[i].height, shapes[i].slices, shapes[i].stacks);
@@ -118,6 +121,7 @@ GLvoid Mouse(int button, int state, int x, int y) {
 				shapes[i].R = rand() % 255 / 255.0;
 				shapes[i].G = rand() % 255 / 255.0;
 				shapes[i].B = rand() % 255 / 255.0;
+				shapes[i].axis = rand() % 3 + 1;
 				if (rand() % 2)
 					shapes[i].rotate_left = true;
 				else shapes[i].rotate_left = false;
