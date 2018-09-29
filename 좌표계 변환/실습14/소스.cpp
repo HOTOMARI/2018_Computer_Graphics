@@ -5,6 +5,7 @@
 GLvoid DrawScene();
 GLvoid Reshape(int, int);
 GLvoid Mouse(int, int, int, int);
+GLvoid Keyboard(unsigned char, int, int);
 GLvoid Timerfunction(int);
 
 
@@ -37,6 +38,7 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 	glutReshapeFunc(Reshape); // 다시 그리기 함수 지정 
 	glutTimerFunc(1000 / 60, Timerfunction, 1);	// 타이머 셋팅
 	glutMouseFunc(Mouse);		// 마우스 버튼 입력 받기
+	glutKeyboardFunc(Keyboard);	// 키보드 입력 받기
 
 	srand(time(NULL));
 
@@ -55,7 +57,8 @@ GLvoid DrawScene() // 출력 함수
 			glPushMatrix();
 			glColor3f(shapes[i].R, shapes[i].G, shapes[i].B);
 			glTranslated(shapes[i].x, shapes[i].y, 0);
-			glRotatef(shapes[i].rotate_degree, shapes[i].axis / 1, shapes[i].axis / 2, shapes[i].axis / 3);
+			glRotatef(shapes[i].rotate_degree, 0, 1, 0);
+			//glRotatef(shapes[i].rotate_degree, shapes[i].axis / 1, shapes[i].axis / 2, shapes[i].axis / 3);
 
 			switch (shapes[i].type) {
 			case 0:
@@ -133,17 +136,39 @@ GLvoid Mouse(int button, int state, int x, int y) {
 	glutPostRedisplay();
 }
 
+GLvoid Keyboard(unsigned char key, int x, int y)
+{
+	switch (key) {
+	case 'q':
+	case 'Q':
+		glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
+		glutLeaveMainLoop();
+		break;
+	case 'r':
+	case 'R':
+		for (int i = 0; i < 20; ++i) {
+			if (shapes[i].dead == false) {
+				if (shapes[i].rotate_left)
+					shapes[i].rotate_left = false;
+				else shapes[i].rotate_left = true;
+			}
+		}
+		break;
+	}
+
+}
+
 GLvoid Timerfunction(int value) {
 	switch (value) {
 	case 1:
 		for (int i = 0; i < 20; ++i) {
-			if (shapes[i].dead == false && shapes[i].rotate_left == false) {
+			if (shapes[i].dead == false && shapes[i].rotate_left == true) {
 				shapes[i].rotate_degree -= 5;
 				if (shapes[i].rotate_degree < 0) {
 					shapes[i].rotate_degree = 360 + shapes[i].rotate_degree;
 				}
 			}
-			else if (shapes[i].dead == false && shapes[i].rotate_left == true) {
+			else if (shapes[i].dead == false && shapes[i].rotate_left == false) {
 				shapes[i].rotate_degree += 5;
 				if (shapes[i].rotate_degree > 360) {
 					shapes[i].rotate_degree = shapes[i].rotate_degree - 360;
@@ -151,7 +176,7 @@ GLvoid Timerfunction(int value) {
 			}
 		}
 		glutPostRedisplay();
-		glutTimerFunc(1000 / 60, Timerfunction, 1);
+		glutTimerFunc(1000/ 60, Timerfunction, 1);
 		break;
 	}
 }
