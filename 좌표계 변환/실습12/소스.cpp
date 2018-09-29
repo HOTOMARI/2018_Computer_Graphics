@@ -175,7 +175,7 @@ GLvoid DrawScene() // 출력 함수
 			if (shape.movestack_drewline == 60 - 1) {
 				shape.movestack_drewline = 0;
 				shape.on_which_line++;
-				if (shape.on_which_line > 3) {
+				if (shape.on_which_line > line_index) {
 					shape.on_which_line = 0;
 				}
 			}
@@ -214,38 +214,44 @@ GLvoid Reshape(int w, int h) // 다시 그리기 함수
 
 GLvoid Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		if (shape_mode == 4 && line_index >= 4) {
-			line_index = -1;
-			shape.on_which_line = 0;
-			shape.movestack_drewline = 0;
-			drewline_moveswitch = false;
-			for (int i = 0; i < 4; ++i) {
-				lines[i].is_live = false;
+		if (drewline_moveswitch==false) {
+			if (shape_mode == 4 && line_index >= 4) {
+				line_index = -1;
+				shape.on_which_line = 0;
+				shape.movestack_drewline = 0;
+				drewline_moveswitch = false;
+				for (int i = 0; i < 4; ++i) {
+					lines[i].is_live = false;
+				}
+			}
+			if (shape_mode == 4 && line_index < 4) {
+				if (line_index == -1) {
+					line_index++;
+					if (lines[line_index].is_live == false) {
+						lines[line_index].is_live = true;
+						lines[line_index].startX = x - 400;
+						lines[line_index].startY = -1 * y + 300;
+						lines[line_index].endX = x - 400;
+						lines[line_index].endY = -1 * y + 300;
+					}
+				}
+				else {
+					lines[line_index].endX = x - 400;
+					lines[line_index].endY = -1 * y + 300;
+					line_index++;
+					if (lines[line_index].is_live == false) {
+						lines[line_index].is_live = true;
+						lines[line_index].startX = x - 400;
+						lines[line_index].startY = -1 * y + 300;
+						lines[line_index].endX = x - 400;
+						lines[line_index].endY = -1 * y + 300;
+					}
+				}
 			}
 		}
-		if (shape_mode == 4 && line_index < 4) {
-			if (line_index == -1) {
-				line_index++;
-				if (lines[line_index].is_live == false) {
-					lines[line_index].is_live = true;
-					lines[line_index].startX = x - 400;
-					lines[line_index].startY = -1 * y + 300;
-					lines[line_index].endX = x - 400;
-					lines[line_index].endY = -1 * y + 300;
-				}
-			}
-			else {
-				lines[line_index].endX = x - 400;
-				lines[line_index].endY = -1 * y + 300;
-				line_index++;
-				if (lines[line_index].is_live == false) {
-					lines[line_index].is_live = true;
-					lines[line_index].startX = x - 400;
-					lines[line_index].startY = -1 * y + 300;
-					lines[line_index].endX = x - 400;
-					lines[line_index].endY = -1 * y + 300;
-				}
-			}
+		else {
+			drewline_moveswitch = false;
+			InitialShape();
 		}
 	}
 	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
@@ -332,7 +338,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 
 GLvoid Motion(int x, int y)
 {
-	if (line_index >= 0 && line_index <= 4 && shape_mode == 4) {
+	if (line_index >= 0 && line_index <= 4 && shape_mode == 4 && drewline_moveswitch==false) {
 		lines[line_index].endX = x - 400;
 		lines[line_index].endY = -1 * y + 300;
 	}
@@ -374,4 +380,6 @@ void InitialShape()
 	shape.on_which_line = 0;
 	shape.movestack_drewline = 0;
 	drewline_moveswitch = false;
+	for (int i = 0; i < 4; ++i)
+		lines[i].is_live = false;
 }
