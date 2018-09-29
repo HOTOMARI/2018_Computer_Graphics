@@ -137,7 +137,18 @@ GLvoid Timerfunction(int value) {
 	switch (value) {
 	case 1:
 		for (int i = 0; i < 20; ++i) {
-			
+			if (shapes[i].dead == false && shapes[i].rotate_left == false) {
+				shapes[i].rotate_degree -= 5;
+				if (shapes[i].rotate_degree < 0) {
+					shapes[i].rotate_degree = 360 + shapes[i].rotate_degree;
+				}
+			}
+			else if (shapes[i].dead == false && shapes[i].rotate_left == true) {
+				shapes[i].rotate_degree += 5;
+				if (shapes[i].rotate_degree > 360) {
+					shapes[i].rotate_degree = shapes[i].rotate_degree - 360;
+				}
+			}
 		}
 		glutPostRedisplay();
 		glutTimerFunc(1000 / 60, Timerfunction, 1);
