@@ -18,6 +18,7 @@ struct Shape {
 	int rotate_degree;
 	int axis;			// 1 x축 2 y축 2 3축
 	float x, y;
+	float scale;
 
 	bool rotate_left;
 	bool dead = true;
@@ -57,8 +58,9 @@ GLvoid DrawScene() // 출력 함수
 			glPushMatrix();
 			glColor3f(shapes[i].R, shapes[i].G, shapes[i].B);
 			glTranslated(shapes[i].x, shapes[i].y, 0);
-			glRotatef(shapes[i].rotate_degree, 0, 1, 0);
-			//glRotatef(shapes[i].rotate_degree, shapes[i].axis / 1, shapes[i].axis / 2, shapes[i].axis / 3);
+			glScaled(1.0+shapes[i].scale, 1.0 + shapes[i].scale, 1.0 + shapes[i].scale);
+			//glRotatef(shapes[i].rotate_degree, 0, 1, 0);
+			glRotatef(shapes[i].rotate_degree, shapes[i].axis / 1, shapes[i].axis / 2, shapes[i].axis / 3);
 
 			switch (shapes[i].type) {
 			case 0:
@@ -128,6 +130,7 @@ GLvoid Mouse(int button, int state, int x, int y) {
 				if (rand() % 2)
 					shapes[i].rotate_left = true;
 				else shapes[i].rotate_left = false;
+				shapes[i].scale = 0;
 				shapes[i].dead = false;
 				break;
 			}
@@ -162,16 +165,21 @@ GLvoid Timerfunction(int value) {
 	switch (value) {
 	case 1:
 		for (int i = 0; i < 20; ++i) {
-			if (shapes[i].dead == false && shapes[i].rotate_left == true) {
-				shapes[i].rotate_degree -= 5;
-				if (shapes[i].rotate_degree < 0) {
-					shapes[i].rotate_degree = 360 + shapes[i].rotate_degree;
+			if (shapes[i].dead == false) {
+				shapes[i].scale -= 0.003;
+				if (shapes[i].scale <= -1.0)
+					shapes[i].dead = true;
+				if (shapes[i].rotate_left) {
+					shapes[i].rotate_degree -= 5;
+					if (shapes[i].rotate_degree < 0) {
+						shapes[i].rotate_degree = 360 + shapes[i].rotate_degree;
+					}
 				}
-			}
-			else if (shapes[i].dead == false && shapes[i].rotate_left == false) {
-				shapes[i].rotate_degree += 5;
-				if (shapes[i].rotate_degree > 360) {
-					shapes[i].rotate_degree = shapes[i].rotate_degree - 360;
+				else {
+					shapes[i].rotate_degree += 5;
+					if (shapes[i].rotate_degree > 360) {
+						shapes[i].rotate_degree = shapes[i].rotate_degree - 360;
+					}
 				}
 			}
 		}
