@@ -7,7 +7,7 @@ x축으로 30도 y축으로 30도 로 초기화
 
 time_t		now=time(0);
 struct tm curr_time;
-localtaime_s(&curr_time, &now);
+localtime_s(&curr_time, &now);
 
 curr_time.tm_hour;	//시간
 curr_time.tm_min;	//분

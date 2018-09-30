@@ -7,6 +7,9 @@ GLvoid Reshape(int, int);
 GLvoid Keyboard(unsigned char, int, int);
 GLvoid Timerfunction(int);
 
+time_t		now = time(0);
+struct tm curr_time;
+
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
 {
 	// 초기화 함수들 
@@ -91,6 +94,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 GLvoid Timerfunction(int value) {
 	switch (value) {
 	case 1:
+		localtime_s(&curr_time, &now);
 		glutPostRedisplay();
 		glutTimerFunc(1000 / 60, Timerfunction, 1);
 		break;
