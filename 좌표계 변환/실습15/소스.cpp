@@ -118,15 +118,25 @@ GLvoid DrawScene() // 출력 함수
 	}
 	glPopMatrix();
 
-	glPushMatrix();
-	glTranslated(-110, 0, 0);
-	for (int j = 0; j < 2; ++j) {
-		glColor3f(0, 0, 0);
-		glutWireCube(20);
-		glColor3f(1.0, 1.0, 1.0);
-		glutSolidCube(20);
+	if (nums[5] % 2) {
+		glPushMatrix();
+		glTranslated(-112, 30, 0);
+		for (int j = 0; j < 2; ++j) {
+			glPushMatrix();
+			if (j)
+				glTranslated(230, 0, 0);
+			for (int i = 0; i < 2; ++i) {
+				if (i)
+					glTranslated(0, -75, 0);
+				glColor3f(0, 0, 0);
+				glutWireCube(20);
+				glColor3f(1.0, 1.0, 1.0);
+				glutSolidCube(20);
+			}
+			glPopMatrix();
+		}
+		glPopMatrix();
 	}
-	glPopMatrix();
 
 	glutSwapBuffers(); // 화면에 출력하기 
 }
