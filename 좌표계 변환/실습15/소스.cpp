@@ -7,8 +7,10 @@ GLvoid Reshape(int, int);
 GLvoid Keyboard(unsigned char, int, int);
 GLvoid Timerfunction(int);
 
-time_t		now = time(0);
+time_t	now;
 struct tm curr_time;
+
+int nums[6];
 
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
 {
@@ -37,7 +39,6 @@ GLvoid DrawScene() // 출력 함수
 	glTranslated(-460, 0, 0);
 
 	for (int j = 0; j < 6; ++j) {
-
 		if (j != 0) {
 			glTranslated(170, 0, 0);
 			if (j % 2 == 0)
@@ -52,6 +53,26 @@ GLvoid DrawScene() // 출력 함수
 			glScaled(1.0, 0.25, 1.0);
 			glColor3f(1.0, 1.0, 1.0);
 			glutWireCube(100);
+			switch (i) {
+			case 0:
+				if (nums[j] == 2 || nums[j] == 3 || nums[j] == 5 || nums[j] == 6 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+				break;
+			case 1:
+				if (nums[j] == 2 || nums[j] == 3 || nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 9) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+				break;
+			case 2:
+				if (nums[j] == 2 || nums[j] == 3 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 0) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+				break;
+			}
 			glPopMatrix();
 		}
 		glTranslated(-63, 187, 0);
@@ -62,13 +83,51 @@ GLvoid DrawScene() // 출력 함수
 			glScaled(0.25, 1.0, 1.0);
 			glColor3f(1.0, 1.0, 1.0);
 			glutWireCube(100);
+			switch (i) {
+			case 0:
+				if (nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+				break;
+			case 1:
+				if (nums[j] == 1 || nums[j] == 2 || nums[j] == 3 || nums[j] == 4 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+			}
 			glTranslated(0, -125, 0);
+			glColor3f(1.0, 1.0, 1.0);
 			glutWireCube(100);
+			switch (i) {
+			case 0:
+				if (nums[j] == 2 || nums[j] == 6 || nums[j] == 8 || nums[j] == 0) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+				break;
+			case 1:
+				if (nums[j] == 1 || nums[j] == 3 || nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+					glColor3f(0, 1.0, 0);
+					glutSolidCube(100);
+				}
+			}
 			glPopMatrix();
 		}
 		glPopMatrix();
 	}
 	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(-110, 0, 0);
+	for (int j = 0; j < 2; ++j) {
+		glColor3f(0, 0, 0);
+		glutWireCube(20);
+		glColor3f(1.0, 1.0, 1.0);
+		glutSolidCube(20);
+	}
+	glPopMatrix();
+
 	glutSwapBuffers(); // 화면에 출력하기 
 }
 
@@ -94,7 +153,14 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 GLvoid Timerfunction(int value) {
 	switch (value) {
 	case 1:
+		now = time(0);
 		localtime_s(&curr_time, &now);
+		nums[0] = curr_time.tm_hour / 10;
+		nums[1] = curr_time.tm_hour % 10;
+		nums[2] = curr_time.tm_min / 10;
+		nums[3] = curr_time.tm_min % 10;
+		nums[4] = curr_time.tm_sec / 10;
+		nums[5] = curr_time.tm_sec % 10;
 		glutPostRedisplay();
 		glutTimerFunc(1000 / 60, Timerfunction, 1);
 		break;
