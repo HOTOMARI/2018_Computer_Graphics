@@ -31,7 +31,7 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 {
 	// 초기화 함수들 
 	glutInit(&argc, argv); // glut 초기화 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA); // 디스플레이 모드 설정 
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정 
 	glutInitWindowPosition(100, 100); // 윈도우의 위치 지정 
 	glutInitWindowSize(800, 600); // 윈도우의 크기 지정 
 	glutCreateWindow("Tiles"); // 윈도우 생성 (윈도우 이름) 
@@ -49,7 +49,9 @@ void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정
 GLvoid DrawScene() // 출력 함수 
 {
 	glClearColor(0, 0, 0, 1); // 바탕색을 지정 
-	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
+	glEnable(GL_DEPTH_TEST);	//깊이테스트
+	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 	glMatrixMode(GL_MODELVIEW);
 
 
