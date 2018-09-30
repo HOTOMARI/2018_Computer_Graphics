@@ -11,6 +11,7 @@ time_t	now;
 struct tm curr_time;
 
 int nums[6];
+int rotate_degree = 0;
 
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
 {
@@ -33,110 +34,96 @@ GLvoid DrawScene() // 출력 함수
 	glClearColor(0, 0, 0, 1); // 바탕색을 지정 
 	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
 	glMatrixMode(GL_MODELVIEW);
+	glLineWidth(2);
 	glPushMatrix();
-
+	glRotated(30, 0, 0, 0);
+	//glRotated(90, 0, 1.0, 0);
+	glRotated(rotate_degree, 0, 1.0, 0);
 	glScaled(0.6, 0.6, 1.0);
 	glTranslated(-460, 0, 0);
 
-	for (int j = 0; j < 6; ++j) {
-		if (j != 0) {
-			glTranslated(170, 0, 0);
-			if (j % 2 == 0)
-				glTranslated(40, 0, 0);
-		}
-		glPushMatrix();
-		glTranslated(0, 125, 0);
-		for (int i = 0; i < 3; ++i) {
-			if (i)
-				glTranslated(0, -125, 0);
-			glPushMatrix();
-			glScaled(1.0, 0.25, 1.0);
-			glColor3f(1.0, 1.0, 1.0);
-			glutWireCube(100);
-			switch (i) {
-			case 0:
-				if (nums[j] == 2 || nums[j] == 3 || nums[j] == 5 || nums[j] == 6 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
-				}
-				break;
-			case 1:
-				if (nums[j] == 2 || nums[j] == 3 || nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 9) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
-				}
-				break;
-			case 2:
-				if (nums[j] == 2 || nums[j] == 3 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 0) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
-				}
-				break;
-			}
-			glPopMatrix();
-		}
-		glTranslated(-63, 187, 0);
-		for (int i = 0; i < 2; ++i) {
-			if (i)
-				glTranslated(125, 0, 0);
-			glPushMatrix();
-			glScaled(0.25, 1.0, 1.0);
-			glColor3f(1.0, 1.0, 1.0);
-			glutWireCube(100);
-			switch (i) {
-			case 0:
-				if (nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
-				}
-				break;
-			case 1:
-				if (nums[j] == 1 || nums[j] == 2 || nums[j] == 3 || nums[j] == 4 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
+		for (int j = 0; j < 6; ++j) {
+			if (j != 0) {
+				glTranslated(170, 0, 0);
+				if (j % 2 == 0) {
+					glTranslated(40, 0, 0);
 				}
 			}
-			glTranslated(0, -125, 0);
-			glColor3f(1.0, 1.0, 1.0);
-			glutWireCube(100);
-			switch (i) {
-			case 0:
-				if (nums[j] == 2 || nums[j] == 6 || nums[j] == 8 || nums[j] == 0) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
-				}
-				break;
-			case 1:
-				if (nums[j] == 1 || nums[j] == 3 || nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
-					glColor3f(0, 1.0, 0);
-					glutSolidCube(100);
-				}
-			}
-			glPopMatrix();
-		}
-		glPopMatrix();
-	}
-	glPopMatrix();
 
-	if (nums[5] % 2) {
-		glPushMatrix();
-		glTranslated(-112, 30, 0);
-		for (int j = 0; j < 2; ++j) {
 			glPushMatrix();
-			if (j)
-				glTranslated(230, 0, 0);
+			glTranslated(0, 125, 0);
+			for (int i = 0; i < 3; ++i) {
+				if (i)
+					glTranslated(0, -125, 0);
+				glPushMatrix();
+				glScaled(1.0, 0.25, 1.0);
+				switch (i) {
+				case 0:
+					if (nums[j] == 2 || nums[j] == 3 || nums[j] == 5 || nums[j] == 6 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+					break;
+				case 1:
+					if (nums[j] == 2 || nums[j] == 3 || nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 9) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+					break;
+				case 2:
+					if (nums[j] == 2 || nums[j] == 3 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 0) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+					break;
+				}
+				glColor3f(0, 0, 0);
+				glutWireCube(100);
+				glPopMatrix();
+			}
+			glTranslated(-63, 187, 0);
 			for (int i = 0; i < 2; ++i) {
 				if (i)
-					glTranslated(0, -75, 0);
+					glTranslated(125, 0, 0);
+				glPushMatrix();
+				glScaled(0.25, 1.0, 1.0);
+				switch (i) {
+				case 0:
+					if (nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+					break;
+				case 1:
+					if (nums[j] == 1 || nums[j] == 2 || nums[j] == 3 || nums[j] == 4 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+				}
 				glColor3f(0, 0, 0);
-				glutWireCube(20);
-				glColor3f(1.0, 1.0, 1.0);
-				glutSolidCube(20);
+				glutWireCube(100);
+				glTranslated(0, -125, 0);
+				switch (i) {
+				case 0:
+					if (nums[j] == 2 || nums[j] == 6 || nums[j] == 8 || nums[j] == 0) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+					break;
+				case 1:
+					if (nums[j] == 1 || nums[j] == 3 || nums[j] == 4 || nums[j] == 5 || nums[j] == 6 || nums[j] == 7 || nums[j] == 8 || nums[j] == 9 || nums[j] == 0) {
+						glColor3f(0, 1.0, 0);
+						glutSolidCube(100);
+					}
+				}
+				glColor3f(0, 0, 0);
+				glutWireCube(100);
+				glPopMatrix();
 			}
 			glPopMatrix();
 		}
-		glPopMatrix();
-	}
+
+	glPopMatrix();
 
 	glutSwapBuffers(); // 화면에 출력하기 
 }
@@ -155,6 +142,16 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 	case 'Q':
 		glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_CONTINUE_EXECUTION);
 		glutLeaveMainLoop();
+		break;
+	case 'r':
+		rotate_degree += 5;
+		if (rotate_degree >= 360)
+			rotate_degree = 0;
+		break;
+	case 'R':
+		rotate_degree -= 5;
+		if (rotate_degree <= 0)
+			rotate_degree = 360;
 		break;
 	}
 
