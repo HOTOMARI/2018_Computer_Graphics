@@ -17,6 +17,7 @@ struct Shape {
 int animation_speed = 1000;
 
 float bigTriangle_rotate = 0;
+float smallTriangle_rotate = 0;
 
 Shape shape;
 
@@ -75,6 +76,7 @@ GLvoid DrawScene() // 출력 함수
 		glTranslated(shape.size * cos(330.0 / 180.0 * PI) + ((shape.size * cos(90.0 / 180.0 * PI) - shape.size * cos(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)),
 			shape.size * sin(330.0 / 180.0 * PI) + ((shape.size * sin(90.0 / 180.0 * PI) - shape.size * sin(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)), 0);
 	}
+	glRotatef(smallTriangle_rotate, 0, 1.0, 0);
 
 	glColor3f(1.0, 1.0, 0);
 	glBegin(GL_POLYGON);
@@ -105,6 +107,7 @@ GLvoid DrawScene() // 출력 함수
 		glTranslated(shape.size * cos(330.0 / 180.0 * PI) + ((shape.size * cos(90.0 / 180.0 * PI) - shape.size * cos(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)),
 			shape.size * sin(330.0 / 180.0 * PI) + ((shape.size * sin(90.0 / 180.0 * PI) - shape.size * sin(330.0 / 180.0 * PI)) / 60.0*(shape.movestack - 120)), 0);
 	}
+	glRotatef(smallTriangle_rotate, 0, 1.0, 0);
 
 	glColor3f(0, 1.0, 1.0);
 	glBegin(GL_POLYGON);
@@ -153,6 +156,7 @@ GLvoid Timerfunction(int value) {
 	switch (value)
 	{
 	case 1:
+		smallTriangle_rotate += 5;
 		shape.movestack = (shape.movestack + 1) % 180;
 		glutTimerFunc(animation_speed / 60, Timerfunction, 1);
 		glutPostRedisplay();
