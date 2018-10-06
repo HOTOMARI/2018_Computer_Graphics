@@ -38,9 +38,10 @@ GLvoid DrawScene() // 출력 함수
 	glMatrixMode(GL_MODELVIEW);
 	glLineWidth(2);
 	glPushMatrix();
+	glRotated(rotate_degree, 0, 1.0, 0);
 	glRotated(30, 1.0, 1.0, 0);
 	//glRotated(90, 0, 1.0, 0);
-	glRotated(rotate_degree, 0, 1.0, 0);
+	
 	glScaled(0.6, 0.6, 1.0);
 	glTranslated(-460, 0, 0);
 
