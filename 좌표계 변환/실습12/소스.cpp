@@ -175,7 +175,7 @@ GLvoid DrawScene() // 출력 함수
 			if (shape.movestack_drewline == 60 - 1) {
 				shape.movestack_drewline = 0;
 				shape.on_which_line++;
-				if (shape.on_which_line > line_index) {
+				if (shape.on_which_line > line_index || shape.on_which_line>=4) {
 					shape.on_which_line = 0;
 				}
 			}
@@ -338,7 +338,7 @@ GLvoid Keyboard(unsigned char key, int x, int y)
 
 GLvoid Motion(int x, int y)
 {
-	if (line_index >= 0 && line_index <= 4 && shape_mode == 4 && drewline_moveswitch==false) {
+	if (line_index >= 0 && line_index <= 3 && shape_mode == 4 && drewline_moveswitch==false) {
 		lines[line_index].endX = x - 400;
 		lines[line_index].endY = -1 * y + 300;
 	}
