@@ -17,6 +17,7 @@ int animation_speed = 1000;
 bool animation_switch[2] = { false, };	// 왼쪽, 오른쪽 이동
 
 float moveX = 0, moveY = 0;
+float moveAX = 0;
 float transformSize = 1;
 
 void main(int argc, char** argv) // 윈도우 출력하고 출력함수 설정 
@@ -81,7 +82,7 @@ GLvoid DrawScene() // 출력 함수
 		glEnd();
 		// 오른쪽부분
 		glBegin(GL_POLYGON);
-		glVertex3f(0 + moveX, 0, 0);
+		glVertex3f(0 + moveX, 0 + moveY, 0);
 		glVertex3f(0.5 * 400 + moveX + ((transformSize - 1) * 100), 0.5 * 300 + moveY, 0);
 		glVertex3f(0.5 * 400 + moveX + ((transformSize - 1) * 100), -0.5 * 300 + moveY, 0);
 		glEnd();
