@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="15-Funtion.cpp" />
+    <ClCompile Include="함수.cpp" />
     <ClCompile Include="Run_time_Framework.cpp" />
     <ClCompile Include="소스.cpp" />
   </ItemGroup>

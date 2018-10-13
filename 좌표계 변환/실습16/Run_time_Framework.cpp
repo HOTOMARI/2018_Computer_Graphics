@@ -15,34 +15,90 @@ GLvoid CRun_time_Framework::draw() {
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 
 	glPushMatrix();
-	glRotatef(rotatey, 0, 1, 0);
+	glMultMatrixf(identity);
+
+	{
+		glLineWidth(5);
+		glColor3f(1, 0, 0);
+		glBegin(GL_LINES);
+		glVertex3f(0, 0, 0);
+		glVertex3f(50, 0, 0);
+		glEnd();
+
+		glColor3f(0, 1, 0);
+		glBegin(GL_LINES);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 50, 0);
+		glEnd();
+
+		glColor3f(0, 0, 1);
+		glBegin(GL_LINES);
+		glVertex3f(0, 0, 0);
+		glVertex3f(0, 0, 50);
+		glEnd();
+		glLineWidth(1);
+	}
 
 
-	glLineWidth(5);
+	glPushMatrix();
+	glColor3f(1, 1, 0);
+	glTranslatef(0, -300, 0);
+	glRotatef(-90, 1, 0, 0);
+	glRectf(-400, -300, 400, 300);
+	glPopMatrix();
 
+	glRotatef(rotateo, 0, 1, 0);
+
+	glPushMatrix();
+	glColor3f(0, 1, 1);
+	glTranslatef(-100, -100, 0);
+	glMultMatrixf(identity);
+	glRotatef(shapes[0].degree, 0, 1, 0);
+	switch (shapes[0].type)
+	{
+	case 0:
+		glutSolidSphere(80, 10, 10);
+		break;
+	case 1:
+		glutSolidCube(80);
+		break;
+	case 2:
+		glRotatef(-90, 1, 0, 0);
+		gluQuadricDrawStyle(qobj, GLU_FILL);
+		gluCylinder(qobj, 80, 0.0, 150, 20, 8);
+		break;
+	case 3:
+		glutSolidTeapot(80);
+		break;
+	}
+	glPopMatrix();
+
+	glPushMatrix();
 	glColor3f(1, 0, 0);
-	glBegin(GL_LINES);
-	glVertex3f(0, 0, 0);
-	glVertex3f(50, 0, 0);
-	glEnd();
-
-	glColor3f(0, 1, 0);
-	glBegin(GL_LINES);
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, 50, 0);
-	glEnd();
-
-	glColor3f(0, 0, 1);
-	glBegin(GL_LINES);
-	glVertex3f(0, 0, 0);
-	glVertex3f(0, 0, 50);
-	glEnd();
-
-	glTranslatef(0, 0, 0);
-
-	//glutWireSphere(80, 10, 10);
+	glTranslatef(100, -100, 0);
+	glMultMatrixf(identity);
+	glRotatef(shapes[1].degree, 0, 1, 0);
+	switch (shapes[1].type)
+	{
+	case 0:
+		glutWireSphere(80, 10, 10);
+		break;
+	case 1:
+		glutWireCube(80);
+		break;
+	case 2:
+		glRotatef(-90, 1, 0, 0);
+		gluQuadricDrawStyle(qobj, GLU_LINE);
+		gluCylinder(qobj, 80, 0.0, 150, 20, 8);
+		break;
+	case 3:
+		glutWireTeapot(80);
+		break;
+	}
+	glPopMatrix();
 
 	glPopMatrix();
+
 	glutSwapBuffers();
 	return GLvoid();
 }
@@ -63,15 +119,14 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 	// 투영은 직각 투영 또는 원근 투영 중 한개를 설정한다.
 	// 원근 투영을 사용하는 경우: 
-	gluPerspective (60.0, w/h, 1.0, 1.0); 
-	glTranslatef (0.0, 0.0, -1.0);
+	gluPerspective (60, (float)w / (float)h, 1, 1000);
+	glTranslatef (0, 0, -400);
 
 	// 직각 투영인경우
 	// glOrtho (0.0, 800.0, 0.0, 600.0, -1.0, 1.0);
 
 	// 모델링 변환 설정: 디스플레이 콜백 함수에서 모델 변환 적용하기 위하여 Matrix mode 저장
 	glMatrixMode (GL_MODELVIEW);
-	glOrtho(-400.0, 400.0, -300.0, 300.0, -400.0, 400.0);
 
 	// 관측 변환: 카메라의 위치 설정 (필요한 경우, 다른 곳에 설정 가능) 
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
@@ -79,13 +134,73 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 	return GLvoid();
 }
 
-GLvoid CRun_time_Framework::Keyboard(unsigned char key, int x, int y) {
+GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
+	case 'x':
+		dir |= DIR_X_CCW;
+		break;
+	case 'X':
+		dir |= DIR_X_CW;
+		break;
 	case 'y':
-		rotatey += 5;
+		dir |= DIR_Y_CCW;
 		break;
 	case 'Y':
-		rotatey -= 5;
+		dir |= DIR_Y_CW;
+		break;
+	case 'z':
+		dir |= DIR_Z_CCW;
+		break;
+	case 'Z':
+		dir |= DIR_Z_CW;
+		break;
+	case 'l':
+		shapes[0].degree += 15.0;
+		break;
+	case 'L':
+		shapes[0].degree -= 15.0;
+		break;
+	case 'r':
+		shapes[1].degree += 15.0;
+		break;
+	case 'R':
+		shapes[1].degree -= 15.0;
+		break;
+
+	case 'o':
+		rotateo += 15.0;
+		break;
+	case 'O':
+		rotateo += 15.0;
+		break;
+
+	case 'c':
+	case 'C':
+		for (int i = 0; i < 2; ++i)
+			shapes[i].type = (shapes[i].type + 1) % 4;
+		break;
+	}
+}
+
+GLvoid CRun_time_Framework::KeyboardUp(unsigned char key, int x, int y) {
+	switch (key) {
+	case 'x':
+		dir ^= DIR_X_CCW;
+		break;
+	case 'X':
+		dir ^= DIR_X_CW;
+		break;
+	case 'y':
+		dir ^= DIR_Y_CCW;
+		break;
+	case 'Y':
+		dir ^= DIR_Y_CW;
+		break;
+	case 'z':
+		dir ^= DIR_Z_CCW;
+		break;
+	case 'Z':
+		dir ^= DIR_Z_CW;
 		break;
 	}
 }
@@ -103,9 +218,16 @@ GLvoid CRun_time_Framework::drawscene() {
 	return GLvoid();
 }
 
-GLvoid CRun_time_Framework::Keyinput(unsigned char key, int x, int y) {
+GLvoid CRun_time_Framework::KeyDowninput(unsigned char key, int x, int y) {
 	if (myself != nullptr) {
-		myself->Keyboard(key, x, y);
+		myself->KeyboardDown(key, x, y);
+	}
+	return GLvoid();
+}
+
+GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
+	if (myself != nullptr) {
+		myself->KeyboardUp(key, x, y);
 	}
 	return GLvoid();
 }
@@ -125,6 +247,8 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 }
 
 GLvoid CRun_time_Framework::Init() {
+	memset(identity, 0, sizeof(identity));
+	identity[0] = identity[5] = identity[10] = identity[15] = 1;
 	srand(time(NULL));
 	myself = this;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
@@ -134,7 +258,8 @@ GLvoid CRun_time_Framework::Init() {
 	glutCreateWindow("15"); // 윈도우 생성 (윈도우 이름)
 	glutDisplayFunc(drawscene); // 출력 함수의 지정
 	glutReshapeFunc(Resize);
-	glutKeyboardFunc(Keyinput);
+	glutKeyboardFunc(KeyDowninput);
+	glutKeyboardUpFunc(KeyUpinput);
 	glutMouseFunc(Mouseaction);
 	glutIdleFunc(Updatecallback);
 }
@@ -152,7 +277,62 @@ GLvoid CRun_time_Framework::Update() {
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
 
-		
+		if (dir & DIR_X_CCW) {
+			glPushMatrix();
+			{
+				glRotatef(0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+		if (dir & DIR_X_CW) {
+			glPushMatrix();
+			{
+				glRotatef(-0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+
+		if (dir & DIR_Y_CCW) {
+			glPushMatrix();
+			{
+				glRotatef(0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+		if (dir & DIR_Y_CW) {
+			glPushMatrix();
+			{
+				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+
+		if (dir & DIR_Z_CCW) {
+			glPushMatrix();
+			{
+				glRotatef(0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+		if (dir & DIR_Z_CW) {
+			glPushMatrix();
+			{
+				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
 
 		Prevtime = current_time;
 		current_frame = 0;
