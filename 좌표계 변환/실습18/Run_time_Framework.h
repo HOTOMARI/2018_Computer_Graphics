@@ -20,7 +20,7 @@ struct Shape {
 };
 
 struct Camera {
-	float degree[3] = { -180,-90,0 };
+	float degree[3] = { -180,-90,90 };
 	float x = 0;
 	float y = 0;
 	float zoom = 0;

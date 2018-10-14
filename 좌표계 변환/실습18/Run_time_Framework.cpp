@@ -17,8 +17,12 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	gluLookAt(camera.x, camera.y, 0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	gluLookAt(cos(camera.degree[2]/180*PI)*200 , sin(camera.degree[2] / 180 * PI) * 200, 0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+	gluLookAt(0 , 0, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
 	gluLookAt(cos(camera.degree[1] / 180 * PI) * 200, 0, sin(camera.degree[1] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+	if ((fabs((int)camera.degree[0]%360) <= 120 && fabs((int)camera.degree[0] % 360) >= 0)||
+		(fabs((int)camera.degree[0] % 360) <= 360 && fabs((int)camera.degree[0] % 360) > 240))
+		gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, -1.0, 0.0);
+	else
 	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	glMultMatrixf(identity);
 
@@ -210,7 +214,7 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	case 'i':
 		camera.degree[0] = -180;
 		camera.degree[1] = -90;
-		camera.degree[2] = 0;
+		camera.degree[2] = 90;
 		camera.zoom = 0;
 		camera.x = 0;
 		camera.y = 0;
