@@ -17,7 +17,7 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	gluLookAt(camera.x, camera.y, 0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	gluLookAt(cos(camera.degree[2]/180*PI)*200 - 200, sin(camera.degree[2] / 180 * PI) * 200, 0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+	gluLookAt(cos(camera.degree[2]/180*PI)*200 , sin(camera.degree[2] / 180 * PI) * 200, 0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	gluLookAt(cos(camera.degree[1] / 180 * PI) * 200, 0, sin(camera.degree[1] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	glMultMatrixf(identity);
