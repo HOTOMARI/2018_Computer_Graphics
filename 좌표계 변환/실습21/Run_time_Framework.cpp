@@ -323,7 +323,7 @@ GLvoid CRun_time_Framework::Update() {
 				tree_bigger = true;
 		}
 
-
+		metal_pole_rotate += 0.1*(current_time - Prevtime);
 
 		if (shapes[0].dir & DIR_Y_CCW) {
 			glPushMatrix();

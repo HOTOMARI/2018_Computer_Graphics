@@ -35,6 +35,7 @@ private:
 	int m_nHeight;
 
 	float tree_size = 0.2;
+	float metal_pole_rotate = 0;
 
 	bool camera_is_front = true;
 	bool crane_right = true;
