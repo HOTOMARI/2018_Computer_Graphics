@@ -49,6 +49,7 @@ GLvoid CRun_time_Framework::draw() {
 	}
 	*/
 
+	// ¹Ù´Ú
 	glPushMatrix();
 	glColor3f(1, 1, 0);
 	glTranslatef(0, -50, 0);
@@ -56,15 +57,46 @@ GLvoid CRun_time_Framework::draw() {
 	glRectf(-400, -300, 400, 300);
 	glPopMatrix();
 
+	// ¸Ç ¾Æ·¡ ¸öÃ¼
 	glPushMatrix();
-	glColor3f(0, 1, 1);
-	glTranslatef(shapes[0].position[1], 0, shapes[0].position[0]);
-	glMultMatrixf(identity);
-	glRotatef(-90, 1, 0, 0);
-	glutWireSphere(50, 10, 10);	
+	glTranslatef(shapes[0].position[0], -(100*0.3), 0);
+	glMultMatrixf(shapes[0].identity);
+
+	glPushMatrix();
+	glScalef(1.5, 1.0, 0.7);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glColor3f(1, 0, 0);
+	glutSolidCube(100);
 	glPopMatrix();
 
+	// 1Â÷ÆÈ
+	glRotatef(shapes[1].rotate[1], 0.f, 1.f, 0.f);
+	glMultMatrixf(shapes[1].identity);
+	glTranslatef(0, 70, 0);
 
+	glPushMatrix();
+	glScalef(0.4, 1.0, 0.4);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glColor3f(0, 1, 0);
+	glutSolidCube(100);
+	glPopMatrix();
+
+	// 2Â÷ÆÈ
+	glTranslatef(0, 30, 0);
+	glMultMatrixf(shapes[2].identity);
+	glTranslatef(0, 70, 0);
+
+	glPushMatrix();
+	glScalef(0.2, 1.0, 0.2);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glColor3f(0, 0, 1);
+	glutSolidCube(100);
+	glPopMatrix();
+
+	glPopMatrix();
 	glPopMatrix();
 
 	glutSwapBuffers();
@@ -104,23 +136,35 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
-	case 'x':
-		dir |= DIR_X_CCW;
-		break;
-	case 'X':
-		dir |= DIR_X_CW;
-		break;
-	case 'y':
-		dir |= DIR_Y_CCW;
-		break;
-	case 'Y':
-		dir |= DIR_Y_CW;
-		break;
 	case 'z':
-		dir |= DIR_Z_CCW;
+		shapes[0].dir |= DIR_Y_CCW;
 		break;
 	case 'Z':
-		dir |= DIR_Z_CW;
+		shapes[0].dir |= DIR_Y_CW;
+		break;
+	case 'x':
+		shapes[1].dir |= DIR_X_CCW;
+		break;
+	case 'X':
+		shapes[1].dir |= DIR_X_CW;
+		break;
+	case 'c':
+		shapes[1].dir |= DIR_Y_CCW;
+		break;
+	case 'C':
+		shapes[1].dir |= DIR_Y_CW;
+		break;
+	case 'v':
+		shapes[2].dir |= DIR_X_CCW;
+		break;
+	case 'V':
+		shapes[2].dir |= DIR_X_CW;
+		break;
+	case 'b':
+		shapes[2].dir |= DIR_Z_CCW;
+		break;
+	case 'B':
+		shapes[2].dir |= DIR_Z_CW;
 		break;
 
 
@@ -145,22 +189,22 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		camera.x += 10;
 		break;
 
-	case 'b':
+	case 'n':
 		camera.degree[0] += 10.0;
 		break;
-	case 'B':
+	case 'N':
 		camera.degree[0] -= 10.0;
 		break;
-	case 'n':
+	case 'm':
 		camera.degree[1] += 10.0;
 		break;
-	case 'N':
+	case 'M':
 		camera.degree[1] -= 10.0;
 		break;
-	case 'm':
+	case ',':
 		camera.degree[2] += 10.0;
 		break;
-	case 'M':
+	case '<':
 		camera.degree[2] -= 10.0;
 		break;
 
@@ -181,23 +225,35 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::KeyboardUp(unsigned char key, int x, int y) {
 	switch (key) {
-	case 'x':
-		dir ^= DIR_X_CCW;
-		break;
-	case 'X':
-		dir ^= DIR_X_CW;
-		break;
-	case 'y':
-		dir ^= DIR_Y_CCW;
-		break;
-	case 'Y':
-		dir ^= DIR_Y_CW;
-		break;
 	case 'z':
-		dir ^= DIR_Z_CCW;
+		shapes[0].dir ^= DIR_Y_CCW;
 		break;
 	case 'Z':
-		dir ^= DIR_Z_CW;
+		shapes[0].dir ^= DIR_Y_CW;
+		break;
+	case 'x':
+		shapes[1].dir ^= DIR_X_CCW;
+		break;
+	case 'X':
+		shapes[1].dir ^= DIR_X_CW;
+		break;
+	case 'c':
+		shapes[1].dir ^= DIR_Y_CCW;
+		break;
+	case 'C':
+		shapes[1].dir ^= DIR_Y_CW;
+		break;
+	case 'v':
+		shapes[2].dir ^= DIR_X_CCW;
+		break;
+	case 'V':
+		shapes[2].dir ^= DIR_X_CW;
+		break;
+	case 'b':
+		shapes[2].dir ^= DIR_Z_CCW;
+		break;
+	case 'B':
+		shapes[2].dir ^= DIR_Z_CW;
 		break;
 	}
 }
@@ -244,8 +300,10 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 }
 
 GLvoid CRun_time_Framework::Init() {
-	memset(identity, 0, sizeof(identity));
-	identity[0] = identity[5] = identity[10] = identity[15] = 1;
+	for (int i = 0; i < 3; ++i) {
+		memset(shapes[i].identity, 0, sizeof(shapes[i].identity));
+		shapes[i].identity[0] = shapes[i].identity[5] = shapes[i].identity[10] = shapes[i].identity[15] = 1;
+	}
 	srand(time(NULL));
 	myself = this;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
@@ -273,73 +331,132 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
-
-		if (dir & DIR_X_CCW) {
-			glPushMatrix();
-			{
-				glRotatef(0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-				if(shapes[0].position[0] <= 266)
-					shapes[0].position[0] += 2;
-			}
-			glPopMatrix();
+		if (right) {
+			shapes[0].position[0] += 0.1 * (current_time - Prevtime);
+			if (shapes[0].position[0] > 300)
+				right = false;
 		}
-		if (dir & DIR_X_CW) {
-			glPushMatrix();
-			{
-				glRotatef(-0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-				if (shapes[0].position[0] >= -266)
-					shapes[0].position[0] -= 2;
-			}
-			glPopMatrix();
+		else {
+			shapes[0].position[0] -= 0.1 * (current_time - Prevtime);
+			if (shapes[0].position[0] < -300)
+				right = true;
 		}
 
-		if (dir & DIR_Y_CCW) {
+		if (shapes[0].dir & DIR_Y_CCW) {
 			glPushMatrix();
 			{
+				shapes[0].rotate[1] += 0.5 * (current_time - Prevtime);
 				glRotatef(0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+				glMultMatrixf(shapes[0].identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, shapes[0].identity);
 			}
 			glPopMatrix();
 		}
-		if (dir & DIR_Y_CW) {
+		if (shapes[0].dir & DIR_Y_CW) {
 			glPushMatrix();
 			{
+				shapes[0].rotate[1] -= 0.5 * (current_time - Prevtime);
 				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-
+				glMultMatrixf(shapes[0].identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, shapes[0].identity);
 			}
 			glPopMatrix();
 		}
 
-		if (dir & DIR_Z_CCW) {
+		if (shapes[1].dir & DIR_X_CCW) {
+			if (shapes[1].rotate[0] < 90.0) {
+				glPushMatrix();
+				{
+					shapes[1].rotate[0] += 0.5 * (current_time - Prevtime);
+					glRotatef(0.5f * (current_time - Prevtime), 1, 0.f, 0);
+					glMultMatrixf(shapes[1].identity);
+					glGetFloatv(GL_MODELVIEW_MATRIX, shapes[1].identity);
+				}
+				glPopMatrix();
+			}
+		}
+		if (shapes[1].dir & DIR_X_CW) {
+			if (shapes[1].rotate[0] > -90.0) {
+				glPushMatrix();
+				{
+					shapes[1].rotate[0] -= 0.5 * (current_time - Prevtime);
+					glRotatef(-0.5f * (current_time - Prevtime), 1, 0.f, 0);
+					glMultMatrixf(shapes[1].identity);
+					glGetFloatv(GL_MODELVIEW_MATRIX, shapes[1].identity);
+				}
+				glPopMatrix();
+			}
+		}
+		if (shapes[1].dir & DIR_Y_CCW) {
 			glPushMatrix();
 			{
-				glRotatef(0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-				if (shapes[0].position[1] >= -366)
-					shapes[0].position[1] -= 2;
+				shapes[1].rotate[1] += 0.5 * (current_time - Prevtime);
+				//glRotatef(0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+				glMultMatrixf(shapes[1].identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, shapes[1].identity);
 			}
 			glPopMatrix();
 		}
-		if (dir & DIR_Z_CW) {
+		if (shapes[1].dir & DIR_Y_CW) {
 			glPushMatrix();
 			{
-				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-				if (shapes[0].position[1] <= 366)
-					shapes[0].position[1] += 2;
+				shapes[1].rotate[1] -= 0.5 * (current_time - Prevtime);
+				//glRotatef(-0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+				glMultMatrixf(shapes[1].identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, shapes[1].identity);
 			}
 			glPopMatrix();
 		}
 
+		if (shapes[2].dir & DIR_X_CCW) {
+			if (shapes[2].rotate[0] < 90.0) {
+				glPushMatrix();
+				{
+					shapes[2].rotate[0] += 0.5 * (current_time - Prevtime);
+					glRotatef(0.5f * (current_time - Prevtime), 1, 0.f, 0);
+					glMultMatrixf(shapes[2].identity);
+					glGetFloatv(GL_MODELVIEW_MATRIX, shapes[2].identity);
+				}
+				glPopMatrix();
+			}
+		}
+		if (shapes[2].dir & DIR_X_CW) {
+			if (shapes[2].rotate[0] > -90.0) {
+				glPushMatrix();
+				{
+					shapes[2].rotate[0] -= 0.5 * (current_time - Prevtime);
+					glRotatef(-0.5f * (current_time - Prevtime), 1, 0.f, 0);
+					glMultMatrixf(shapes[2].identity);
+					glGetFloatv(GL_MODELVIEW_MATRIX, shapes[2].identity);
+				}
+				glPopMatrix();
+			}
+		}
+
+		if (shapes[2].dir & DIR_Z_CCW) {
+			if (shapes[2].rotate[2] < 90.0) {
+				glPushMatrix();
+				{
+					shapes[2].rotate[2] += 0.5 * (current_time - Prevtime);
+					glRotatef(0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+					glMultMatrixf(shapes[2].identity);
+					glGetFloatv(GL_MODELVIEW_MATRIX, shapes[2].identity);
+				}
+				glPopMatrix();
+			}
+		}
+		if (shapes[2].dir & DIR_Z_CW) {
+			if (shapes[2].rotate[2] > -90.0) {
+				glPushMatrix();
+				{
+					shapes[2].rotate[2] -= 0.5 * (current_time - Prevtime);
+					glRotatef(-0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+					glMultMatrixf(shapes[2].identity);
+					glGetFloatv(GL_MODELVIEW_MATRIX, shapes[2].identity);
+				}
+				glPopMatrix();
+			}
+		}
 		
 
 		Prevtime = current_time;

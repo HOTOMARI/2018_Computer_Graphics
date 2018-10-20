@@ -17,6 +17,8 @@
 struct Shape {
 	float rotate[3] = { 0,0,0 };
 	float position[2] = { 0,0 };
+	unsigned char dir = 0;
+	GLfloat identity[16];
 };
 
 struct Camera {
@@ -35,12 +37,13 @@ private:
 	float rotateo = 0;
 
 	bool camera_is_front = true;
+	bool right = true;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
 	GLfloat identity[16];
 
-	Shape shapes[2];
+	Shape shapes[3];
 	Camera camera;
 
 	GLfloat Prevtime = 0;
