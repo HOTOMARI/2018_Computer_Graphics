@@ -101,4 +101,38 @@ GLvoid CRun_time_Framework::tree()
 	glPopMatrix();
 }
 
+GLvoid CRun_time_Framework::metal_pole()
+{
+	// Ã¶ºÀ
+	{
+		glPushMatrix();
+		glTranslatef(-50, 0, 0);
+		glScalef(0.2, 1.0, 0.2);
+		glColor3f(1, 0.5, 0.5);
+		glutSolidCube(100);
+		glColor3f(1, 1, 1);
+		glutWireCube(100);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(50, 0, 0);
+		glScalef(0.2, 1.0, 0.2);
+		glColor3f(1, 0.5, 0.5);
+		glutSolidCube(100);
+		glColor3f(1, 1, 1);
+		glutWireCube(100);
+		glPopMatrix();
+
+		glPushMatrix();
+		glTranslatef(0, 50, 0);
+		glScalef(1.0, 0.1, 0.1);
+		glColor3f(0.5, 0.5, 1);
+		glutSolidCube(100);
+		glColor3f(1, 1, 1);
+		glutWireCube(100);
+		glPopMatrix();
+	}
+	// »ç¶÷
+}
+
 

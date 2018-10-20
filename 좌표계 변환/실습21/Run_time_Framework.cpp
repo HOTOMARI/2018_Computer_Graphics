@@ -61,6 +61,12 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	tree();
 	glPopMatrix();
+	//Ã¶ºÀ
+	glPushMatrix();
+	metal_pole();
+	glPopMatrix();
+
+
 
 	glPopMatrix();
 	glutSwapBuffers();

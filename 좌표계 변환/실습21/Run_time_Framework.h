@@ -71,6 +71,7 @@ public:
 	GLvoid crane();
 	GLvoid ground();
 	GLvoid tree();
+	GLvoid metal_pole();
 	
 
 	// 콜백 함수
