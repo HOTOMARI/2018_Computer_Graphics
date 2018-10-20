@@ -17,6 +17,7 @@
 struct Shape {
 	float rotate[3] = { 0,0,0 };
 	float position[2] = { 0,0 };
+	float size;
 	unsigned char dir = 0;
 	GLfloat identity[16];
 	RECT bb;
@@ -34,22 +35,25 @@ private:
 	static CRun_time_Framework* myself;
 	int m_nWidth;
 	int m_nHeight;
-	int crane_dir = rand() % 4;
-	int ball_dir = rand() % 4;
+	int crane_dir;
+	int ball_dir;
 
-	float tree_size = 0.2;
-	float metal_pole_rotate = 0;
-	float treadmill_rotate = 0;
-	float leg_rotate = 0;
-	float bench = 0;
+	float tree_size;
+	float metal_pole_rotate;
+	float treadmill_rotate;
+	float leg_rotate;
+	float propeller_rotate;
+	float airplane_rotate = 0;
+	float bench;
 	RECT object[4];
 
-	bool camera_is_front = true;
-	bool crane_right = true;
-	bool tree_bigger = true;
-	bool bench_up = true;
-	bool leg_up = true;
-	bool see_collide = false;
+	bool camera_is_front;
+	bool crane_right;
+	bool tree_bigger;
+	bool bench_up;
+	bool leg_up;
+	bool see_collide;
+	bool airplane_dir;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
@@ -57,6 +61,7 @@ private:
 
 	Shape shapes[3];
 	Shape Ball;
+	Shape Smoke[3];
 	Camera camera;
 
 	GLfloat Prevtime = 0;
@@ -87,6 +92,7 @@ public:
 	GLvoid metal_pole();
 	GLvoid bench_press();
 	GLvoid treadmill();
+	GLvoid airplane();
 	GLvoid update_bb();
 	bool collide(RECT, RECT);
 

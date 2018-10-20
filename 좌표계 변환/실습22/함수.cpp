@@ -311,7 +311,73 @@ GLvoid CRun_time_Framework::treadmill()
 
 GLvoid CRun_time_Framework::airplane()
 {
-	return GLvoid();
+	//glTranslatef(200 * cos(airplane_rotate / 180 * PI), 0, 200 * sin(airplane_rotate / 180 * PI));
+	glRotatef(airplane_rotate, 0, 1, 0);
+	glTranslatef(0, 100, 200);
+	if (airplane_dir)glRotatef(180, 0, 1, 0);
+	else glRotatef(0, 0, 1, 0);
+
+	// ¸öÃ¼
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(1, 0.4, 0.4);
+	glColor3f(0.9, 0.6, 0.3);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+
+	// ¸öÃ¼
+	glPushMatrix();
+	glTranslatef(0, 0, 0);
+	glScalef(0.5, 0.1, 1);
+	glColor3f(1, 0, 0);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+
+	// ÇÁ·ÎÆç·¯
+	glPushMatrix();
+	glTranslatef(-58, 0, 0);
+	glRotatef(propeller_rotate, 1, 0, 0);
+	glScalef(0.1, 0.5, 0.1);
+	glColor3f(1, 1, 1);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+
+	// ²¿¸®
+	glPushMatrix();
+	glTranslatef(50, 30, 0);
+	glScalef(0.1, 0.5, 0.5);
+	glColor3f(1, 0, 0);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+
+	// ¿¬±â 1
+	glPushMatrix();
+	glTranslatef(80, 0, 0);
+	glColor3f(0.5, 0.5, 0.5);
+	glutSolidSphere(Smoke[0].size, 5, 5);
+	glPopMatrix();
+
+	// ¿¬±â 2
+	glPushMatrix();
+	glTranslatef(140, 0, 0);
+	glColor3f(0.5, 0.5, 0.5);
+	glutSolidSphere(Smoke[1].size, 5, 5);
+	glPopMatrix();
+
+	// ¿¬±â 1
+	glPushMatrix();
+	glTranslatef(200, 0, 0);
+	glColor3f(0.5, 0.5, 0.5);
+	glutSolidSphere(Smoke[2].size, 5, 5);
+	glPopMatrix();
 }
 
 GLvoid CRun_time_Framework::update_bb()

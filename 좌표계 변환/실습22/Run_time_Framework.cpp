@@ -77,7 +77,10 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	treadmill();
 	glPopMatrix();
-
+	//∫Ò«‡±‚
+	glPushMatrix();
+	airplane();
+	glPopMatrix();
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -172,7 +175,9 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	case '8':
 		ball_dir = 3;
 		break;
-
+	case '9':
+		airplane_dir = (airplane_dir + 1) % 2;
+		break;
 	case '0':
 		see_collide = (see_collide + 1) % 2;
 
@@ -336,14 +341,27 @@ GLvoid CRun_time_Framework::Init() {
 	object[3].top = -180;
 	object[3].bottom = -250;
 
+	Smoke[0].size = 50;
+	Smoke[1].size = 30;
+	Smoke[2].size = 10;
+
 	crane_dir = 0;
 	ball_dir = 2;
+	airplane_dir = 0;
 
 	tree_size = 0.2;
 	metal_pole_rotate = 0;
 	treadmill_rotate = 0;
 	leg_rotate = 0;
+	propeller_rotate = 0;
 	bench = 0;
+
+	camera_is_front = true;
+	crane_right = true;
+	tree_bigger = true;
+	bench_up = true;
+	leg_up = true;
+	see_collide = false;
 
 
 	srand(time(NULL));
@@ -495,6 +513,13 @@ GLvoid CRun_time_Framework::Update() {
 			if (leg_rotate < -30)
 				leg_up = true;
 		}
+
+		propeller_rotate += 2 * (current_time - Prevtime);
+
+		if (airplane_dir)
+			airplane_rotate += 0.1 * (current_time - Prevtime);
+		else
+			airplane_rotate -= 0.1 * (current_time - Prevtime);
 
 		if (shapes[0].dir & DIR_Y_CCW) {
 			glPushMatrix();
@@ -650,6 +675,15 @@ GLvoid CRun_time_Framework::Update() {
 				shapes[0].position[1] += 0.3 * (current_time - Prevtime);
 				break;
 			}
+		}
+
+		for (int i = 0; i < 3; ++i) {
+			Smoke[i].size -= 0.1 * (current_time - Prevtime);
+		}
+		if (Smoke[2].size <= 0) {
+			Smoke[2].size = Smoke[1].size + 10;
+			Smoke[1].size = Smoke[0].size + 5;
+			Smoke[0].size = rand() % 40 + 20;
 		}
 
 		for (int i = 0; i < 4; ++i) {
