@@ -49,16 +49,20 @@ GLvoid CRun_time_Framework::draw() {
 	}
 	*/
 
-	glPushMatrix();
 	// 바닥
+	glPushMatrix();
 	ground();
-
 	glPopMatrix();
-
+	// 크레인
+	glPushMatrix();
 	crane();
-
+	glPopMatrix();
+	//나무
+	glPushMatrix();
+	tree();
 	glPopMatrix();
 
+	glPopMatrix();
 	glutSwapBuffers();
 	return GLvoid();
 }
@@ -291,16 +295,29 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
-		if (right) {
+		if (crane_right) {
 			shapes[0].position[0] += 0.1 * (current_time - Prevtime);
 			if (shapes[0].position[0] > 300)
-				right = false;
+				crane_right = false;
 		}
 		else {
 			shapes[0].position[0] -= 0.1 * (current_time - Prevtime);
 			if (shapes[0].position[0] < -300)
-				right = true;
+				crane_right = true;
 		}
+
+		if (tree_bigger) {
+			tree_size += 0.001 * (current_time - Prevtime);
+			if (tree_size > 1.0)
+				tree_bigger = false;
+		}
+		else {
+			tree_size -= 0.001 * (current_time - Prevtime);
+			if (tree_size < 0.2)
+				tree_bigger = true;
+		}
+
+
 
 		if (shapes[0].dir & DIR_Y_CCW) {
 			glPushMatrix();

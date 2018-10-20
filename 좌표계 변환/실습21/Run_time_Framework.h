@@ -34,10 +34,11 @@ private:
 	int m_nWidth;
 	int m_nHeight;
 
-	float rotateo = 0;
+	float tree_size = 0.2;
 
 	bool camera_is_front = true;
-	bool right = true;
+	bool crane_right = true;
+	bool tree_bigger = true;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
@@ -69,6 +70,7 @@ public:
 	GLvoid background(float r, float g, float b);
 	GLvoid crane();
 	GLvoid ground();
+	GLvoid tree();
 	
 
 	// 콜백 함수

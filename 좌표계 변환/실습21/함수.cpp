@@ -9,7 +9,6 @@ GLvoid CRun_time_Framework::background(float r, float g, float b) {
 GLvoid CRun_time_Framework::crane()
 {
 	// ¸Ç ¾Æ·¡ ¸öÃ¼
-	glPushMatrix();
 	glTranslatef(shapes[0].position[0], -(100 * 0.3), 0);
 	glMultMatrixf(shapes[0].identity);
 
@@ -46,8 +45,6 @@ GLvoid CRun_time_Framework::crane()
 	glColor3f(0, 0, 1);
 	glutSolidCube(100);
 	glPopMatrix();
-
-	glPopMatrix();
 }
 
 GLvoid CRun_time_Framework::ground()
@@ -81,6 +78,27 @@ GLvoid CRun_time_Framework::ground()
 	glVertex3f(400, -100, 1);
 	glVertex3f(200, -300, 1);
 	glEnd();
+}
+
+GLvoid CRun_time_Framework::tree()
+{
+	glTranslatef(-350, 0, 250);
+
+	// ¸öÅë
+	glPushMatrix();
+	glScalef(0.2, 1.0, 0.2);
+	glColor3f(1, 0.5, 0.5);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+	// ¸Ó¸®
+	glPushMatrix();
+	glTranslatef(0, 50, 0);
+	glScalef(tree_size, tree_size, tree_size);
+	glColor3f(0, 1, 0);
+	glutWireSphere(70, 10, 10);
+	glPopMatrix();
 }
 
 

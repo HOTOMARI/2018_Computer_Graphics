@@ -331,15 +331,15 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
-		if (right) {
+		if (crane_right) {
 			shapes[0].position[0] += 0.1 * (current_time - Prevtime);
 			if (shapes[0].position[0] > 300)
-				right = false;
+				crane_right = false;
 		}
 		else {
 			shapes[0].position[0] -= 0.1 * (current_time - Prevtime);
 			if (shapes[0].position[0] < -300)
-				right = true;
+				crane_right = true;
 		}
 
 		if (shapes[0].dir & DIR_Y_CCW) {

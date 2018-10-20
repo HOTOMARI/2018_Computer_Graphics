@@ -34,10 +34,9 @@ private:
 	int m_nWidth;
 	int m_nHeight;
 
-	float rotateo = 0;
-
 	bool camera_is_front = true;
-	bool right = true;
+	bool crane_right = true;
+	bool tree_bigger = true;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
