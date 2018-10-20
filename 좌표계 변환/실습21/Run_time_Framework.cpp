@@ -57,6 +57,10 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	crane();
 	glPopMatrix();
+	// 공
+	glPushMatrix();
+	ball();
+	glPopMatrix();
 	//나무
 	glPushMatrix();
 	tree();
@@ -68,6 +72,10 @@ GLvoid CRun_time_Framework::draw() {
 	//벤치프레스
 	glPushMatrix();
 	bench_press();
+	glPopMatrix();
+	//러닝머신
+	glPushMatrix();
+	treadmill();
 	glPopMatrix();
 
 
@@ -140,6 +148,33 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		shapes[2].dir |= DIR_Z_CW;
 		break;
 
+	case '1':
+		crane_dir = 0;
+		break;
+	case '2':
+		crane_dir = 1;
+		break;
+	case '3':
+		crane_dir = 2;
+		break;
+	case '4':
+		crane_dir = 3;
+		break;
+	case '5':
+		ball_dir = 0;
+		break;
+	case '6':
+		ball_dir = 1;
+		break;
+	case '7':
+		ball_dir = 2;
+		break;
+	case '8':
+		ball_dir = 3;
+		break;
+
+	case '0':
+		see_collide = (see_collide + 1) % 2;
 
 
 	case '-':
@@ -277,6 +312,40 @@ GLvoid CRun_time_Framework::Init() {
 		memset(shapes[i].identity, 0, sizeof(shapes[i].identity));
 		shapes[i].identity[0] = shapes[i].identity[5] = shapes[i].identity[10] = shapes[i].identity[15] = 1;
 	}
+	memset(Ball.identity, 0, sizeof(Ball.identity));
+	Ball.identity[0] = Ball.identity[5] = Ball.identity[10] = Ball.identity[15] = 1;
+	Ball.position[1] = -200;
+
+	object[0].left = -380;
+	object[0].right = -320;
+	object[0].top = -220;
+	object[0].bottom = -280;
+
+	object[1].left = -400;
+	object[1].right = -280;
+	object[1].top = 280;
+	object[1].bottom = 200;
+
+	object[2].left = 270;
+	object[2].right = 400;
+	object[2].top = 350;
+	object[2].bottom = 150;
+
+	object[3].left = 260;
+	object[3].right = 400;
+	object[3].top = -180;
+	object[3].bottom = -250;
+
+	crane_dir = 0;
+	ball_dir = 2;
+
+	tree_size = 0.2;
+	metal_pole_rotate = 0;
+	treadmill_rotate = 0;
+	leg_rotate = 0;
+	bench = 0;
+
+
 	srand(time(NULL));
 	myself = this;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
@@ -304,15 +373,90 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
-		if (crane_right) {
-			shapes[0].position[0] += 0.1 * (current_time - Prevtime);
+		switch (crane_dir) {
+		case 0:
+			shapes[0].position[0] += 0.2 * (current_time - Prevtime);
 			if (shapes[0].position[0] > 300)
-				crane_right = false;
-		}
-		else {
-			shapes[0].position[0] -= 0.1 * (current_time - Prevtime);
+				crane_dir = 1;
+			break;
+		case 1:
+			shapes[0].position[0] -= 0.2 * (current_time - Prevtime);
 			if (shapes[0].position[0] < -300)
-				crane_right = true;
+				crane_dir = 0;
+			break;
+		case 2:
+			shapes[0].position[1] += 0.2 * (current_time - Prevtime);
+			if (shapes[0].position[1] > 250)
+				crane_dir = 3;
+			break;
+		case 3:
+			shapes[0].position[1] -= 0.2 * (current_time - Prevtime);
+			if (shapes[0].position[1] < -250)
+				crane_dir = 2;
+			break;
+		}
+
+		switch (ball_dir) {
+		case 0:
+			Ball.position[0] += 0.2 * (current_time - Prevtime);
+
+			glPushMatrix();
+			{
+				Ball.rotate[0] -= 0.5 * (current_time - Prevtime);
+				glRotatef(-0.5f * (current_time - Prevtime), 0, 0.f, 1);
+				glMultMatrixf(Ball.identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, Ball.identity);
+			}
+			glPopMatrix();
+
+			if (Ball.position[0] > 350)
+				ball_dir = 1;
+			break;
+		case 1:
+			Ball.position[0] -= 0.2 * (current_time - Prevtime);
+
+			glPushMatrix();
+			{
+				Ball.rotate[0] += 0.5 * (current_time - Prevtime);
+				glRotatef(0.5f * (current_time - Prevtime), 0, 0.f, 1);
+				glMultMatrixf(Ball.identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, Ball.identity);
+			}
+			glPopMatrix();
+
+			if (Ball.position[0] < -350)
+				ball_dir = 0;
+			break;
+		case 2:
+			Ball.position[1] += 0.2 * (current_time - Prevtime);
+
+			glPushMatrix();
+			{
+				Ball.rotate[1] += 0.5 * (current_time - Prevtime);
+				glRotatef(0.5f * (current_time - Prevtime), 1, 0.f, 0);
+				glMultMatrixf(Ball.identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, Ball.identity);
+			}
+			glPopMatrix();
+
+			if (Ball.position[1] > 250)
+				ball_dir = 3;
+			break;
+		case 3:
+			Ball.position[1] -= 0.2 * (current_time - Prevtime);
+
+			glPushMatrix();
+			{
+				Ball.rotate[1] -= 0.5 * (current_time - Prevtime);
+				glRotatef(-0.5f * (current_time - Prevtime), 1, 0.f, 0);
+				glMultMatrixf(Ball.identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, Ball.identity);
+			}
+			glPopMatrix();
+
+			if (Ball.position[1] < -250)
+				ball_dir = 2;
+			break;
 		}
 
 		if (tree_bigger) {
@@ -337,6 +481,19 @@ GLvoid CRun_time_Framework::Update() {
 			bench -= 0.1 * (current_time - Prevtime);
 			if (bench < -20)
 				bench_up = true;
+		}
+
+		treadmill_rotate += 0.1*(current_time - Prevtime);
+
+		if (leg_up) {
+			leg_rotate += 0.1 * (current_time - Prevtime);
+			if (leg_rotate > 30)
+				leg_up = false;
+		}
+		else {
+			leg_rotate -= 0.1 * (current_time - Prevtime);
+			if (leg_rotate < -30)
+				leg_up = true;
 		}
 
 		if (shapes[0].dir & DIR_Y_CCW) {
@@ -429,7 +586,6 @@ GLvoid CRun_time_Framework::Update() {
 				glPopMatrix();
 			}
 		}
-
 		if (shapes[2].dir & DIR_Z_CCW) {
 			if (shapes[2].rotate[2] < 90.0) {
 				glPushMatrix();
@@ -455,7 +611,89 @@ GLvoid CRun_time_Framework::Update() {
 			}
 		}
 		
+		update_bb();
 
+		if (collide(Ball.bb, shapes[0].bb)) {
+			switch (ball_dir) {
+			case 0:
+				ball_dir = 1;
+				Ball.position[0] -= 0.3 * (current_time - Prevtime);
+				break;
+			case 1:
+				ball_dir = 0;
+				Ball.position[0] += 0.3 * (current_time - Prevtime);
+				break;
+			case 2:
+				ball_dir = 3;
+				Ball.position[1] -= 0.3 * (current_time - Prevtime);
+				break;
+			case 3:
+				ball_dir = 2;
+				Ball.position[1] += 0.3 * (current_time - Prevtime);
+				break;
+			}
+			switch (crane_dir) {
+			case 0:
+				crane_dir = 1;
+				shapes[0].position[0] -= 0.3 * (current_time - Prevtime);
+				break;
+			case 1:
+				crane_dir = 0;
+				shapes[0].position[0] += 0.3 * (current_time - Prevtime);
+				break;
+			case 2:
+				crane_dir = 3;
+				shapes[0].position[1] -= 0.3 * (current_time - Prevtime);
+				break;
+			case 3:
+				crane_dir = 2;
+				shapes[0].position[1] += 0.3 * (current_time - Prevtime);
+				break;
+			}
+		}
+
+		for (int i = 0; i < 4; ++i) {
+			if (collide(Ball.bb, object[i])) {
+				switch (ball_dir) {
+				case 0:
+					ball_dir = 1;
+					Ball.position[0] -= 0.3 * (current_time - Prevtime);
+					break;
+				case 1:
+					ball_dir = 0;
+					Ball.position[0] += 0.3 * (current_time - Prevtime);
+					break;
+				case 2:
+					ball_dir = 3;
+					Ball.position[1] -= 0.3 * (current_time - Prevtime);
+					break;
+				case 3:
+					ball_dir = 2;
+					Ball.position[1] += 0.3 * (current_time - Prevtime);
+					break;
+				}
+			}
+			if (collide(shapes[0].bb, object[i])) {
+				switch (crane_dir) {
+				case 0:
+					crane_dir = 1;
+					shapes[0].position[0] -= 0.3 * (current_time - Prevtime);
+					break;
+				case 1:
+					crane_dir = 0;
+					shapes[0].position[0] += 0.3 * (current_time - Prevtime);
+					break;
+				case 2:
+					crane_dir = 3;
+					shapes[0].position[1] -= 0.3 * (current_time - Prevtime);
+					break;
+				case 3:
+					crane_dir = 2;
+					shapes[0].position[1] += 0.3 * (current_time - Prevtime);
+					break;
+				}
+			}
+		}
 		Prevtime = current_time;
 		current_frame = 0;
 		glutPostRedisplay();

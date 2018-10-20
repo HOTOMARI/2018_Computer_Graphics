@@ -19,6 +19,7 @@ struct Shape {
 	float position[2] = { 0,0 };
 	unsigned char dir = 0;
 	GLfloat identity[16];
+	RECT bb;
 };
 
 struct Camera {
@@ -33,21 +34,29 @@ private:
 	static CRun_time_Framework* myself;
 	int m_nWidth;
 	int m_nHeight;
+	int crane_dir = rand() % 4;
+	int ball_dir = rand() % 4;
 
 	float tree_size = 0.2;
 	float metal_pole_rotate = 0;
+	float treadmill_rotate = 0;
+	float leg_rotate = 0;
 	float bench = 0;
+	RECT object[4];
 
 	bool camera_is_front = true;
 	bool crane_right = true;
 	bool tree_bigger = true;
 	bool bench_up = true;
+	bool leg_up = true;
+	bool see_collide = false;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
 	GLfloat identity[16];
 
 	Shape shapes[3];
+	Shape Ball;
 	Camera camera;
 
 	GLfloat Prevtime = 0;
@@ -72,11 +81,14 @@ public:
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
 	GLvoid crane();
+	GLvoid ball();
 	GLvoid ground();
 	GLvoid tree();
 	GLvoid metal_pole();
 	GLvoid bench_press();
-	
+	GLvoid treadmill();
+	GLvoid update_bb();
+	bool collide(RECT, RECT);
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
