@@ -171,4 +171,47 @@ GLvoid CRun_time_Framework::metal_pole()
 	}
 }
 
+GLvoid CRun_time_Framework::bench_press()
+{
+	glTranslatef(350, 0, -250);
+
+	// ´¯´Â°Å
+	glPushMatrix();
+	glTranslatef(0, -40, 0);
+	glScalef(0.75, 0.2, 1);
+	glColor3f(0.25, 0.75, 0.5);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+
+	// ¿ª±âºÀ
+	glPushMatrix();
+	glTranslatef(0, bench, 0);
+	glScalef(1, 0.1, 0.1);
+	glColor3f(0.75, 0.75, 0.5);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+	// ¿·¿¡´Þ¸°°Å
+	glPushMatrix();
+	glTranslatef(-50, bench, 0);
+	glScalef(0.1, 0.5, 0.5);
+	glColor3f(0.75, 0.75, 0.5);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslatef(50, bench, 0);
+	glScalef(0.1, 0.5, 0.5);
+	glColor3f(0.75, 0.75, 0.5);
+	glutSolidCube(100);
+	glColor3f(1, 1, 1);
+	glutWireCube(100);
+	glPopMatrix();
+}
+
 

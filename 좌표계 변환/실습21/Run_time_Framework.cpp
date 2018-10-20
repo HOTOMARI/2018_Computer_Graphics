@@ -65,7 +65,10 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	metal_pole();
 	glPopMatrix();
-
+	//벤치프레스
+	glPushMatrix();
+	bench_press();
+	glPopMatrix();
 
 
 	glPopMatrix();
@@ -324,6 +327,17 @@ GLvoid CRun_time_Framework::Update() {
 		}
 
 		metal_pole_rotate += 0.1*(current_time - Prevtime);
+
+		if (bench_up) {
+			bench += 0.1 * (current_time - Prevtime);
+			if (bench > 10)
+				bench_up = false;
+		}
+		else {
+			bench -= 0.1 * (current_time - Prevtime);
+			if (bench < -20)
+				bench_up = true;
+		}
 
 		if (shapes[0].dir & DIR_Y_CCW) {
 			glPushMatrix();

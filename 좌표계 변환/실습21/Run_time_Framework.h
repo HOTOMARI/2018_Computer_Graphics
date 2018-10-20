@@ -36,10 +36,12 @@ private:
 
 	float tree_size = 0.2;
 	float metal_pole_rotate = 0;
+	float bench = 0;
 
 	bool camera_is_front = true;
 	bool crane_right = true;
 	bool tree_bigger = true;
+	bool bench_up = true;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
@@ -73,6 +75,7 @@ public:
 	GLvoid ground();
 	GLvoid tree();
 	GLvoid metal_pole();
+	GLvoid bench_press();
 	
 
 	// 콜백 함수
