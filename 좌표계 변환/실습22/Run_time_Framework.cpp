@@ -338,8 +338,8 @@ GLvoid CRun_time_Framework::Init() {
 
 	object[3].left = 260;
 	object[3].right = 400;
-	object[3].top = -180;
-	object[3].bottom = -250;
+	object[3].top = -200;
+	object[3].bottom = -300;
 
 	Smoke[0].size = 50;
 	Smoke[1].size = 30;
