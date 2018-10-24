@@ -176,7 +176,12 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		ball_dir = 3;
 		break;
 	case '9':
-		airplane_dir = (airplane_dir + 1) % 2;
+		airplane_spin += 18;
+		//airplane_dir = (airplane_dir + 1) % 2;
+		break;
+	case '(':
+		airplane_spin -= 18;
+		//airplane_dir = (airplane_dir + 1) % 2;
 		break;
 	case '0':
 		see_collide = (see_collide + 1) % 2;
@@ -354,6 +359,8 @@ GLvoid CRun_time_Framework::Init() {
 	treadmill_rotate = 0;
 	leg_rotate = 0;
 	propeller_rotate = 0;
+	airplane_rotate = 0;
+	airplane_spin = 0;
 	bench = 0;
 
 	camera_is_front = true;

@@ -316,6 +316,7 @@ GLvoid CRun_time_Framework::airplane()
 	glTranslatef(0, 100, 200);
 	if (airplane_dir)glRotatef(180, 0, 1, 0);
 	else glRotatef(0, 0, 1, 0);
+	glRotatef(airplane_spin, 1, 0, 0);
 
 	// ¸öÃ¼
 	glPushMatrix();

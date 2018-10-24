@@ -35,34 +35,24 @@ private:
 	static CRun_time_Framework* myself;
 	int m_nWidth;
 	int m_nHeight;
-	int crane_dir;
-	int ball_dir;
-
-	float tree_size;
-	float metal_pole_rotate;
-	float treadmill_rotate;
-	float leg_rotate;
-	float propeller_rotate;
-	float airplane_rotate = 0;
-	float airplane_spin = 0;
-	float bench;
-	RECT object[4];
 
 	bool camera_is_front;
-	bool crane_right;
-	bool tree_bigger;
-	bool bench_up;
-	bool leg_up;
-	bool see_collide;
-	bool airplane_dir;
+	bool top_open;
+	bool front_open;
+
+	bool depth;
+	bool culling;
+	bool shading;
+
+	float top_rotate;
+	float front_rotate;
+	float spring_stretch;
+	float ball_move;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
 	GLfloat identity[16];
 
-	Shape shapes[3];
-	Shape Ball;
-	Shape Smoke[3];
 	Camera camera;
 
 	GLfloat Prevtime = 0;
@@ -86,15 +76,10 @@ public:
 
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
-	GLvoid crane();
-	GLvoid ball();
 	GLvoid ground();
-	GLvoid tree();
-	GLvoid metal_pole();
-	GLvoid bench_press();
-	GLvoid treadmill();
-	GLvoid airplane();
-	GLvoid update_bb();
+	GLvoid QBEY();		// 큐베
+	GLvoid spring();	// 용수철
+	GLvoid ball();		// 공
 	bool collide(RECT, RECT);
 
 	// 콜백 함수
