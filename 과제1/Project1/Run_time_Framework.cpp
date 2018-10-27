@@ -13,8 +13,11 @@ GLvoid CRun_time_Framework::draw() {
 	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
 	glMatrixMode(GL_MODELVIEW);
 
-	Draw_Triangle();
-	Draw_Rectangle();
+	Draw_Tri();
+	Draw_Rect();
+	if (line.see) {
+		Draw_Line();
+	}
 
 	glutSwapBuffers();
 }
@@ -71,7 +74,21 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		line.see = true;
+		line.x1 = line.x2 = x - 400;
+		line.y1 = line.y2 = -1 * (y - 300);
+	}
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		line.see = false;
+	}
+	return GLvoid();
+}
 
+GLvoid CRun_time_Framework::Motion(int x, int y)
+{
+	if (line.see) {
+		line.x2 = x - 400;
+		line.y2 = -1 * (y - 300);
 	}
 	return GLvoid();
 }
@@ -83,11 +100,19 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 	return GLvoid();
 }
 
+GLvoid CRun_time_Framework::Mousemotion(int x, int y)
+{
+	if (myself != nullptr) {
+		myself->Motion(x, y);
+	}
+	return GLvoid();
+}
+
 GLvoid CRun_time_Framework::Init() {
 	triangle = NULL;
 	rectangle = NULL;
-	Make_Triangle();
-	Make_Rectangle();
+	Make_Tri();
+	Make_Rect();
 	make_stack[0] = 0;
 	make_stack[1] = 0;
 
@@ -103,6 +128,7 @@ GLvoid CRun_time_Framework::Init() {
 	glutKeyboardFunc(KeyDowninput);
 	glutKeyboardUpFunc(KeyUpinput);
 	glutMouseFunc(Mouseaction);
+	glutMotionFunc(Mousemotion);
 	glutIdleFunc(Updatecallback);
 }
 
@@ -119,20 +145,20 @@ GLvoid CRun_time_Framework::Update() {
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
 
-		Update_Triangle();
-		Delete_ScreenOut_Triangle();
+		Update_Tri();
+		Delete_ScreenOut_Tri();
 
-		Update_Rectangle();
-		Delete_ScreenOut_Rectangle();
+		Update_Rect();
+		Delete_ScreenOut_Rect();
 
 		make_stack[0]++;
 		make_stack[1]++;
 		if (make_stack[0] > 120) {
-			Make_Triangle();
+			Make_Tri();
 			make_stack[0] = 0;
 		}
 		if (make_stack[1] > 200) {
-			Make_Rectangle();
+			Make_Rect();
 			make_stack[1] = 0;
 		}
 

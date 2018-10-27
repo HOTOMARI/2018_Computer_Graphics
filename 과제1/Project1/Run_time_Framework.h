@@ -33,6 +33,12 @@ struct Rect {
 	Rect* next = NULL;
 };
 
+struct Line {
+	float x1, y1;
+	float x2, y2;
+	bool see = false;
+};
+
 
 class CRun_time_Framework {
 private:
@@ -50,6 +56,8 @@ private:
 
 	Rect* rectangle;
 
+	Line line;
+
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 
 public:
@@ -63,19 +71,23 @@ public:
 	GLvoid KeyboardDown(unsigned char key, int x, int y);
 	GLvoid KeyboardUp(unsigned char key, int x, int y);
 	GLvoid Mouse(int button, int state, int x, int y);
+	GLvoid Motion(int x, int y);
 	GLvoid Update();
 
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
-	void Make_Triangle();
-	void Draw_Triangle();
-	void Delete_ScreenOut_Triangle();
-	void Update_Triangle();
+	void Make_Tri();
+	void Draw_Tri();
+	void Delete_ScreenOut_Tri();
+	void Update_Tri();
 
-	void Make_Rectangle();
-	void Draw_Rectangle();
-	void Delete_ScreenOut_Rectangle();
-	void Update_Rectangle();
+	void Make_Rect();
+	void Draw_Rect();
+	void Delete_ScreenOut_Rect();
+	void Delete_LineCollide_Rect();
+	void Update_Rect();
+
+	void Draw_Line();
 
 	bool collide(RECT, RECT);
 
@@ -85,5 +97,6 @@ public:
 	static GLvoid KeyDowninput(unsigned char key, int x, int y);
 	static GLvoid KeyUpinput(unsigned char key, int x, int y);
 	static GLvoid Mouseaction(int button, int state, int x, int y);
+	static GLvoid Mousemotion(int x, int y);
 	static GLvoid Updatecallback();
 };

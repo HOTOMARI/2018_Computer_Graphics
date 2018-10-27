@@ -6,7 +6,7 @@ GLvoid CRun_time_Framework::background(float r, float g, float b) {
 	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기
 }
 
-void CRun_time_Framework::Make_Triangle()
+void CRun_time_Framework::Make_Tri()
 {
 	Tri* t = triangle;
 
@@ -32,7 +32,7 @@ void CRun_time_Framework::Make_Triangle()
 	}
 }
 
-void CRun_time_Framework::Draw_Triangle()
+void CRun_time_Framework::Draw_Tri()
 {
 	Tri* t = triangle;
 
@@ -54,7 +54,7 @@ void CRun_time_Framework::Draw_Triangle()
 	
 }
 
-void CRun_time_Framework::Delete_ScreenOut_Triangle()
+void CRun_time_Framework::Delete_ScreenOut_Tri()
 {
 	Tri* t = triangle;
 	if (t != NULL) {
@@ -65,7 +65,7 @@ void CRun_time_Framework::Delete_ScreenOut_Triangle()
 	}
 }
 
-void CRun_time_Framework::Update_Triangle()
+void CRun_time_Framework::Update_Tri()
 {
 	Tri* t = triangle;
 	while (t != NULL) {
@@ -75,7 +75,7 @@ void CRun_time_Framework::Update_Triangle()
 	}
 }
 
-void CRun_time_Framework::Make_Rectangle()
+void CRun_time_Framework::Make_Rect()
 {
 	Rect* t = rectangle;
 
@@ -105,7 +105,7 @@ void CRun_time_Framework::Make_Rectangle()
 	}
 }
 
-void CRun_time_Framework::Draw_Rectangle()
+void CRun_time_Framework::Draw_Rect()
 {
 	Rect* t = rectangle;
 
@@ -137,7 +137,7 @@ void CRun_time_Framework::Draw_Rectangle()
 	}
 }
 
-void CRun_time_Framework::Delete_ScreenOut_Rectangle()
+void CRun_time_Framework::Delete_ScreenOut_Rect()
 {
 	Rect* t = rectangle;
 	if (t != NULL) {
@@ -148,7 +148,11 @@ void CRun_time_Framework::Delete_ScreenOut_Rectangle()
 	}
 }
 
-void CRun_time_Framework::Update_Rectangle()
+void CRun_time_Framework::Delete_LineCollide_Rect()
+{
+}
+
+void CRun_time_Framework::Update_Rect()
 {
 	Rect* t = rectangle;
 	while (t != NULL) {
@@ -156,6 +160,14 @@ void CRun_time_Framework::Update_Rectangle()
 		t->rt.top += 0.05 * (current_time - Prevtime);
 		t = t->next;
 	}
+}
+
+void  CRun_time_Framework::Draw_Line()
+{
+	glBegin(GL_LINES);
+	glVertex2f(line.x1, line.y1);
+	glVertex2f(line.x2, line.y2);
+	glEnd();
 }
 
 bool CRun_time_Framework::collide(RECT A, RECT B)
