@@ -377,6 +377,78 @@ void  CRun_time_Framework::Draw_Line()
 	glEnd();
 }
 
+void CRun_time_Framework::Make_Star(float x, float y)
+{
+	Star* t = star;
+
+	if (t == NULL) {
+		t = (Star*)malloc(sizeof(Star));
+		t->next = NULL;
+		star = t;
+	}
+	else {
+		while (t->next != NULL)
+			t = t->next;
+		t->next = (Star*)malloc(sizeof(Star));
+		t = t->next;
+		t->next = NULL;
+	}
+	t->T = 0;
+	t->x = x;
+	t->y = y;
+	t->final_x = rand() % 800 - 400;
+	t->final_y = rand() % 200 - 100;
+	t->size = rand() % 20 + 30;
+	t->rotate = rand() % 360;
+	t->R = rand() % 255 / 255.0;
+	t->G = rand() % 255 / 255.0;
+	t->B = rand() % 255 / 255.0;
+}
+
+void CRun_time_Framework::Draw_Star()
+{
+	Star* t = star;
+
+	while (t != NULL) {
+		glPushMatrix();
+
+		glColor3f(t->R, t->G, t->B);
+		glBegin(GL_POLYGON);
+		for (int k = 0; k < 360; ++k) {
+			if (k % 20 == 10) {
+				glVertex2f(t->size*cos(k / 180.0*PI) + t->x, t->size*sin(k / 180.0*PI) + t->y);
+			}
+			else if(k % 20 == 0){
+				glVertex2f((t->size-10)*cos(k / 180.0*PI) + t->x, (t->size - 10)*sin(k / 180.0*PI) + t->y);
+			}
+		}
+		glEnd();
+
+		glPopMatrix();
+
+		t = t->next;
+	}
+}
+
+void CRun_time_Framework::Update_Star()
+{
+	Star* t = star;
+	while (t != NULL) {
+		t->R = rand() % 255 / 255.0;
+		t->G = rand() % 255 / 255.0;
+		t->B = rand() % 255 / 255.0;
+		
+		if (t->final_x > t->x) {
+			t->x = t->T*t->final_x + (1 - t->T)*t->x;
+		}
+		if (t->final_y < t->y) {
+			t->y = t->T*t->final_y + (1 - t->T)*t->y;
+		}
+		t->T += 0.0001*(current_time - Prevtime);
+		t = t->next;
+	}
+}
+
 bool CRun_time_Framework::collide(RECT A, RECT B)
 {
 	if (A.left > B.right)

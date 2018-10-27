@@ -59,6 +59,10 @@ struct Star {
 	float size;
 	float R, G, B;
 	float x, y;
+	float final_x, final_y;
+	float rotate;
+	float T;
+	Star* next;
 };
 
 
@@ -81,6 +85,8 @@ private:
 	Rect* rectangle;
 
 	Line line;
+
+	Star* star;
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 	bool line_finished;
@@ -120,6 +126,10 @@ public:
 	void Update_Trash();
 
 	void Draw_Line();
+
+	void Make_Star(float, float);
+	void Draw_Star();
+	void Update_Star();
 
 	bool collide(RECT, RECT);
 	bool collide_Line_and_Line(float x1, float x2, float x3, float x4, float y1, float y2, float y3, float y4);
