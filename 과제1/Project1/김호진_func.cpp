@@ -255,6 +255,8 @@ void CRun_time_Framework::Make_Fragments(Rect* t)
 		}
 		break;
 	}
+	fragments[0].speed = 0;
+	fragments[1].speed = 0;
 }
 
 void CRun_time_Framework::Draw_Fragments()
@@ -290,7 +292,7 @@ void CRun_time_Framework::Update_Fragments()
 		if (fragments[0].clicked == false) {
 			for (int i = 0; i < 3; ++i) {
 				fragments[0].p[i].x -= 0.03 * (current_time - Prevtime);
-				fragments[0].p[i].y -= 0.05 * (current_time - Prevtime);
+				fragments[0].p[i].y -= fragments[0].speed * (current_time - Prevtime);
 				if (fragments[0].p[i].y < -190) {
 					fragments[0].live = false;
 					Make_Trash();
@@ -299,13 +301,14 @@ void CRun_time_Framework::Update_Fragments()
 			}
 			fragments[0].center_x = (fragments[0].p[0].x + fragments[0].p[1].x + fragments[0].p[2].x) / 3.0;
 			fragments[0].center_y = (fragments[0].p[0].y + fragments[0].p[1].y + fragments[0].p[2].y) / 3.0;
+			fragments[0].speed+=0.001 * (current_time - Prevtime);
 		}
 	}
 	if (fragments[1].live) {
 		if (fragments[1].clicked == false) {
 			for (int i = 0; i < 3; ++i) {
 				fragments[1].p[i].x += 0.03 * (current_time - Prevtime);
-				fragments[1].p[i].y -= 0.1 * (current_time - Prevtime);
+				fragments[1].p[i].y -= fragments[1].speed * (current_time - Prevtime);
 				if (fragments[1].p[i].y < -190) {
 					fragments[1].live = false;
 					Make_Trash();
@@ -314,6 +317,7 @@ void CRun_time_Framework::Update_Fragments()
 			}
 			fragments[1].center_x = (fragments[1].p[0].x + fragments[1].p[1].x + fragments[1].p[2].x) / 3.0;
 			fragments[1].center_y = (fragments[1].p[0].y + fragments[1].p[1].y + fragments[1].p[2].y) / 3.0;
+			fragments[1].speed += 0.002 * (current_time - Prevtime);
 		}
 	}
 }

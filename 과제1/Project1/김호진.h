@@ -47,6 +47,7 @@ struct Frag {
 	bool live = false;
 	bool clicked = false;
 	float center_x, center_y;
+	float speed;
 };
 
 struct Trash {
