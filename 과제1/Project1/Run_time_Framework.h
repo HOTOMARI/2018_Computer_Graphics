@@ -66,7 +66,7 @@ private:
 
 	Tri* triangle;
 	Frag fragments[2];
-	Tri trash[3][10];
+	Tri trash[3][20];
 
 	Rect* rectangle;
 
@@ -101,7 +101,7 @@ public:
 	void Delete_ScreenOut_Rect();
 	void Update_Rect();
 
-	void Saparate_Rect(Rect*);
+	void Make_Fragments(Rect*);
 	void Draw_Fragments();
 	void Update_Fragments();
 

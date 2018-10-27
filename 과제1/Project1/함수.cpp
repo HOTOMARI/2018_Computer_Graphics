@@ -283,6 +283,20 @@ void CRun_time_Framework::Update_Fragments()
 	}
 }
 
+void CRun_time_Framework::Draw_Trash()
+{
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 20; ++j) {
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(-400 + j * 40, -300 + i * 40);
+			glVertex2f(-400 + (j + 1) * 40, -300 + i * 40);
+			glVertex2f(-400 + (j + 1) * 40, -300 + (i + 1) * 40);
+			glVertex2f(-400 + j * 40, -300 + (i + 1) * 40);
+			glEnd();
+		}
+	}
+}
+
 void  CRun_time_Framework::Draw_Line()
 {
 	glBegin(GL_LINES);
