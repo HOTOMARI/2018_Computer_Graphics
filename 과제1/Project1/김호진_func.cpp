@@ -401,6 +401,7 @@ void CRun_time_Framework::Make_Star(float x, float y)
 		t = t->next;
 		t->next = NULL;
 	}
+	t->rotate = rand() % 365;
 	t->T = 0;
 	t->x = x;
 	t->y = y;
@@ -418,15 +419,16 @@ void CRun_time_Framework::Draw_Star()
 
 	while (t != NULL) {
 		glPushMatrix();
-
+		glTranslatef(t->x, t->y, 0);
+		glRotatef(t->rotate, 0, 0, 1);
 		glColor3f(t->R, t->G, t->B);
 		glBegin(GL_POLYGON);
 		for (int k = 0; k < 360; ++k) {
 			if (k % 20 == 10) {
-				glVertex2f(t->size*cos(k / 180.0*PI) + t->x, t->size*sin(k / 180.0*PI) + t->y);
+				glVertex2f(t->size*cos(k / 180.0*PI), t->size*sin(k / 180.0*PI));
 			}
 			else if(k % 20 == 0){
-				glVertex2f((t->size-10)*cos(k / 180.0*PI) + t->x, (t->size - 10)*sin(k / 180.0*PI) + t->y);
+				glVertex2f((t->size-10)*cos(k / 180.0*PI), (t->size - 10)*sin(k / 180.0*PI));
 			}
 		}
 		glEnd();
@@ -452,6 +454,8 @@ void CRun_time_Framework::Update_Star()
 			t->y = t->T*t->final_y + (1 - t->T)*t->y;
 		}
 		t->T += 0.0001*(current_time - Prevtime);
+		t->rotate += 0.5*(current_time - Prevtime);
+		t->size = rand() % 40 + 10;
 		t = t->next;
 	}
 }

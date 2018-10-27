@@ -139,7 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="김호.cpp" />
+    <ClCompile Include="김호진.cpp" />
     <ClCompile Include="감호진_main.cpp" />
     <ClCompile Include="김호진_func.cpp" />
   </ItemGroup>

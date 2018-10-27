@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="김호.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="감호진_main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="김호진_func.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="김호진.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

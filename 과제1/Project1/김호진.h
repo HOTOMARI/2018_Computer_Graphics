@@ -57,6 +57,7 @@ struct Trash {
 };
 
 struct Star {
+	float rotate;
 	float size;
 	float R, G, B;
 	float x, y;
