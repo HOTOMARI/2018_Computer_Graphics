@@ -154,7 +154,7 @@ void CRun_time_Framework::Update_Rect()
 	Rect* t = rectangle;
 	while (t != NULL) {
 		for (int i = 0; i < 4; ++i) {
-			t->p[i].y += 0.05 * (current_time - Prevtime);
+			t->p[i].y += 0.1 * (current_time - Prevtime);
 		}
 		t = t->next;
 	}
@@ -258,6 +258,16 @@ void CRun_time_Framework::Draw_Fragments()
 
 	for (int i = 0; i < 2; ++i) {
 		if (fragments[i].live) {
+			if (fragments[i].clicked == false) {
+				glColor3f(1, 0, 0);
+				glBegin(GL_POLYGON);
+				for (float k = 0.0; k < 360.0; k += 1.0) {
+					glVertex2f(30 * cos(k / 180.0*PI) + fragments[i].center_x,
+						30 * sin(k / 180.0*PI) + fragments[i].center_y);
+				}
+				glEnd();
+			}
+			glColor3f(1, 1, 1);
 			glBegin(GL_POLYGON);
 			glVertex2f(fragments[i].p[0].x, fragments[i].p[0].y);
 			glVertex2f(fragments[i].p[1].x, fragments[i].p[1].y);
@@ -272,26 +282,34 @@ void CRun_time_Framework::Draw_Fragments()
 void CRun_time_Framework::Update_Fragments()
 {
 	if (fragments[0].live) {
-		for (int i = 0; i < 3; ++i) {
-			fragments[0].p[i].x -= 0.03 * (current_time - Prevtime);
-			fragments[0].p[i].y -= 0.05 * (current_time - Prevtime);
-			if (fragments[0].p[i].y < -190) {
-				fragments[0].live = false;
-				Make_Trash();
-				break;
+		if (fragments[0].clicked == false) {
+			for (int i = 0; i < 3; ++i) {
+				fragments[0].p[i].x -= 0.03 * (current_time - Prevtime);
+				fragments[0].p[i].y -= 0.05 * (current_time - Prevtime);
+				if (fragments[0].p[i].y < -190) {
+					fragments[0].live = false;
+					Make_Trash();
+					break;
+				}
 			}
 		}
+		fragments[0].center_x = (fragments[0].p[0].x + fragments[0].p[1].x + fragments[0].p[2].x) / 3.0;
+		fragments[0].center_y = (fragments[0].p[0].y + fragments[0].p[1].y + fragments[0].p[2].y) / 3.0;
 	}
 	if (fragments[1].live) {
-		for (int i = 0; i < 3; ++i) {
-			fragments[1].p[i].x += 0.03 * (current_time - Prevtime);
-			fragments[1].p[i].y -= 0.1 * (current_time - Prevtime);
-			if (fragments[1].p[i].y < -190) {
-				fragments[1].live = false;
-				Make_Trash();
-				break;
+		if (fragments[1].clicked == false) {
+			for (int i = 0; i < 3; ++i) {
+				fragments[1].p[i].x += 0.03 * (current_time - Prevtime);
+				fragments[1].p[i].y -= 0.1 * (current_time - Prevtime);
+				if (fragments[1].p[i].y < -190) {
+					fragments[1].live = false;
+					Make_Trash();
+					break;
+				}
 			}
 		}
+		fragments[1].center_x = (fragments[1].p[0].x + fragments[1].p[1].x + fragments[1].p[2].x) / 3.0;
+		fragments[1].center_y = (fragments[1].p[0].y + fragments[1].p[1].y + fragments[1].p[2].y) / 3.0;
 	}
 }
 

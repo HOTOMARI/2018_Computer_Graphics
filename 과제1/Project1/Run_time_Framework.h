@@ -44,6 +44,8 @@ struct Line {
 struct Frag {
 	MYPOINT p[3];
 	bool live = false;
+	bool clicked = false;
+	float center_x, center_y;
 };
 
 struct Trash {

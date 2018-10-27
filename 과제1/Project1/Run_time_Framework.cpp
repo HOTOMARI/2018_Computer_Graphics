@@ -81,6 +81,9 @@ GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 			line.x1 = line.x2 = x - 400;
 			line.y1 = line.y2 = -1 * (y - 300);
 		}
+		else {
+
+		}
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		line.see = false;
