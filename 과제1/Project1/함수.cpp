@@ -13,10 +13,6 @@ void CRun_time_Framework::Make_Tri()
 	if (t == NULL) {
 		t = (Tri*)malloc(sizeof(Tri));
 		t->next = NULL;
-		t->center_x = -430.0;
-		t->center_y = 250.0;
-		t->size = 30;
-		t->rotate = rand() % 360;
 		triangle = t;
 	}
 	else {
@@ -25,11 +21,15 @@ void CRun_time_Framework::Make_Tri()
 		t->next = (Tri*)malloc(sizeof(Tri));
 		t = t->next;
 		t->next = NULL;
-		t->center_x = -430.0;
-		t->center_y = 250.0;
-		t->size = 30;
-		t->rotate = rand() % 360;
 	}
+	t->center_x = -430.0;
+	t->center_y = 250.0;
+	t->size = 30;
+	for (int i = 0; i < 3; ++i) {
+		t->p[i].x = t->center_x + t->size*cos((90.0 + 120.0*i) / 180.0*PI);
+		t->p[i].y = t->center_y + t->size*sin((90.0 + 120.0*i) / 180.0*PI);
+	}
+	t->rotate = rand() % 360;
 }
 
 void CRun_time_Framework::Draw_Tri()
@@ -39,12 +39,10 @@ void CRun_time_Framework::Draw_Tri()
 	while (t != NULL) {
 		glPushMatrix();
 
-		glTranslatef(t->center_x, t->center_y, 0);
-		glRotatef(t->rotate, 0, 0, 1);
 		glBegin(GL_POLYGON);
-		glVertex2f(t->size*cos(90.0 / 180.0 * PI), t->size*sin(90.0 / 180.0 * PI));
-		glVertex2f(t->size*cos(210.0 / 180.0 * PI), t->size*sin(210.0 / 180.0 * PI));
-		glVertex2f(t->size*cos(330.0 / 180.0 * PI), t->size*sin(330.0 / 180.0 * PI));
+		glVertex2f(t->p[0].x, t->p[0].y);
+		glVertex2f(t->p[1].x, t->p[1].y);
+		glVertex2f(t->p[2].x, t->p[2].y);
 		glEnd();
 
 		glPopMatrix();
@@ -71,6 +69,10 @@ void CRun_time_Framework::Update_Tri()
 	while (t != NULL) {
 		t->rotate += 0.1*(current_time - Prevtime);
 		t->center_x += 0.05 * (current_time - Prevtime);
+		for (int i = 0; i < 3; ++i) {
+			t->p[i].x = t->center_x + t->size*cos((90.0 + 120.0*i + t->rotate) / 180.0*PI);
+			t->p[i].y = t->center_y + t->size*sin((90.0 + 120.0*i + t->rotate) / 180.0*PI);
+		}
 		t = t->next;
 	}
 }
@@ -83,7 +85,6 @@ void CRun_time_Framework::Make_Rect()
 		t = (Rect*)malloc(sizeof(Rect));
 		t->next = NULL;
 		t->type = rand() % 2;
-		t->size = 30;
 		rectangle = t;
 	}
 	else {
@@ -92,10 +93,9 @@ void CRun_time_Framework::Make_Rect()
 		t->next = (Rect*)malloc(sizeof(Rect));
 		t = t->next;
 		t->next = NULL;
-		t->size = 30;
 		t->type = rand() % 2;
 	}
-
+	t->size = 30;
 	switch (t->type) {
 	case 0:
 		t->p[0].x = 30, t->p[0].y = -300;
@@ -143,7 +143,7 @@ void CRun_time_Framework::Delete_ScreenOut_Rect()
 	}
 }
 
-void CRun_time_Framework::Delete_LineCollide_Rect()
+void CRun_time_Framework::Saparate_Rect(Rect* t)
 {
 }
 

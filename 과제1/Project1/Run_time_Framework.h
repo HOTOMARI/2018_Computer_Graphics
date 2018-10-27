@@ -23,7 +23,7 @@ struct Tri {
 	float size;
 	float center_x, center_y;
 	float rotate;
-	int state = 0;
+	MYPOINT p[3];
 	Tri* next = NULL;
 };
 
@@ -86,7 +86,7 @@ public:
 	void Make_Rect();
 	void Draw_Rect();
 	void Delete_ScreenOut_Rect();
-	void Delete_LineCollide_Rect();
+	void Saparate_Rect(Rect*);
 	void Update_Rect();
 
 	void Draw_Line();

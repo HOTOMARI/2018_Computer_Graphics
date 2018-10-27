@@ -185,7 +185,6 @@ GLvoid CRun_time_Framework::Update() {
 			line_finished = false;
 		}
 
-
 		Prevtime = current_time;
 		current_frame = 0;
 		glutPostRedisplay();
