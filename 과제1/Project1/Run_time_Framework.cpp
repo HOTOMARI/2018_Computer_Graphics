@@ -18,6 +18,7 @@ GLvoid CRun_time_Framework::draw() {
 	if (line.see) {
 		Draw_Line();
 	}
+	Draw_Fragments();
 
 	glutSwapBuffers();
 }
@@ -177,6 +178,7 @@ GLvoid CRun_time_Framework::Update() {
 					collide_Line_and_Line(line.x1, line.x2, t->p[3].x, t->p[0].x, line.y1, line.y2, t->p[3].y, t->p[0].y)) {
 
 					printf("collide RECT%d!\n", index);
+					Saparate_Rect(t);
 					break;
 				}
 				index++;
@@ -184,6 +186,8 @@ GLvoid CRun_time_Framework::Update() {
 			}
 			line_finished = false;
 		}
+
+		Update_Fragments();
 
 		Prevtime = current_time;
 		current_frame = 0;

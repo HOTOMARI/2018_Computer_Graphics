@@ -145,6 +145,94 @@ void CRun_time_Framework::Delete_ScreenOut_Rect()
 
 void CRun_time_Framework::Saparate_Rect(Rect* t)
 {
+	switch (t->type) {
+	case 0:
+		if ((line.x2 - line.x1) / (line.y2 - line.y1) <= 1 &&
+			(line.x2 - line.x1) / (line.y2 - line.y1) >= -1) {
+			printf("세로 SLICE!!\n");
+			fragments[0].live = true;
+
+			fragments[0].p[0].x = t->p[0].x - 5;
+			fragments[0].p[0].y = t->p[0].y;
+			fragments[0].p[1].x = t->p[3].x - 5;
+			fragments[0].p[1].y = t->p[3].y;
+			fragments[0].p[2].x = t->p[2].x - 5;
+			fragments[0].p[2].y = t->p[2].y;
+
+			fragments[1].live = true;
+
+			fragments[1].p[0].x = t->p[0].x + 5;
+			fragments[1].p[0].y = t->p[0].y;
+			fragments[1].p[1].x = t->p[2].x + 5;
+			fragments[1].p[1].y = t->p[2].y;
+			fragments[1].p[2].x = t->p[1].x + 5;
+			fragments[1].p[2].y = t->p[1].y;
+		}
+		else {
+			printf("가로 SLICE!!\n");
+			fragments[0].live = true;
+
+			fragments[0].p[0].x = t->p[3].x - 5;
+			fragments[0].p[0].y = t->p[3].y;
+			fragments[0].p[1].x = t->p[2].x - 5;
+			fragments[0].p[1].y = t->p[2].y;
+			fragments[0].p[2].x = t->p[1].x - 5;
+			fragments[0].p[2].y = t->p[1].y;
+
+			fragments[1].live = true;
+
+			fragments[1].p[0].x = t->p[0].x + 5;
+			fragments[1].p[0].y = t->p[0].y;
+			fragments[1].p[1].x = t->p[3].x + 5;
+			fragments[1].p[1].y = t->p[3].y;
+			fragments[1].p[2].x = t->p[1].x + 5;
+			fragments[1].p[2].y = t->p[1].y;
+		}
+		break;
+	case 1:
+		if ((line.x2 - line.x1) / (line.y2 - line.y1) <= 1 &&
+			(line.x2 - line.x1) / (line.y2 - line.y1) >= -1) {
+			printf("세로 SLICE!!\n");
+			fragments[0].live = true;
+
+			fragments[0].p[0].x = t->p[0].x - 5;
+			fragments[0].p[0].y = t->p[0].y;
+			fragments[0].p[1].x = t->p[3].x - 5;
+			fragments[0].p[1].y = t->p[3].y;
+			fragments[0].p[2].x = t->p[2].x - 5;
+			fragments[0].p[2].y = t->p[2].y;
+
+			fragments[1].live = true;
+
+			fragments[1].p[0].x = t->p[0].x + 5;
+			fragments[1].p[0].y = t->p[0].y;
+			fragments[1].p[1].x = t->p[2].x + 5;
+			fragments[1].p[1].y = t->p[2].y;
+			fragments[1].p[2].x = t->p[1].x + 5;
+			fragments[1].p[2].y = t->p[1].y;
+		}
+		else {
+			printf("가로 SLICE!!\n");
+			fragments[0].live = true;
+
+			fragments[0].p[0].x = t->p[0].x - 5;
+			fragments[0].p[0].y = t->p[0].y;
+			fragments[0].p[1].x = t->p[3].x - 5;
+			fragments[0].p[1].y = t->p[3].y;
+			fragments[0].p[2].x = t->p[1].x - 5;
+			fragments[0].p[2].y = t->p[1].y;
+
+			fragments[1].live = true;
+
+			fragments[1].p[0].x = t->p[1].x + 5;
+			fragments[1].p[0].y = t->p[1].y;
+			fragments[1].p[1].x = t->p[3].x + 5;
+			fragments[1].p[1].y = t->p[3].y;
+			fragments[1].p[2].x = t->p[2].x + 5;
+			fragments[1].p[2].y = t->p[2].y;
+		}
+		break;
+	}
 }
 
 void CRun_time_Framework::Update_Rect()
@@ -155,6 +243,39 @@ void CRun_time_Framework::Update_Rect()
 			t->p[i].y += 0.05 * (current_time - Prevtime);
 		}
 		t = t->next;
+	}
+}
+
+void CRun_time_Framework::Draw_Fragments()
+{
+	glPushMatrix();
+
+	for (int i = 0; i < 2; ++i) {
+		if (fragments[i].live) {
+			glBegin(GL_POLYGON);
+			glVertex2f(fragments[i].p[0].x, fragments[i].p[0].y);
+			glVertex2f(fragments[i].p[1].x, fragments[i].p[1].y);
+			glVertex2f(fragments[i].p[2].x, fragments[i].p[2].y);
+			glEnd();
+		}
+	}
+
+	glPopMatrix();
+}
+
+void CRun_time_Framework::Update_Fragments()
+{
+	if (fragments[0].live) {
+		for (int i = 0; i < 3; ++i) {
+			fragments[0].p[i].x -= 0.03 * (current_time - Prevtime);
+			fragments[0].p[i].y -= 0.07 * (current_time - Prevtime);
+		}
+	}
+	if (fragments[1].live) {
+		for (int i = 0; i < 3; ++i) {
+			fragments[1].p[i].x += 0.03 * (current_time - Prevtime);
+			fragments[1].p[i].y -= 0.07 * (current_time - Prevtime);
+		}
 	}
 }
 

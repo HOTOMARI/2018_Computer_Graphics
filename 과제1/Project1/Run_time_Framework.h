@@ -30,6 +30,7 @@ struct Tri {
 struct Rect {
 	float size;
 	int type;
+	bool live = true;
 	MYPOINT p[4];
 	Rect* next = NULL;
 };
@@ -38,6 +39,11 @@ struct Line {
 	float x1, y1;
 	float x2, y2;
 	bool see = false;
+};
+
+struct Frag {
+	MYPOINT p[3];
+	bool live = false;
 };
 
 
@@ -53,7 +59,8 @@ private:
 	GLint current_frame = 0;
 
 	Tri* triangle;
-	Tri* star;
+	Frag fragments[2];
+	Tri trash[2][20];
 
 	Rect* rectangle;
 
@@ -88,6 +95,9 @@ public:
 	void Delete_ScreenOut_Rect();
 	void Saparate_Rect(Rect*);
 	void Update_Rect();
+
+	void Draw_Fragments();
+	void Update_Fragments();
 
 	void Draw_Line();
 
