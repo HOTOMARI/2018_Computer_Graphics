@@ -180,7 +180,8 @@ GLvoid CRun_time_Framework::Update() {
 					collide_Line_and_Line(line.x1, line.x2, t->p[1].x, t->p[2].x, line.y1, line.y2, t->p[1].y, t->p[2].y)||
 					collide_Line_and_Line(line.x1, line.x2, t->p[2].x, t->p[3].x, line.y1, line.y2, t->p[2].y, t->p[3].y)||
 					collide_Line_and_Line(line.x1, line.x2, t->p[3].x, t->p[0].x, line.y1, line.y2, t->p[3].y, t->p[0].y)) && t->live &&
-					fragments[0].live == false && fragments[1].live == false) {
+					fragments[0].live == false && fragments[1].live == false &&
+					(t->p[2].y > -190 && t->p[2].y < 190)) {
 					t->live = false;
 					printf("collide RECT%d!\n", index);
 					Make_Fragments(t);
