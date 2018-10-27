@@ -2,6 +2,7 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <time.h>
+#include <stdio.h>
 
 #define PI 3.141592
 #define FPS_TIME 60
@@ -14,8 +15,8 @@
 #define DIR_Y_CW 0x10	
 #define DIR_Z_CW 0x20	
 
-struct MYRECT {
-	float right, left, top, bottom;
+struct MYPOINT {
+	float x, y;
 };
 
 struct Tri {
@@ -29,7 +30,7 @@ struct Tri {
 struct Rect {
 	float size;
 	int type;
-	MYRECT rt;
+	MYPOINT p[4];
 	Rect* next = NULL;
 };
 
@@ -59,6 +60,7 @@ private:
 	Line line;
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
+	bool line_finished;
 
 public:
 	CRun_time_Framework();
@@ -90,6 +92,7 @@ public:
 	void Draw_Line();
 
 	bool collide(RECT, RECT);
+	bool collide_Line_and_Line(float x1, float x2, float x3, float x4, float y1, float y2, float y3, float y4);
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);

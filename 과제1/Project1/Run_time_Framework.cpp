@@ -74,12 +74,15 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		line.see = true;
-		line.x1 = line.x2 = x - 400;
-		line.y1 = line.y2 = -1 * (y - 300);
+		if (line_finished == false) {
+			line.see = true;
+			line.x1 = line.x2 = x - 400;
+			line.y1 = line.y2 = -1 * (y - 300);
+		}
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		line.see = false;
+		line_finished = true;
 	}
 	return GLvoid();
 }
@@ -115,6 +118,8 @@ GLvoid CRun_time_Framework::Init() {
 	Make_Rect();
 	make_stack[0] = 0;
 	make_stack[1] = 0;
+
+	line_finished = false;
 
 	srand(time(NULL));
 	myself = this;
@@ -161,6 +166,25 @@ GLvoid CRun_time_Framework::Update() {
 			Make_Rect();
 			make_stack[1] = 0;
 		}
+
+		if (line_finished && line.see==false) {
+			Rect* t = rectangle;
+			int index = 0;
+			while (t != NULL) {
+				if (collide_Line_and_Line(line.x1, line.x2, t->p[0].x, t->p[1].x, line.y1, line.y2, t->p[0].y, t->p[1].y)||
+					collide_Line_and_Line(line.x1, line.x2, t->p[1].x, t->p[2].x, line.y1, line.y2, t->p[1].y, t->p[2].y)||
+					collide_Line_and_Line(line.x1, line.x2, t->p[2].x, t->p[3].x, line.y1, line.y2, t->p[2].y, t->p[3].y)||
+					collide_Line_and_Line(line.x1, line.x2, t->p[3].x, t->p[0].x, line.y1, line.y2, t->p[3].y, t->p[0].y)) {
+
+					printf("collide RECT%d!\n", index);
+					break;
+				}
+				index++;
+				t = t->next;
+			}
+			line_finished = false;
+		}
+
 
 		Prevtime = current_time;
 		current_frame = 0;

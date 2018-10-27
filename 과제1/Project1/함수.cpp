@@ -82,12 +82,8 @@ void CRun_time_Framework::Make_Rect()
 	if (t == NULL) {
 		t = (Rect*)malloc(sizeof(Rect));
 		t->next = NULL;
-		t->rt.bottom = -360;
-		t->rt.top = -300;
-		t->rt.left = -30;
-		t->rt.right = 30;
-		t->size = 30;
 		t->type = rand() % 2;
+		t->size = 30;
 		rectangle = t;
 	}
 	else {
@@ -96,12 +92,23 @@ void CRun_time_Framework::Make_Rect()
 		t->next = (Rect*)malloc(sizeof(Rect));
 		t = t->next;
 		t->next = NULL;
-		t->rt.bottom = -360;
-		t->rt.top = -300;
-		t->rt.left = -30;
-		t->rt.right = 30;
 		t->size = 30;
 		t->type = rand() % 2;
+	}
+
+	switch (t->type) {
+	case 0:
+		t->p[0].x = 30, t->p[0].y = -300;
+		t->p[1].x = 30, t->p[1].y = -360;
+		t->p[2].x = -30, t->p[2].y = -360;
+		t->p[3].x = -30, t->p[3].y = -300;
+		break;
+	case 1:
+		t->p[0].x = 0, t->p[0].y = -300;
+		t->p[1].x = 30, t->p[1].y = -330;
+		t->p[2].x = 0, t->p[2].y = -360;
+		t->p[3].x = -30, t->p[3].y = -330;
+		break;
 	}
 }
 
@@ -112,24 +119,12 @@ void CRun_time_Framework::Draw_Rect()
 	while (t != NULL) {
 		glPushMatrix();
 
-		switch (t->type) {
-		case 0:
-			glBegin(GL_POLYGON);
-			glVertex2f(t->rt.right, t->rt.top);
-			glVertex2f(t->rt.right, t->rt.bottom);
-			glVertex2f(t->rt.left, t->rt.bottom);
-			glVertex2f(t->rt.left, t->rt.top);
-			glEnd();
-			break;
-		case 1:
-			glBegin(GL_POLYGON);
-			glVertex2f(t->rt.right - 30, t->rt.top);
-			glVertex2f(t->rt.right, t->rt.bottom + 30);
-			glVertex2f(t->rt.left + 30, t->rt.bottom);
-			glVertex2f(t->rt.left, t->rt.top - 30);
-			glEnd();
-			break;
-		}
+		glBegin(GL_POLYGON);
+		glVertex2f(t->p[0].x, t->p[0].y);
+		glVertex2f(t->p[1].x, t->p[1].y);
+		glVertex2f(t->p[2].x, t->p[2].y);
+		glVertex2f(t->p[3].x, t->p[3].y);
+		glEnd();
 
 		glPopMatrix();
 
@@ -141,7 +136,7 @@ void CRun_time_Framework::Delete_ScreenOut_Rect()
 {
 	Rect* t = rectangle;
 	if (t != NULL) {
-		if (t->rt.bottom > 300 + t->size) {
+		if (t->p[2].y > 300 + t->size) {
 			rectangle = t->next;
 			free(t);
 		}
@@ -156,8 +151,9 @@ void CRun_time_Framework::Update_Rect()
 {
 	Rect* t = rectangle;
 	while (t != NULL) {
-		t->rt.bottom += 0.05 * (current_time - Prevtime);
-		t->rt.top += 0.05 * (current_time - Prevtime);
+		for (int i = 0; i < 4; ++i) {
+			t->p[i].y += 0.05 * (current_time - Prevtime);
+		}
 		t = t->next;
 	}
 }
@@ -181,6 +177,21 @@ bool CRun_time_Framework::collide(RECT A, RECT B)
 	if (A.bottom > B.top)
 		return false;
 	return true;
+}
+
+bool CRun_time_Framework::collide_Line_and_Line(float x1, float x2, float x3, float x4, float y1, float y2, float y3, float y4)
+{
+	float den = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
+
+	if (den != 0) {
+		float ua, ub;
+		ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / den;
+		ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / den;
+		if (ua < 1 && ua>0 && ub < 1 && ub>0)
+			return true;
+		else return false;
+	}
+	else return false;
 }
 
 
