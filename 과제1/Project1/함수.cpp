@@ -49,7 +49,11 @@ void CRun_time_Framework::Draw_Tri()
 
 		t = t->next;
 	}
-	
+
+	glBegin(GL_LINES);
+	glVertex2f(-400, 200);
+	glVertex2f(400, 200);
+	glEnd();
 }
 
 void CRun_time_Framework::Delete_ScreenOut_Tri()
