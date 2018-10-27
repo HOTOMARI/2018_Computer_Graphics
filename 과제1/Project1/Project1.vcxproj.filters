@@ -26,7 +26,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Run_time_Framework.h">
+    <ClInclude Include="김호진.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

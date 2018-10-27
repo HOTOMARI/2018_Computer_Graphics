@@ -60,7 +60,6 @@ struct Star {
 	float R, G, B;
 	float x, y;
 	float final_x, final_y;
-	float rotate;
 	float T;
 	Star* next;
 };

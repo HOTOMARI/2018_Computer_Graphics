@@ -1,4 +1,4 @@
-#include "Run_time_Framework.h"
+#include "±èÈ£Áø.h"
 
 extern int kind;
 
@@ -173,7 +173,7 @@ GLvoid CRun_time_Framework::Init() {
 	make_timer[1] = 0;
 	trash_count = 0;
 
-	trash[1][0].fill = true;
+	//trash[1][0].fill = true;
 
 	line_finished = false;
 

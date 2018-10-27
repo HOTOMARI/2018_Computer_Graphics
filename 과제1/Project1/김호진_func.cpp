@@ -1,4 +1,4 @@
-#include "Run_time_Framework.h"
+#include "±èÈ£Áø.h"
 
 
 GLvoid CRun_time_Framework::background(float r, float g, float b) {
@@ -37,6 +37,7 @@ void CRun_time_Framework::Draw_Tri()
 {
 	Tri* t = triangle;
 
+	glColor3f(1, 1, 1);
 	while (t != NULL) {
 		glPushMatrix();
 
@@ -123,6 +124,7 @@ void CRun_time_Framework::Make_Rect()
 void CRun_time_Framework::Draw_Rect()
 {
 	Rect* t = rectangle;
+	glColor3f(1, 1, 1);
 
 	while (t != NULL) {
 		if (t->live) {
@@ -261,7 +263,7 @@ void CRun_time_Framework::Draw_Fragments()
 
 	for (int i = 0; i < 2; ++i) {
 		if (fragments[i].live) {
-			//if (fragments[i].clicked == false) {
+			if (fragments[i].clicked == false) {
 				glColor3f(1, 0, 0);
 				glBegin(GL_POLYGON);
 				for (float k = 0.0; k < 360.0; k += 1.0) {
@@ -269,7 +271,7 @@ void CRun_time_Framework::Draw_Fragments()
 						30 * sin(k / 180.0*PI) + fragments[i].center_y);
 				}
 				glEnd();
-			//}
+			}
 			glColor3f(1, 1, 1);
 			glBegin(GL_POLYGON);
 			glVertex2f(fragments[i].p[0].x, fragments[i].p[0].y);
@@ -318,6 +320,7 @@ void CRun_time_Framework::Update_Fragments()
 
 void CRun_time_Framework::Draw_Trash()
 {
+	glColor3f(1, 1, 0);
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 20; ++j) {
 			glBegin(GL_LINE_LOOP);
@@ -371,6 +374,7 @@ void CRun_time_Framework::Update_Trash()
 
 void  CRun_time_Framework::Draw_Line()
 {
+	glColor3f(1, 1, 1);
 	glBegin(GL_LINES);
 	glVertex2f(line.x1, line.y1);
 	glVertex2f(line.x2, line.y2);
@@ -399,7 +403,6 @@ void CRun_time_Framework::Make_Star(float x, float y)
 	t->final_x = rand() % 800 - 400;
 	t->final_y = rand() % 200 - 100;
 	t->size = rand() % 20 + 30;
-	t->rotate = rand() % 360;
 	t->R = rand() % 255 / 255.0;
 	t->G = rand() % 255 / 255.0;
 	t->B = rand() % 255 / 255.0;

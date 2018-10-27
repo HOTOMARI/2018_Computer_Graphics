@@ -144,7 +144,7 @@
     <ClCompile Include="함수.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Run_time_Framework.h" />
+    <ClInclude Include="김호진.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
