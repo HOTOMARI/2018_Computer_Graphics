@@ -77,18 +77,85 @@ void CRun_time_Framework::Update_Triangle()
 
 void CRun_time_Framework::Make_Rectangle()
 {
+	Rect* t = rectangle;
+
+	if (t == NULL) {
+		t = (Rect*)malloc(sizeof(Rect));
+		t->next = NULL;
+		t->rt.bottom = -360;
+		t->rt.top = -300;
+		t->rt.left = -30;
+		t->rt.right = 30;
+		t->size = 30;
+		t->type = rand() % 2;
+		rectangle = t;
+	}
+	else {
+		while (t->next != NULL)
+			t = t->next;
+		t->next = (Rect*)malloc(sizeof(Rect));
+		t = t->next;
+		t->next = NULL;
+		t->rt.bottom = -360;
+		t->rt.top = -300;
+		t->rt.left = -30;
+		t->rt.right = 30;
+		t->size = 30;
+		t->type = rand() % 2;
+	}
 }
 
 void CRun_time_Framework::Draw_Rectangle()
 {
+	Rect* t = rectangle;
+
+	while (t != NULL) {
+		glPushMatrix();
+
+		switch (t->type) {
+		case 0:
+			glBegin(GL_POLYGON);
+			glVertex2f(t->rt.right, t->rt.top);
+			glVertex2f(t->rt.right, t->rt.bottom);
+			glVertex2f(t->rt.left, t->rt.bottom);
+			glVertex2f(t->rt.left, t->rt.top);
+			glEnd();
+			break;
+		case 1:
+			glBegin(GL_POLYGON);
+			glVertex2f(t->rt.right - 30, t->rt.top);
+			glVertex2f(t->rt.right, t->rt.bottom + 30);
+			glVertex2f(t->rt.left + 30, t->rt.bottom);
+			glVertex2f(t->rt.left, t->rt.top - 30);
+			glEnd();
+			break;
+		}
+
+		glPopMatrix();
+
+		t = t->next;
+	}
 }
 
 void CRun_time_Framework::Delete_ScreenOut_Rectangle()
 {
+	Rect* t = rectangle;
+	if (t != NULL) {
+		if (t->rt.bottom > 300 + t->size) {
+			rectangle = t->next;
+			free(t);
+		}
+	}
 }
 
 void CRun_time_Framework::Update_Rectangle()
 {
+	Rect* t = rectangle;
+	while (t != NULL) {
+		t->rt.bottom += 0.05 * (current_time - Prevtime);
+		t->rt.top += 0.05 * (current_time - Prevtime);
+		t = t->next;
+	}
 }
 
 bool CRun_time_Framework::collide(RECT A, RECT B)

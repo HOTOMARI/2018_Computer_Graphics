@@ -14,7 +14,7 @@ GLvoid CRun_time_Framework::draw() {
 	glMatrixMode(GL_MODELVIEW);
 
 	Draw_Triangle();
-	
+	Draw_Rectangle();
 
 	glutSwapBuffers();
 }
@@ -85,8 +85,11 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 
 GLvoid CRun_time_Framework::Init() {
 	triangle = NULL;
+	rectangle = NULL;
 	Make_Triangle();
-	make_stack = 0;
+	Make_Rectangle();
+	make_stack[0] = 0;
+	make_stack[1] = 0;
 
 	srand(time(NULL));
 	myself = this;
@@ -118,10 +121,19 @@ GLvoid CRun_time_Framework::Update() {
 
 		Update_Triangle();
 		Delete_ScreenOut_Triangle();
-		make_stack++;
-		if (make_stack > 120) {
+
+		Update_Rectangle();
+		Delete_ScreenOut_Rectangle();
+
+		make_stack[0]++;
+		make_stack[1]++;
+		if (make_stack[0] > 120) {
 			Make_Triangle();
-			make_stack = 0;
+			make_stack[0] = 0;
+		}
+		if (make_stack[1] > 200) {
+			Make_Rectangle();
+			make_stack[1] = 0;
 		}
 
 		Prevtime = current_time;
