@@ -13,7 +13,7 @@ void CRun_time_Framework::Make_Triangle()
 	if (t == NULL) {
 		t = (Tri*)malloc(sizeof(Tri));
 		t->next = NULL;
-		t->center_x = -400.0;
+		t->center_x = -430.0;
 		t->center_y = 250.0;
 		t->size = 30;
 		t->rotate = rand() % 360;
@@ -25,7 +25,7 @@ void CRun_time_Framework::Make_Triangle()
 		t->next = (Tri*)malloc(sizeof(Tri));
 		t = t->next;
 		t->next = NULL;
-		t->center_x = -400.0;
+		t->center_x = -430.0;
 		t->center_y = 250.0;
 		t->size = 30;
 		t->rotate = rand() % 360;
@@ -54,6 +54,17 @@ void CRun_time_Framework::Draw_Triangle()
 	
 }
 
+void CRun_time_Framework::Delete_ScreenOut_Triangle()
+{
+	Tri* t = triangle;
+	if (t != NULL) {
+		if (t->center_x > 400+t->size) {
+			triangle = t->next;
+			free(t);
+		}
+	}
+}
+
 void CRun_time_Framework::Update_Triangle()
 {
 	Tri* t = triangle;
@@ -62,6 +73,22 @@ void CRun_time_Framework::Update_Triangle()
 		t->center_x += 0.05 * (current_time - Prevtime);
 		t = t->next;
 	}
+}
+
+void CRun_time_Framework::Make_Rectangle()
+{
+}
+
+void CRun_time_Framework::Draw_Rectangle()
+{
+}
+
+void CRun_time_Framework::Delete_ScreenOut_Rectangle()
+{
+}
+
+void CRun_time_Framework::Update_Rectangle()
+{
 }
 
 bool CRun_time_Framework::collide(RECT A, RECT B)

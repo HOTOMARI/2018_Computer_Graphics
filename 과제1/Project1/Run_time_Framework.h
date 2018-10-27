@@ -22,6 +22,12 @@ struct Tri {
 	Tri* next = NULL;
 };
 
+struct Rect {
+	float size;
+	int type;
+	RECT rt;
+};
+
 
 class CRun_time_Framework {
 private:
@@ -35,6 +41,9 @@ private:
 	GLint current_frame = 0;
 
 	Tri* triangle;
+	Tri* star;
+
+	Rect rectangle;
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 
@@ -55,7 +64,14 @@ public:
 	GLvoid background(float r, float g, float b);
 	void Make_Triangle();
 	void Draw_Triangle();
+	void Delete_ScreenOut_Triangle();
 	void Update_Triangle();
+
+	void Make_Rectangle();
+	void Update_Rectangle();
+	void Delete_ScreenOut_Rectangle();
+	void Update_Rectangle();
+
 	bool collide(RECT, RECT);
 
 	// 콜백 함수

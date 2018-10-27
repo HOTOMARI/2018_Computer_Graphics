@@ -117,6 +117,7 @@ GLvoid CRun_time_Framework::Update() {
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
 
 		Update_Triangle();
+		Delete_ScreenOut_Triangle();
 		make_stack++;
 		if (make_stack > 120) {
 			Make_Triangle();
