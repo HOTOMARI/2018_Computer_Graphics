@@ -22,6 +22,7 @@ void CRun_time_Framework::Make_Tri()
 		t = t->next;
 		t->next = NULL;
 	}
+	t->live = true;
 	t->center_x = -430.0;
 	t->center_y = 250.0;
 	t->size = 30;
@@ -39,11 +40,13 @@ void CRun_time_Framework::Draw_Tri()
 	while (t != NULL) {
 		glPushMatrix();
 
-		glBegin(GL_POLYGON);
-		glVertex2f(t->p[0].x, t->p[0].y);
-		glVertex2f(t->p[1].x, t->p[1].y);
-		glVertex2f(t->p[2].x, t->p[2].y);
-		glEnd();
+		if (t->live) {
+			glBegin(GL_POLYGON);
+			glVertex2f(t->p[0].x, t->p[0].y);
+			glVertex2f(t->p[1].x, t->p[1].y);
+			glVertex2f(t->p[2].x, t->p[2].y);
+			glEnd();
+		}
 
 		glPopMatrix();
 
@@ -258,7 +261,7 @@ void CRun_time_Framework::Draw_Fragments()
 
 	for (int i = 0; i < 2; ++i) {
 		if (fragments[i].live) {
-			if (fragments[i].clicked == false) {
+			//if (fragments[i].clicked == false) {
 				glColor3f(1, 0, 0);
 				glBegin(GL_POLYGON);
 				for (float k = 0.0; k < 360.0; k += 1.0) {
@@ -266,7 +269,7 @@ void CRun_time_Framework::Draw_Fragments()
 						30 * sin(k / 180.0*PI) + fragments[i].center_y);
 				}
 				glEnd();
-			}
+			//}
 			glColor3f(1, 1, 1);
 			glBegin(GL_POLYGON);
 			glVertex2f(fragments[i].p[0].x, fragments[i].p[0].y);
@@ -292,9 +295,9 @@ void CRun_time_Framework::Update_Fragments()
 					break;
 				}
 			}
+			fragments[0].center_x = (fragments[0].p[0].x + fragments[0].p[1].x + fragments[0].p[2].x) / 3.0;
+			fragments[0].center_y = (fragments[0].p[0].y + fragments[0].p[1].y + fragments[0].p[2].y) / 3.0;
 		}
-		fragments[0].center_x = (fragments[0].p[0].x + fragments[0].p[1].x + fragments[0].p[2].x) / 3.0;
-		fragments[0].center_y = (fragments[0].p[0].y + fragments[0].p[1].y + fragments[0].p[2].y) / 3.0;
 	}
 	if (fragments[1].live) {
 		if (fragments[1].clicked == false) {
@@ -307,9 +310,9 @@ void CRun_time_Framework::Update_Fragments()
 					break;
 				}
 			}
+			fragments[1].center_x = (fragments[1].p[0].x + fragments[1].p[1].x + fragments[1].p[2].x) / 3.0;
+			fragments[1].center_y = (fragments[1].p[0].y + fragments[1].p[1].y + fragments[1].p[2].y) / 3.0;
 		}
-		fragments[1].center_x = (fragments[1].p[0].x + fragments[1].p[1].x + fragments[1].p[2].x) / 3.0;
-		fragments[1].center_y = (fragments[1].p[0].y + fragments[1].p[1].y + fragments[1].p[2].y) / 3.0;
 	}
 }
 
@@ -399,6 +402,14 @@ bool CRun_time_Framework::collide_Line_and_Line(float x1, float x2, float x3, fl
 			return true;
 		else return false;
 	}
+	else return false;
+}
+
+bool CRun_time_Framework::collide_UpTri_and_Frag(Tri* t, Frag fragment)
+{
+	if((sqrt(pow(t->center_x - fragment.center_x, 2) + pow(t->center_y - fragment.center_y, 2)) < 30.0)&&
+		t->live&&fragment.live)
+		return true;
 	else return false;
 }
 

@@ -23,6 +23,7 @@ struct Tri {
 	float size;
 	float center_x, center_y;
 	float rotate;
+	bool live = false;
 	MYPOINT p[3];
 	Tri* next = NULL;
 };
@@ -52,6 +53,12 @@ struct Trash {
 	float ani_stack = 0;
 	float height = 0;
 	bool fill = false;
+};
+
+struct Star {
+	float size;
+	float R, G, B;
+	float x, y;
 };
 
 
@@ -116,6 +123,7 @@ public:
 
 	bool collide(RECT, RECT);
 	bool collide_Line_and_Line(float x1, float x2, float x3, float x4, float y1, float y2, float y3, float y4);
+	bool collide_UpTri_and_Frag(Tri*, Frag);
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);

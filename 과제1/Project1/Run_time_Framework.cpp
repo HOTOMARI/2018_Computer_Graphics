@@ -76,18 +76,48 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		for (int i = 0; i < 2; ++i) {
+			if (sqrt(pow((x - 400) - fragments[i].center_x, 2) + pow((-1 * (y - 300)) - fragments[i].center_y, 2)) < 30.0) {
+				fragments[i].clicked = true;
+				line_finished = true;
+			}
+		}
 		if (line_finished == false) {
 			line.see = true;
 			line.x1 = line.x2 = x - 400;
 			line.y1 = line.y2 = -1 * (y - 300);
 		}
-		else {
-
-		}
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		line.see = false;
 		line_finished = true;
+		for (int i = 0; i < 2; ++i) {
+			fragments[i].clicked = false;
+		}
+
+		{
+			Tri* t = triangle;
+			int index = 0;
+			while (t != NULL) {
+				if (collide_UpTri_and_Frag(t, fragments[0])) {
+					t->live = false;
+					fragments[0].live = false;
+					printf("collide TRI%d!\n", index);
+					//Make_Fragments(t);
+					break;
+				}
+				else if (collide_UpTri_and_Frag(t, fragments[1])) {
+					t->live = false;
+					fragments[1].live = false;
+					printf("collide TRI%d!\n", index);
+					//Make_Fragments(t);
+					break;
+				}
+				index++;
+				t = t->next;
+			}
+		}
+
 	}
 	return GLvoid();
 }
@@ -97,6 +127,17 @@ GLvoid CRun_time_Framework::Motion(int x, int y)
 	if (line.see) {
 		line.x2 = x - 400;
 		line.y2 = -1 * (y - 300);
+	}
+	for (int i = 0; i < 2; ++i) {
+		if (fragments[i].clicked) {
+			for (int k = 0; k < 3; ++k) {
+				fragments[i].p[k].x += (x - 400) - fragments[i].center_x;
+				fragments[i].p[k].y += (-1 * (y - 300)) - fragments[i].center_y;
+			}
+
+			fragments[i].center_x = x - 400;
+			fragments[i].center_y = -1 * (y - 300);
+		}
 	}
 	return GLvoid();
 }
