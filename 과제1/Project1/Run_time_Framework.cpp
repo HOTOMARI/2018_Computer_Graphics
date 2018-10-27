@@ -117,8 +117,9 @@ GLvoid CRun_time_Framework::Init() {
 	rectangle = NULL;
 	Make_Tri();
 	Make_Rect();
-	make_stack[0] = 0;
-	make_stack[1] = 0;
+	make_timer[0] = 0;
+	make_timer[1] = 0;
+	trash_count = 0;
 
 	line_finished = false;
 
@@ -157,15 +158,15 @@ GLvoid CRun_time_Framework::Update() {
 		Update_Rect();
 		Delete_ScreenOut_Rect();
 
-		make_stack[0]++;
-		make_stack[1]++;
-		if (make_stack[0] > 120) {
+		make_timer[0]++;
+		make_timer[1]++;
+		if (make_timer[0] > 120) {
 			Make_Tri();
-			make_stack[0] = 0;
+			make_timer[0] = 0;
 		}
-		if (make_stack[1] > 200) {
+		if (make_timer[1] > 200) {
 			Make_Rect();
-			make_stack[1] = 0;
+			make_timer[1] = 0;
 		}
 
 		if (line_finished && line.see==false) {

@@ -46,13 +46,19 @@ struct Frag {
 	bool live = false;
 };
 
+struct Trash {
+	int ani_stack = 0;
+	bool fill = false;
+};
+
 
 class CRun_time_Framework {
 private:
 	static CRun_time_Framework* myself;
 	int m_nWidth;
 	int m_nHeight;
-	int make_stack[2];
+	int make_timer[2];
+	int trash_count;
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
@@ -60,7 +66,7 @@ private:
 
 	Tri* triangle;
 	Frag fragments[2];
-	Tri trash[2][20];
+	Tri trash[3][10];
 
 	Rect* rectangle;
 
@@ -93,11 +99,15 @@ public:
 	void Make_Rect();
 	void Draw_Rect();
 	void Delete_ScreenOut_Rect();
-	void Saparate_Rect(Rect*);
 	void Update_Rect();
 
+	void Saparate_Rect(Rect*);
 	void Draw_Fragments();
 	void Update_Fragments();
+
+	void Draw_Trash();
+	void Make_Trash();
+	void Update_Trash();
 
 	void Draw_Line();
 

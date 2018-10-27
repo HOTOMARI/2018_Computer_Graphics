@@ -147,7 +147,18 @@ void CRun_time_Framework::Delete_ScreenOut_Rect()
 	}
 }
 
-void CRun_time_Framework::Saparate_Rect(Rect* t)
+void CRun_time_Framework::Update_Rect()
+{
+	Rect* t = rectangle;
+	while (t != NULL) {
+		for (int i = 0; i < 4; ++i) {
+			t->p[i].y += 0.05 * (current_time - Prevtime);
+		}
+		t = t->next;
+	}
+}
+
+void CRun_time_Framework::Make_Fragments(Rect* t)
 {
 	switch (t->type) {
 	case 0:
@@ -236,17 +247,6 @@ void CRun_time_Framework::Saparate_Rect(Rect* t)
 			fragments[1].p[2].y = t->p[2].y;
 		}
 		break;
-	}
-}
-
-void CRun_time_Framework::Update_Rect()
-{
-	Rect* t = rectangle;
-	while (t != NULL) {
-		for (int i = 0; i < 4; ++i) {
-			t->p[i].y += 0.05 * (current_time - Prevtime);
-		}
-		t = t->next;
 	}
 }
 
