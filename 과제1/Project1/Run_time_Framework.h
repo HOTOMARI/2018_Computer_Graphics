@@ -47,7 +47,8 @@ struct Frag {
 };
 
 struct Trash {
-	int ani_stack = 0;
+	float ani_stack = 0;
+	float height = 0;
 	bool fill = false;
 };
 
@@ -66,7 +67,7 @@ private:
 
 	Tri* triangle;
 	Frag fragments[2];
-	Tri trash[3][20];
+	Trash trash[3][20];
 
 	Rect* rectangle;
 

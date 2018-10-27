@@ -100,6 +100,7 @@ void CRun_time_Framework::Make_Rect()
 		t->type = rand() % 2;
 	}
 	t->size = 30;
+	t->live = true;
 	switch (t->type) {
 	case 0:
 		t->p[0].x = 30, t->p[0].y = -300;
@@ -121,17 +122,18 @@ void CRun_time_Framework::Draw_Rect()
 	Rect* t = rectangle;
 
 	while (t != NULL) {
-		glPushMatrix();
+		if (t->live) {
+			glPushMatrix();
 
-		glBegin(GL_POLYGON);
-		glVertex2f(t->p[0].x, t->p[0].y);
-		glVertex2f(t->p[1].x, t->p[1].y);
-		glVertex2f(t->p[2].x, t->p[2].y);
-		glVertex2f(t->p[3].x, t->p[3].y);
-		glEnd();
+			glBegin(GL_POLYGON);
+			glVertex2f(t->p[0].x, t->p[0].y);
+			glVertex2f(t->p[1].x, t->p[1].y);
+			glVertex2f(t->p[2].x, t->p[2].y);
+			glVertex2f(t->p[3].x, t->p[3].y);
+			glEnd();
 
-		glPopMatrix();
-
+			glPopMatrix();
+		}
 		t = t->next;
 	}
 }
@@ -272,13 +274,23 @@ void CRun_time_Framework::Update_Fragments()
 	if (fragments[0].live) {
 		for (int i = 0; i < 3; ++i) {
 			fragments[0].p[i].x -= 0.03 * (current_time - Prevtime);
-			fragments[0].p[i].y -= 0.07 * (current_time - Prevtime);
+			fragments[0].p[i].y -= 0.05 * (current_time - Prevtime);
+			if (fragments[0].p[i].y < -190) {
+				fragments[0].live = false;
+				Make_Trash();
+				break;
+			}
 		}
 	}
 	if (fragments[1].live) {
 		for (int i = 0; i < 3; ++i) {
 			fragments[1].p[i].x += 0.03 * (current_time - Prevtime);
-			fragments[1].p[i].y -= 0.07 * (current_time - Prevtime);
+			fragments[1].p[i].y -= 0.1 * (current_time - Prevtime);
+			if (fragments[1].p[i].y < -190) {
+				fragments[1].live = false;
+				Make_Trash();
+				break;
+			}
 		}
 	}
 }
@@ -293,6 +305,45 @@ void CRun_time_Framework::Draw_Trash()
 			glVertex2f(-400 + (j + 1) * 40, -300 + (i + 1) * 40);
 			glVertex2f(-400 + j * 40, -300 + (i + 1) * 40);
 			glEnd();
+
+			if (trash[i][j].fill) {
+				glBegin(GL_POLYGON);
+				glVertex2f(-400 + j * 40, -300 + i * 40);
+				for (float k = 0.0; k < 360.0; k += 1.0) {
+					glVertex2f(-400 + j * 40 + (40.0 / 360.0) * k,
+						-300 + i * 40 + (trash[i][j].height-4.0) + 5.0*sin((k + trash[i][j].ani_stack * 10.0) / 180.0*PI));
+				}
+				glVertex2f(-400 + (j + 1) * 40, -300 + i * 40);
+				glEnd();
+			}
+		}
+	}
+}
+
+void CRun_time_Framework::Make_Trash()
+{
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 20; ++j) {
+			if (trash[i][j].fill == false) {
+				trash[i][j].fill = true;
+				return;
+			}
+		}
+	}
+}
+
+void CRun_time_Framework::Update_Trash()
+{
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 20; ++j) {
+			if (trash[i][j].fill&&trash[i][j].height < 40) {
+				trash[i][j].height += 0.02 * (current_time - Prevtime);
+				if (trash[i][j].height > 40.0) {
+					trash[i][j].height = 40.0;
+				}
+			}
+			if (trash[i][j].fill)
+				trash[i][j].ani_stack += 0.02 * (current_time - Prevtime);
 		}
 	}
 }

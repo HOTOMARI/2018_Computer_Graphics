@@ -122,6 +122,8 @@ GLvoid CRun_time_Framework::Init() {
 	make_timer[1] = 0;
 	trash_count = 0;
 
+	trash[1][0].fill = true;
+
 	line_finished = false;
 
 	srand(time(NULL));
@@ -174,11 +176,11 @@ GLvoid CRun_time_Framework::Update() {
 			Rect* t = rectangle;
 			int index = 0;
 			while (t != NULL) {
-				if (collide_Line_and_Line(line.x1, line.x2, t->p[0].x, t->p[1].x, line.y1, line.y2, t->p[0].y, t->p[1].y)||
+				if ((collide_Line_and_Line(line.x1, line.x2, t->p[0].x, t->p[1].x, line.y1, line.y2, t->p[0].y, t->p[1].y)||
 					collide_Line_and_Line(line.x1, line.x2, t->p[1].x, t->p[2].x, line.y1, line.y2, t->p[1].y, t->p[2].y)||
 					collide_Line_and_Line(line.x1, line.x2, t->p[2].x, t->p[3].x, line.y1, line.y2, t->p[2].y, t->p[3].y)||
-					collide_Line_and_Line(line.x1, line.x2, t->p[3].x, t->p[0].x, line.y1, line.y2, t->p[3].y, t->p[0].y)) {
-
+					collide_Line_and_Line(line.x1, line.x2, t->p[3].x, t->p[0].x, line.y1, line.y2, t->p[3].y, t->p[0].y)) && t->live) {
+					t->live = false;
 					printf("collide RECT%d!\n", index);
 					Make_Fragments(t);
 					break;
@@ -190,6 +192,7 @@ GLvoid CRun_time_Framework::Update() {
 		}
 
 		Update_Fragments();
+		Update_Trash();
 
 		Prevtime = current_time;
 		current_frame = 0;
