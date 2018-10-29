@@ -14,10 +14,6 @@ GLvoid CRun_time_Framework::draw() {
 	glEnable(GL_DEPTH_TEST);	//±íÀÌÅ×½ºÆ®
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
-
 	glShadeModel(GL_FLAT);
 
 	glPushMatrix();
@@ -32,8 +28,18 @@ GLvoid CRun_time_Framework::draw() {
 	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	glMultMatrixf(identity);
 
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CW);
+
 	glPushMatrix();
 	QBEY();
+	glPopMatrix();
+
+	glDisable(GL_CULL_FACE);
+
+	glPushMatrix();
+	Box();
 	glPopMatrix();
 
 	glPopMatrix();
@@ -200,7 +206,10 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-
+		pre_mouse_x = x;
+	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		dir = 0x00;
 	}
 	return GLvoid();
 }
@@ -212,9 +221,32 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 	return GLvoid();
 }
 
+GLvoid CRun_time_Framework::Motion(int x, int y){
+	cur_mouse_x = x;
+	if (pre_mouse_x > cur_mouse_x) {
+		dir ^= DIR_Z_CCW;
+		dir |= DIR_Z_CW;
+	}
+	else if (pre_mouse_x < cur_mouse_x) {
+		dir ^= DIR_Z_CW;
+		dir |= DIR_Z_CCW;
+	}
+}
+
+GLvoid CRun_time_Framework::Mousemotion(int x, int y)
+{
+	if (myself != nullptr) {
+		myself->Motion(x, y);
+	}
+	return GLvoid();
+}
+
 GLvoid CRun_time_Framework::Init() {
 	memset(identity, 0, sizeof(identity));
 	identity[0] = identity[5] = identity[10] = identity[15] = 1;
+	degree = 180.0;
+
+	Initial_Box();
 
 	camera_is_front = true;
 
@@ -230,6 +262,7 @@ GLvoid CRun_time_Framework::Init() {
 	glutKeyboardFunc(KeyDowninput);
 	glutKeyboardUpFunc(KeyUpinput);
 	glutMouseFunc(Mouseaction);
+	glutMotionFunc(Mousemotion);
 	glutIdleFunc(Updatecallback);
 }
 
@@ -245,26 +278,6 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
-
-		if (dir & DIR_X_CCW) {
-			glPushMatrix();
-			{
-				glRotatef(0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-			}
-			glPopMatrix();
-		}
-		if (dir & DIR_X_CW) {
-			glPushMatrix();
-			{
-				glRotatef(-0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
-				glMultMatrixf(identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-			}
-			glPopMatrix();
-		}
-
 		if (dir & DIR_Y_CCW) {
 			glPushMatrix();
 			{
@@ -287,7 +300,8 @@ GLvoid CRun_time_Framework::Update() {
 		if (dir & DIR_Z_CCW) {
 			glPushMatrix();
 			{
-				glRotatef(0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+				degree += 0.4f * (current_time - Prevtime);
+				glRotatef(0.4f * (current_time - Prevtime), 0.f, 0.f, 1.f);
 				glMultMatrixf(identity);
 				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
 			}
@@ -296,13 +310,15 @@ GLvoid CRun_time_Framework::Update() {
 		if (dir & DIR_Z_CW) {
 			glPushMatrix();
 			{
-				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+				degree -= 0.4f * (current_time - Prevtime);
+				glRotatef(-0.4f * (current_time - Prevtime), 0.f, 0.f, 1.f);
 				glMultMatrixf(identity);
 				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
 			}
 			glPopMatrix();
 		}
 
+		Update_Box();
 
 		Prevtime = current_time;
 		current_frame = 0;

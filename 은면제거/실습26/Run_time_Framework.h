@@ -40,10 +40,18 @@ private:
 	GLUquadricObj *qobj = gluNewQuadric();
 
 	GLfloat identity[16];
+	float degree;
 
 	Camera camera;
 
 	Shape box[3];
+	float vector_x;
+	float vector_y;
+
+	Shape ball[3];
+
+	float pre_mouse_x;
+	float cur_mouse_x;
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
@@ -62,6 +70,7 @@ public:
 	GLvoid KeyboardDown(unsigned char key, int x, int y);
 	GLvoid KeyboardUp(unsigned char key, int x, int y);
 	GLvoid Mouse(int button, int state, int x, int y);
+	GLvoid Motion(int x, int y);
 	GLvoid Update();
 
 	// 만든 함수
@@ -69,6 +78,10 @@ public:
 	GLvoid QBEY();		// 큐베
 	GLvoid Initial_Box();	// 빨간상자
 	GLvoid Box();
+	GLvoid Update_Box();
+	GLvoid Initial_Ball();	// 파란 공
+	GLvoid Ball();
+	GLvoid Update_Ball();
 	bool collide(RECT, RECT);
 
 	// 콜백 함수
@@ -77,5 +90,6 @@ public:
 	static GLvoid KeyDowninput(unsigned char key, int x, int y);
 	static GLvoid KeyUpinput(unsigned char key, int x, int y);
 	static GLvoid Mouseaction(int button, int state, int x, int y);
+	static GLvoid Mousemotion(int x, int y);
 	static GLvoid Updatecallback();
 };
