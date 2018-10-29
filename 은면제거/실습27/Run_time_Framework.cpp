@@ -183,6 +183,8 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		break;
 
 	case 'i':
+		depth = true;
+		culling = false;
 		camera.degree[0] = -180;
 		camera.degree[1] = -90;
 		camera.degree[2] = 90;
