@@ -60,8 +60,6 @@ private:
 
 	GLfloat identity[16];
 
-	Shape shapes[3];
-	Shape Ball;
 	Shape Smoke[3];
 	Camera camera;
 
@@ -86,9 +84,8 @@ public:
 
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
-	GLvoid crane();
-	GLvoid ball();
 	GLvoid ground();
+	GLvoid wall();
 	GLvoid tree();
 	GLvoid metal_pole();
 	GLvoid bench_press();

@@ -6,65 +6,19 @@ GLvoid CRun_time_Framework::background(float r, float g, float b) {
 	glClear(GL_COLOR_BUFFER_BIT); // ¼³Á¤µÈ »öÀ¸·Î ÀüÃ¼¸¦ Ä¥ÇÏ±â
 }
 
-GLvoid CRun_time_Framework::crane()
-{
-	// ¸Ç ¾Æ·¡ ¸öÃ¼
-	glTranslatef(shapes[0].position[0], -(100 * 0.3), shapes[0].position[1]);
-	glMultMatrixf(shapes[0].identity);
-
-	glPushMatrix();
-	glScalef(1.5, 1.0, 0.7);
-	glColor3f(1, 1, 1);
-	glutWireCube(100);
-	glColor3f(1, 0, 0);
-	glutSolidCube(100);
-	glPopMatrix();
-
-	// 1Â÷ÆÈ
-	glRotatef(shapes[1].rotate[1], 0.f, 1.f, 0.f);
-	glMultMatrixf(shapes[1].identity);
-	glTranslatef(0, 70, 0);
-
-	glPushMatrix();
-	glScalef(0.4, 1.0, 0.4);
-	glColor3f(1, 1, 1);
-	glutWireCube(100);
-	glColor3f(0, 1, 0);
-	glutSolidCube(100);
-	glPopMatrix();
-
-	// 2Â÷ÆÈ
-	glTranslatef(0, 30, 0);
-	glMultMatrixf(shapes[2].identity);
-	glTranslatef(0, 70, 0);
-
-	glPushMatrix();
-	glScalef(0.2, 1.0, 0.2);
-	glColor3f(1, 1, 1);
-	glutWireCube(100);
-	glColor3f(0, 0, 1);
-	glutSolidCube(100);
-	glPopMatrix();
-}
-
-GLvoid CRun_time_Framework::ball()
-{
-	glPushMatrix();
-	glTranslatef(Ball.position[0], 0, Ball.position[1]);
-	glMultMatrixf(Ball.identity);
-	glColor3f(0, 1, 1);
-	glRotatef(-90, 1, 0, 0);
-	glutWireSphere(50, 10, 10);
-	glPopMatrix();
-}
-
 GLvoid CRun_time_Framework::ground()
 {
+	glPushMatrix();
 	glColor3f(1, 1, 0);
+	glTranslatef(0, -57, 0);
+	glScalef(1, 0.01, 0.75);
+	glutSolidCube(800);
+	glColor3f(1, 1, 1);
+	glutWireCube(800);
+	glPopMatrix();
+	// »ï°¢Çü
 	glTranslatef(0, -50, 0);
 	glRotatef(-90, 1, 0, 0);
-	glRectf(-400, -300, 400, 300);
-	// »ï°¢Çü
 	glColor3f(0, 1, 1);
 	glBegin(GL_TRIANGLES);
 	glVertex3f(-400, -300, 1);
@@ -93,20 +47,6 @@ GLvoid CRun_time_Framework::ground()
 	if (see_collide) {
 		glColor3f(0, 1, 0);
 		glBegin(GL_POLYGON);
-		glVertex3f(Ball.bb.left, Ball.bb.bottom, 1);
-		glVertex3f(Ball.bb.left, Ball.bb.top, 1);
-		glVertex3f(Ball.bb.right, Ball.bb.top, 1);
-		glVertex3f(Ball.bb.right, Ball.bb.bottom, 1);
-		glEnd();
-
-		glBegin(GL_POLYGON);
-		glVertex3f(shapes[0].bb.left, shapes[0].bb.bottom, 80);
-		glVertex3f(shapes[0].bb.left, shapes[0].bb.top, 80);
-		glVertex3f(shapes[0].bb.right, shapes[0].bb.top, 80);
-		glVertex3f(shapes[0].bb.right, shapes[0].bb.bottom, 80);
-		glEnd();
-
-		glBegin(GL_POLYGON);
 		glVertex3f(object[0].left, object[0].bottom, 80);
 		glVertex3f(object[0].left, object[0].top, 80);
 		glVertex3f(object[0].right, object[0].top, 80);
@@ -134,6 +74,59 @@ GLvoid CRun_time_Framework::ground()
 		glVertex3f(object[3].right, object[3].bottom, 80);
 		glEnd();
 	}
+}
+
+GLvoid CRun_time_Framework::wall()
+{
+	// ¿ÞÂÊ
+	glPushMatrix();
+	glColor3f(1, 0, 0);
+	glTranslatef(-400, 140, 0);
+	glRotatef(90, 0, 0, 1);
+	glScalef(0.5, 0.01, 0.75);
+	glutSolidCube(800);
+	glColor3f(1, 1, 1);
+	glutWireCube(800);
+	glPopMatrix();
+	// ¿À¸¥ÂÊ
+	glPushMatrix();
+	glColor3f(0, 0, 1);
+	glTranslatef(400, 140, 0);
+	glRotatef(90, 0, 0, 1);
+	glScalef(0.5, 0.01, 0.75);
+	glutSolidCube(800);
+	glColor3f(1, 1, 1);
+	glutWireCube(800);
+	glPopMatrix();
+	// µÞ¸é
+	glPushMatrix();
+	glColor3f(0, 1, 0);
+	glTranslatef(0, 140, -300);
+	glRotatef(90, 1, 0, 0);
+	glScalef(1, 0.01, 0.5);
+	glutSolidCube(800);
+	glColor3f(1, 1, 1);
+	glutWireCube(800);
+	glPopMatrix();
+	// Á¤¸é
+	glPushMatrix();
+	glColor3f(0.5, 0.5, 0.5);
+	glTranslatef(0, 140, 300);
+	glRotatef(90, 1, 0, 0);
+	glScalef(1, 0.01, 0.5);
+	glutSolidCube(800);
+	glColor3f(1, 1, 1);
+	glutWireCube(800);
+	glPopMatrix();
+	// ÃµÀå
+	glPushMatrix();
+	glColor3f(0, 1, 1);
+	glTranslatef(0, 340, 0);
+	glScalef(1, 0.01, 0.75);
+	glutSolidCube(800);
+	glColor3f(1, 1, 1);
+	glutWireCube(800);
+	glPopMatrix();
 }
 
 GLvoid CRun_time_Framework::tree()
@@ -383,15 +376,6 @@ GLvoid CRun_time_Framework::airplane()
 
 GLvoid CRun_time_Framework::update_bb()
 {
-	shapes[0].bb.left = shapes[0].position[0] - 75;
-	shapes[0].bb.right = shapes[0].position[0] + 75;
-	shapes[0].bb.top = -(shapes[0].position[1] - 35);
-	shapes[0].bb.bottom = -(shapes[0].position[1] + 35);
-
-	Ball.bb.left = Ball.position[0] - 50;
-	Ball.bb.right = Ball.position[0] + 50;
-	Ball.bb.top = -(Ball.position[1] - 50);
-	Ball.bb.bottom = -(Ball.position[1] + 50);
 }
 
 bool CRun_time_Framework::collide(RECT A, RECT B)
