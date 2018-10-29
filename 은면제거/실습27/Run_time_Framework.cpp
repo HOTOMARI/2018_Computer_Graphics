@@ -422,14 +422,28 @@ GLvoid CRun_time_Framework::Update() {
 
 		switch (Gridman.dir) {
 		case 0:
-			//Gridman.position[2] += 0.1 * (current_time - Prevtime);
-
+			Gridman.position[2] += 0.1 * (current_time - Prevtime);
+			if (Gridman.position[2] > 250) {
+				Gridman.position[2] = 250;
+			}
 			break;
 		case 1:
+			Gridman.position[0] += 0.1 * (current_time - Prevtime);
+			if (Gridman.position[0] > 350) {
+				Gridman.position[0] = 350;
+			}
 			break;
 		case 2:
+			Gridman.position[2] -= 0.1 * (current_time - Prevtime);
+			if (Gridman.position[2] < -250) {
+				Gridman.position[2] = -250;
+			}
 			break;
 		case 3:
+			Gridman.position[0] -= 0.1 * (current_time - Prevtime);
+			if (Gridman.position[0] < -350) {
+				Gridman.position[0] = -350;
+			}
 			break;
 		}
 
