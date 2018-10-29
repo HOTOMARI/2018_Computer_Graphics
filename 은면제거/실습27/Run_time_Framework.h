@@ -35,8 +35,8 @@ struct Robot {
 	float animation = -70;
 	bool animation_state = false;
 	int dir = 0;
-	bool state_walk;
-	bool state_jump;
+	bool state_collide = false;
+	bool state_jump = false;
 	RECT bb;
 };
 

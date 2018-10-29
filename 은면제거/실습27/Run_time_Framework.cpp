@@ -137,6 +137,11 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		front_up = (front_up + 1) % 2;
 		break;
 
+	case 'j':
+	case 'J':
+		if (Gridman.position[1] == 40)
+			Gridman.state_jump = true;
+		break;
 	case '1':
 		depth = (depth + 1) % 2;
 		break;
@@ -420,31 +425,68 @@ GLvoid CRun_time_Framework::Update() {
 			Smoke[0].size = rand() % 40 + 20;
 		}
 
+		for (int i = 0; i < 4; ++i) {
+			if (collide(Gridman.bb, object[i])) {
+				Gridman.state_collide = true;
+				break;
+			}
+			else {
+				Gridman.state_collide = false;
+			}
+		}
+
 		switch (Gridman.dir) {
 		case 0:
 			Gridman.position[2] += 0.1 * (current_time - Prevtime);
+			if (Gridman.state_collide) {
+				Gridman.position[2] -= 0.2 * (current_time - Prevtime);
+			}
 			if (Gridman.position[2] > 250) {
 				Gridman.position[2] = 250;
 			}
 			break;
 		case 1:
 			Gridman.position[0] += 0.1 * (current_time - Prevtime);
+			if (Gridman.state_collide) {
+				Gridman.position[0] -= 0.2 * (current_time - Prevtime);
+			}
 			if (Gridman.position[0] > 350) {
 				Gridman.position[0] = 350;
 			}
 			break;
 		case 2:
 			Gridman.position[2] -= 0.1 * (current_time - Prevtime);
+			if (Gridman.state_collide) {
+				Gridman.position[2] += 0.2 * (current_time - Prevtime);
+			}
 			if (Gridman.position[2] < -250) {
 				Gridman.position[2] = -250;
 			}
 			break;
 		case 3:
 			Gridman.position[0] -= 0.1 * (current_time - Prevtime);
+			if (Gridman.state_collide) {
+				Gridman.position[0] += 0.2 * (current_time - Prevtime);
+			}
 			if (Gridman.position[0] < -350) {
 				Gridman.position[0] = -350;
 			}
 			break;
+		}
+
+		if (Gridman.state_collide && Gridman.state_jump == false && Gridman.position[1] == 40) {
+			Gridman.state_jump = true;
+		}
+
+		if (Gridman.state_jump) {
+			Gridman.position[1] += 0.1 * (current_time - Prevtime);
+			if (Gridman.position[1] > 80)
+				Gridman.state_jump = false;
+		}
+		else {
+			Gridman.position[1] -= 0.1 * (current_time - Prevtime);
+			if (Gridman.position[1] < 40)
+				Gridman.position[1] = 40;
 		}
 
 		if (Gridman.animation_state) {

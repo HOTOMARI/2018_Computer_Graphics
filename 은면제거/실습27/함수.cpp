@@ -456,6 +456,10 @@ GLvoid CRun_time_Framework::robot()
 
 GLvoid CRun_time_Framework::update_bb()
 {
+	Gridman.bb.left = Gridman.position[0] - 40;
+	Gridman.bb.right = Gridman.position[0] + 40;
+	Gridman.bb.top = -(Gridman.position[2] - 40);
+	Gridman.bb.bottom = -(Gridman.position[2] + 40);
 }
 
 bool CRun_time_Framework::collide(RECT A, RECT B)
