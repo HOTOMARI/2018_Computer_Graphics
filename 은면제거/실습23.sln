@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "실습25", "실습23\실습
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "실습27", "실습27\실습27.vcxproj", "{9C2AF9C3-566F-44E3-8421-E5A1DA7452C5}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "실습26", "실습26\실습26.vcxproj", "{DB36EAD0-4C52-4A88-9569-C5F2722D9517}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{9C2AF9C3-566F-44E3-8421-E5A1DA7452C5}.Release|x64.Build.0 = Release|x64
 		{9C2AF9C3-566F-44E3-8421-E5A1DA7452C5}.Release|x86.ActiveCfg = Release|Win32
 		{9C2AF9C3-566F-44E3-8421-E5A1DA7452C5}.Release|x86.Build.0 = Release|Win32
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Debug|x64.ActiveCfg = Debug|x64
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Debug|x64.Build.0 = Debug|x64
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Debug|x86.ActiveCfg = Debug|Win32
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Debug|x86.Build.0 = Debug|Win32
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Release|x64.ActiveCfg = Release|x64
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Release|x64.Build.0 = Release|x64
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Release|x86.ActiveCfg = Release|Win32
+		{DB36EAD0-4C52-4A88-9569-C5F2722D9517}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
