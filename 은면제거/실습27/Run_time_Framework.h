@@ -30,6 +30,15 @@ struct Camera {
 	float zoom = 0;
 };
 
+struct Robot {
+	float position[3] = { 0,0,0 };
+	float animation = -70;
+	bool animation_state = false;
+	int dir = 0;
+	bool state_walk;
+	bool state_jump;
+};
+
 class CRun_time_Framework {
 private:
 	static CRun_time_Framework* myself;
@@ -65,6 +74,7 @@ private:
 
 	GLfloat identity[16];
 
+	Robot Gridman;
 	Shape Smoke[3];
 	Camera camera;
 
@@ -96,6 +106,7 @@ public:
 	GLvoid bench_press();
 	GLvoid treadmill();
 	GLvoid airplane();
+	GLvoid robot();
 	GLvoid update_bb();
 	bool collide(RECT, RECT);
 

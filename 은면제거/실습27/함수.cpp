@@ -374,6 +374,79 @@ GLvoid CRun_time_Framework::airplane()
 	glPopMatrix();
 }
 
+GLvoid CRun_time_Framework::robot()
+{
+	glTranslatef(Gridman.position[0], Gridman.position[1], Gridman.position[2]);
+	glRotatef(Gridman.dir * 90, 0, 1, 0);
+	// ¸Ó¸®
+	glPushMatrix();
+	glColor3f(0, 0, 0);
+	glutSolidCube(30);
+	glColor3f(1, 1, 1);
+	glutWireCube(30);
+	glPopMatrix();
+	// ÄÚ
+	glPushMatrix();
+	glTranslatef(0, 0, 30);
+	glColor3f(1, 1, 1);
+	glutSolidCube(5);
+	glColor3f(1, 1, 1);
+	glutWireCube(5);
+	glPopMatrix();
+	// ¸öÅë
+	glPushMatrix();
+	glTranslatef(0, -40, 0);
+	glColor3f(0.5, 0.5, 0.5);
+	glutSolidCube(50);
+	glColor3f(1, 1, 1);
+	glutWireCube(50);
+	glPopMatrix();
+	// ¿ÞÆÈ
+	glPushMatrix();
+	glTranslatef(-30, -10, 0);
+	glRotatef(-Gridman.animation, 1, 0, 0);
+	glTranslatef(0, -25, 0);
+	glScalef(0.2, 1, 0.2);
+	glColor3f(1, 0, 0);
+	glutSolidCube(50);
+	glColor3f(1, 1, 1);
+	glutWireCube(50);
+	glPopMatrix();
+	// ¿À¸¥ÆÈ
+	glPushMatrix();
+	glTranslatef(30, -10, 0);
+	glRotatef(Gridman.animation, 1, 0, 0);
+	glTranslatef(0, -25, 0);
+	glScalef(0.2, 1, 0.2);
+	glColor3f(0, 0, 1);
+	glutSolidCube(50);
+	glColor3f(1, 1, 1);
+	glutWireCube(50);
+	glPopMatrix();
+	// ¿Þ´Ù¸®
+	glPushMatrix();
+	glTranslatef(-15, -50, 0);
+	glRotatef(Gridman.animation, 1, 0, 0);
+	glTranslatef(0, -25, 0);
+	glScalef(0.3, 1, 0.3);
+	glColor3f(1, 0, 1);
+	glutSolidCube(50);
+	glColor3f(1, 1, 1);
+	glutWireCube(50);
+	glPopMatrix();
+	// ¿À¸¥´Ù¸®
+	glPushMatrix();
+	glTranslatef(15, -50, 0);
+	glRotatef(-Gridman.animation, 1, 0, 0);
+	glTranslatef(0, -25, 0);
+	glScalef(0.3, 1, 0.3);
+	glColor3f(0, 1, 1);
+	glutSolidCube(50);
+	glColor3f(1, 1, 1);
+	glutWireCube(50);
+	glPopMatrix();
+}
+
 GLvoid CRun_time_Framework::update_bb()
 {
 }

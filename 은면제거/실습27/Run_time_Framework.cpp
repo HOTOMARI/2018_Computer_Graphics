@@ -88,6 +88,10 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	airplane();
 	glPopMatrix();
+	// ·Îº¿
+	glPushMatrix();
+	robot();
+	glPopMatrix();
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -245,6 +249,7 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 }
 
 GLvoid CRun_time_Framework::Init() {
+	Gridman.position[1] = 40;
 
 	object[0].left = -380;
 	object[0].right = -320;
@@ -397,6 +402,19 @@ GLvoid CRun_time_Framework::Update() {
 			Smoke[2].size = Smoke[1].size + 10;
 			Smoke[1].size = Smoke[0].size + 5;
 			Smoke[0].size = rand() % 40 + 20;
+		}
+
+		if (Gridman.animation_state) {
+			Gridman.animation += 0.2 * (current_time - Prevtime);
+			if (Gridman.animation > 60) {
+				Gridman.animation_state = false;
+			}
+		}
+		else {
+			Gridman.animation -= 0.2 * (current_time - Prevtime);
+			if (Gridman.animation < -60) {
+				Gridman.animation_state = true;
+			}
 		}
 
 		Prevtime = current_time;
