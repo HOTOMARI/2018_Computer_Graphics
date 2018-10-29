@@ -48,7 +48,7 @@ private:
 	float vector_x;
 	float vector_y;
 
-	Shape ball[3];
+	Shape ball[5];
 
 	float pre_mouse_x;
 	float cur_mouse_x;
@@ -82,6 +82,7 @@ public:
 	GLvoid Initial_Ball();	// 파란 공
 	GLvoid Ball();
 	GLvoid Update_Ball();
+	GLvoid Set_Ball_vector(int shape_index);
 	bool collide(RECT, RECT);
 
 	// 콜백 함수

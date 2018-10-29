@@ -117,6 +117,112 @@ GLvoid CRun_time_Framework::Update_Box()
 	}
 }
 
+GLvoid CRun_time_Framework::Initial_Ball()
+{
+	for (int i = 0; i < 5; ++i) {
+		ball[i].size = 10;
+		for (int j = 0; j < 3; ++j) {
+			ball[i].position[j] = 0;
+		}
+		Set_Ball_vector(i);
+	}
+}
+
+GLvoid CRun_time_Framework::Ball()
+{
+	for (int i = 0; i < 5; ++i) {
+		glPushMatrix();
+		glTranslatef(ball[i].position[0], ball[i].position[1], ball[i].position[2]);
+		glColor3f(0, 0, 1);
+		glutSolidSphere(ball[i].size, 10, 10);
+		glColor3f(0, 0, 0);
+		glutWireSphere(ball[i].size, 10, 10);
+		glPopMatrix();
+	}
+}
+
+GLvoid CRun_time_Framework::Update_Ball()
+{
+	for (int i = 0; i < 5; ++i) {
+		ball[i].position[0] += (ball[i].vector[0] / 5.0) * (current_time - Prevtime);
+		ball[i].position[1] += (ball[i].vector[1] / 5.0) * (current_time - Prevtime);
+		ball[i].position[2] += (ball[i].vector[2] / 5.0) * (current_time - Prevtime);
+
+		if (ball[i].position[0] < -100 + (ball[i].size)) {
+			ball[i].position[0] = -100 + (ball[i].size);
+			Set_Ball_vector(i);
+		}
+		else if (ball[i].position[0] > 100 - (ball[i].size)) {
+			ball[i].position[0] = 100 - (ball[i].size);
+			Set_Ball_vector(i);
+		}
+
+		if (ball[i].position[1] < -100 + (ball[i].size)) {
+			ball[i].position[1] = -100 + (ball[i].size);
+			Set_Ball_vector(i);
+		}
+		else if (ball[i].position[1] > 100 - (ball[i].size)) {
+			ball[i].position[1] = 100 - (ball[i].size);
+			Set_Ball_vector(i);
+		}
+
+		if (ball[i].position[2] < -100 + (ball[i].size)) {
+			ball[i].position[2] = -100 + (ball[i].size);
+			Set_Ball_vector(i);
+		}
+		else if (ball[i].position[2] > 100 - (ball[i].size)) {
+			ball[i].position[2] = 100 - (ball[i].size);
+			Set_Ball_vector(i);
+		}
+	}
+}
+
+
+GLvoid CRun_time_Framework::Set_Ball_vector(int shape_index)
+{
+	switch (rand() % 8) {
+	case 0:
+		ball[shape_index].vector[0] = 1;
+		ball[shape_index].vector[1] = 1;
+		ball[shape_index].vector[2] = 0;
+		break;
+	case 1:
+		ball[shape_index].vector[0] = 1;
+		ball[shape_index].vector[1] = -1;
+		ball[shape_index].vector[2] = 0;
+		break;
+	case 2:
+		ball[shape_index].vector[0] = 1;
+		ball[shape_index].vector[1] = 0;
+		ball[shape_index].vector[2] = 1;
+		break;
+	case 3:
+		ball[shape_index].vector[0] = 1;
+		ball[shape_index].vector[1] = 0;
+		ball[shape_index].vector[2] = -1;
+		break;
+	case 4:
+		ball[shape_index].vector[0] = -1;
+		ball[shape_index].vector[1] = 1;
+		ball[shape_index].vector[2] = 0;
+		break;
+	case 5:
+		ball[shape_index].vector[0] = -1;
+		ball[shape_index].vector[1] = -1;
+		ball[shape_index].vector[2] = 0;
+		break;
+	case 6:
+		ball[shape_index].vector[0] = -1;
+		ball[shape_index].vector[1] = 0;
+		ball[shape_index].vector[2] = 1;
+		break;
+	case 7:
+		ball[shape_index].vector[0] = -1;
+		ball[shape_index].vector[1] = 0;
+		ball[shape_index].vector[2] = -1;
+		break;
+	}
+}
 
 bool CRun_time_Framework::collide(RECT A, RECT B)
 {

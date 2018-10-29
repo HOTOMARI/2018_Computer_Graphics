@@ -42,6 +42,10 @@ GLvoid CRun_time_Framework::draw() {
 	Box();
 	glPopMatrix();
 
+	glPushMatrix();
+	Ball();
+	glPopMatrix();
+
 	glPopMatrix();
 	glutSwapBuffers();
 	return GLvoid();
@@ -242,15 +246,17 @@ GLvoid CRun_time_Framework::Mousemotion(int x, int y)
 }
 
 GLvoid CRun_time_Framework::Init() {
+	srand(time(NULL));
+
 	memset(identity, 0, sizeof(identity));
 	identity[0] = identity[5] = identity[10] = identity[15] = 1;
 	degree = 180.0;
 
 	Initial_Box();
+	Initial_Ball();
 
 	camera_is_front = true;
 
-	srand(time(NULL));
 	myself = this;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
@@ -319,6 +325,7 @@ GLvoid CRun_time_Framework::Update() {
 		}
 
 		Update_Box();
+		Update_Ball();
 
 		Prevtime = current_time;
 		current_frame = 0;
