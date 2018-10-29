@@ -100,6 +100,11 @@ GLvoid CRun_time_Framework::spring()
 		glVertex3f(50 * sin((i+1) / 180 * PI), (i+1)*spring_stretch, 50 * cos((i + 1) / 180 * PI));
 		glEnd();
 	}
+	glPushMatrix();
+	glTranslatef(50 * sin(spring_ball / 180 * PI), spring_ball*spring_stretch, 50 * cos(spring_ball / 180 * PI));
+	glColor3f(1, 0, 0);
+	glutWireSphere(10, 10, 10);
+	glPopMatrix();
 }
 
 GLvoid CRun_time_Framework::ball()

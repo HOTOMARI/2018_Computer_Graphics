@@ -277,6 +277,7 @@ GLvoid CRun_time_Framework::Init() {
 	front_rotate = 0;
 	spring_stretch = 0.05;
 	ball_move = 0;
+	spring_ball = 0;
 
 	srand(time(NULL));
 	myself = this;
@@ -382,6 +383,11 @@ GLvoid CRun_time_Framework::Update() {
 				if (spring_stretch > 0.2)
 					spring_stretch = 0.2;
 			}
+			if (spring_ball < 1800) {
+				spring_ball += 0.5*(current_time - Prevtime);
+				if (spring_ball > 1800)
+					spring_ball = 1800;
+			}
 		}
 		else {
 			if (top_rotate > 0) {
@@ -393,6 +399,9 @@ GLvoid CRun_time_Framework::Update() {
 				spring_stretch -= 0.01*(current_time - Prevtime);
 				if (spring_stretch < 0.05)
 					spring_stretch = 0.05;
+			}
+			if (spring_ball > 0) {
+				spring_ball = 0;
 			}
 		}
 
