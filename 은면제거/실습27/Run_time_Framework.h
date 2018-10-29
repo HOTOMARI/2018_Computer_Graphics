@@ -46,6 +46,7 @@ private:
 	float airplane_rotate = 0;
 	float airplane_spin = 0;
 	float bench;
+	float front_ani;
 	RECT object[4];
 
 	bool camera_is_front;
@@ -55,6 +56,10 @@ private:
 	bool leg_up;
 	bool see_collide;
 	bool airplane_dir;
+	bool front_up;
+
+	bool depth;
+	bool culling;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 

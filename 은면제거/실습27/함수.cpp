@@ -111,7 +111,7 @@ GLvoid CRun_time_Framework::wall()
 	// Á¤¸é
 	glPushMatrix();
 	glColor3f(0.5, 0.5, 0.5);
-	glTranslatef(0, 140, 300);
+	glTranslatef(0, 140 + front_ani, 300);
 	glRotatef(90, 1, 0, 0);
 	glScalef(1, 0.01, 0.5);
 	glutSolidCube(800);

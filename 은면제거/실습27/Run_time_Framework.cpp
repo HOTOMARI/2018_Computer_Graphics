@@ -12,7 +12,18 @@ GLvoid CRun_time_Framework::draw() {
 	glClearColor(0, 0, 0, 1); // 바탕색을 지정 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
 	glEnable(GL_DEPTH_TEST);	//깊이테스트
-	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
+	if (depth)
+		glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
+	else
+		glDepthFunc(GL_ALWAYS);
+
+	if (culling) {
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glFrontFace(GL_CCW);
+	}
+	else
+		glDisable(GL_CULL_FACE);
 
 	glPushMatrix();
 	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
@@ -117,6 +128,17 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
 
+	case 'o':
+	case 'O':
+		front_up = (front_up + 1) % 2;
+		break;
+
+	case '1':
+		depth = (depth + 1) % 2;
+		break;
+	case '2':
+		culling = (culling + 1) % 2;
+		break;
 	case '0':
 		see_collide = (see_collide + 1) % 2;
 
@@ -258,6 +280,7 @@ GLvoid CRun_time_Framework::Init() {
 	airplane_rotate = 0;
 	airplane_spin = 0;
 	bench = 0;
+	front_ani = 0;
 
 	camera_is_front = true;
 	crane_right = true;
@@ -265,11 +288,14 @@ GLvoid CRun_time_Framework::Init() {
 	bench_up = true;
 	leg_up = true;
 	see_collide = false;
+	front_up = false;
 
 	camera.zoom = 500;
 	camera.x = 0;
 	camera.y = 50;
 
+	depth = true;
+	culling = false;
 
 	srand(time(NULL));
 	myself = this;
@@ -298,6 +324,23 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
+
+		if (front_up) {
+			if (front_ani < 400) {
+				front_ani += 1 * (current_time - Prevtime);
+			}
+			else {
+				front_ani = 400;
+			}
+		}
+		else {
+			if (front_ani > 0) {
+				front_ani -= 1 * (current_time - Prevtime);
+			}
+			else {
+				front_ani = 0;
+			}
+		}
 
 		if (tree_bigger) {
 			tree_size += 0.001 * (current_time - Prevtime);
