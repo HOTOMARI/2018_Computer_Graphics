@@ -12,23 +12,13 @@ GLvoid CRun_time_Framework::draw() {
 	glClearColor(0, 0, 0, 1); // 바탕색을 지정 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
 	glEnable(GL_DEPTH_TEST);	//깊이테스트
-	if (depth)
-		glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
-	else
-		glDepthFunc(GL_ALWAYS);
+	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 
-	if (culling) {
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_BACK);
-		glFrontFace(GL_CCW);
-	}
-	else
-		glDisable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CW);
 
-	if (shading)
-		glShadeModel(GL_SMOOTH);
-	else
-		glShadeModel(GL_FLAT);
+	glShadeModel(GL_FLAT);
 
 	glPushMatrix();
 	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
@@ -45,15 +35,6 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 	QBEY();
 	glPopMatrix();
-
-	glPushMatrix();
-	spring();
-	glPopMatrix();
-
-	glPushMatrix();
-	ball();
-	glPopMatrix();
-
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -85,21 +66,7 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 	// 모델링 변환 설정: 디스플레이 콜백 함수에서 모델 변환 적용하기 위하여 Matrix mode 저장
 	glMatrixMode (GL_MODELVIEW);
 
-	glPushMatrix();
-	{
-		glRotatef(30, 1.f, 0.f, 0.f);
-		glMultMatrixf(identity);
-		glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-	}
-	glPopMatrix();
 
-	glPushMatrix();
-	{
-		glRotatef(45, 0.f, 1.f, 0.f);
-		glMultMatrixf(identity);
-		glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-	}
-	glPopMatrix();
 
 	// 관측 변환: 카메라의 위치 설정 (필요한 경우, 다른 곳에 설정 가능) 
 	//gluLookAt(0.0, 0.0, camera_zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
@@ -126,22 +93,6 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		break;
 	case 'C':
 		dir |= DIR_Z_CW;
-		break;
-
-	case '1':
-		depth = (depth + 1) % 2;
-		break;
-	case '2':
-		culling = (culling + 1) % 2;
-		break;
-	case '3':
-		shading = (shading + 1) % 2;
-		break;
-	case '4':
-		top_open = (top_open + 1) % 2;
-		break;
-	case '5':
-		front_open = (front_open + 1) % 2;
 		break;
 
 
@@ -266,18 +217,6 @@ GLvoid CRun_time_Framework::Init() {
 	identity[0] = identity[5] = identity[10] = identity[15] = 1;
 
 	camera_is_front = true;
-	top_open = false;
-	front_open = false;
-
-	depth = true;
-	culling = false;
-	shading = true;
-
-	top_rotate = 0;
-	front_rotate = 0;
-	spring_stretch = 0.05;
-	ball_move = 0;
-	spring_ball = 0;
 
 	srand(time(NULL));
 	myself = this;
@@ -362,72 +301,6 @@ GLvoid CRun_time_Framework::Update() {
 				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
 			}
 			glPopMatrix();
-		}
-
-		glPushMatrix();
-		{
-			glRotatef(0.05f * (current_time - Prevtime), 0.f, 1.f, 0.f);
-			glMultMatrixf(identity);
-			glGetFloatv(GL_MODELVIEW_MATRIX, identity);
-		}
-		glPopMatrix();
-
-		if (top_open) {
-			if (top_rotate < 200) {
-				top_rotate += 1 * (current_time - Prevtime);
-				if (top_rotate > 200)
-					top_rotate = 200;
-			}
-			if (spring_stretch < 0.2) {
-				spring_stretch += 0.005*(current_time - Prevtime);
-				if (spring_stretch > 0.2)
-					spring_stretch = 0.2;
-			}
-			if (spring_ball < 1800) {
-				spring_ball += 0.5*(current_time - Prevtime);
-				if (spring_ball > 1800)
-					spring_ball = 1800;
-			}
-		}
-		else {
-			if (top_rotate > 0) {
-				top_rotate -= 1 * (current_time - Prevtime);
-				if (top_rotate < 0)
-					top_rotate = 0;
-			}
-			if (spring_stretch > 0.05) {
-				spring_stretch -= 0.01*(current_time - Prevtime);
-				if (spring_stretch < 0.05)
-					spring_stretch = 0.05;
-			}
-			if (spring_ball > 0) {
-				spring_ball = 0;
-			}
-		}
-
-		if (front_open) {
-			if (front_rotate < 200) {
-				front_rotate += 1 * (current_time - Prevtime);
-				if (front_rotate > 200)
-					front_rotate = 200;
-			}
-			if (ball_move < 200) {
-				ball_move += 0.5*(current_time - Prevtime);
-				if (ball_move > 200)
-					ball_move = 200;
-			}
-		}
-		else {
-			if (front_rotate > 0) {
-				front_rotate -= 1 * (current_time - Prevtime);
-				if (front_rotate < 0)
-					front_rotate = 0;
-			}
-			if (ball_move > 0) {
-				ball_move -= 1*(current_time - Prevtime);
-				if (ball_move < 0)
-					ball_move = 0;
-			}
 		}
 
 

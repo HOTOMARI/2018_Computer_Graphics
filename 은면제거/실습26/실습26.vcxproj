@@ -139,6 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Run_time_Framework.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Run_time_Framework.cpp" />
+    <ClCompile Include="소스.cpp" />
+    <ClCompile Include="함수.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
