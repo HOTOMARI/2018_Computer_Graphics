@@ -143,6 +143,18 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	case '2':
 		culling = (culling + 1) % 2;
 		break;
+	case '3':
+		Gridman.dir = 0;
+		break;
+	case '4':
+		Gridman.dir = 1;
+		break;
+	case '5':
+		Gridman.dir = 2;
+		break;
+	case '6':
+		Gridman.dir = 3;
+		break;
 	case '0':
 		see_collide = (see_collide + 1) % 2;
 
@@ -250,6 +262,10 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 
 GLvoid CRun_time_Framework::Init() {
 	Gridman.position[1] = 40;
+	Gridman.bb.left = -40;
+	Gridman.bb.right = 40;
+	Gridman.bb.top = 40;
+	Gridman.bb.bottom = -40;
 
 	object[0].left = -380;
 	object[0].right = -320;
@@ -402,6 +418,19 @@ GLvoid CRun_time_Framework::Update() {
 			Smoke[2].size = Smoke[1].size + 10;
 			Smoke[1].size = Smoke[0].size + 5;
 			Smoke[0].size = rand() % 40 + 20;
+		}
+
+		switch (Gridman.dir) {
+		case 0:
+			//Gridman.position[2] += 0.1 * (current_time - Prevtime);
+
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
 		}
 
 		if (Gridman.animation_state) {

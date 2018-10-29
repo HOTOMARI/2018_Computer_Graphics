@@ -37,6 +37,7 @@ struct Robot {
 	int dir = 0;
 	bool state_walk;
 	bool state_jump;
+	RECT bb;
 };
 
 class CRun_time_Framework {

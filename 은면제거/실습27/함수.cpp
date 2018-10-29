@@ -73,6 +73,13 @@ GLvoid CRun_time_Framework::ground()
 		glVertex3f(object[3].right, object[3].top, 80);
 		glVertex3f(object[3].right, object[3].bottom, 80);
 		glEnd();
+
+		glBegin(GL_POLYGON);
+		glVertex3f(Gridman.bb.left, Gridman.bb.bottom, 80);
+		glVertex3f(Gridman.bb.left, Gridman.bb.top, 80);
+		glVertex3f(Gridman.bb.right, Gridman.bb.top, 80);
+		glVertex3f(Gridman.bb.right, Gridman.bb.bottom, 80);
+		glEnd();
 	}
 }
 
@@ -387,7 +394,7 @@ GLvoid CRun_time_Framework::robot()
 	glPopMatrix();
 	// ÄÚ
 	glPushMatrix();
-	glTranslatef(0, 0, 30);
+	glTranslatef(0, 0, 18);
 	glColor3f(1, 1, 1);
 	glutSolidCube(5);
 	glColor3f(1, 1, 1);
