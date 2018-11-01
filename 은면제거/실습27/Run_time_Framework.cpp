@@ -413,8 +413,7 @@ GLvoid CRun_time_Framework::Update() {
 			airplane_rotate += 0.1 * (current_time - Prevtime);
 		else
 			airplane_rotate -= 0.1 * (current_time - Prevtime);
-	
-		update_bb();
+
 
 		for (int i = 0; i < 3; ++i) {
 			Smoke[i].size -= 0.1 * (current_time - Prevtime);
@@ -437,42 +436,52 @@ GLvoid CRun_time_Framework::Update() {
 
 		switch (Gridman.dir) {
 		case 0:
-			Gridman.position[2] += 0.1 * (current_time - Prevtime);
 			if (Gridman.state_collide) {
-				Gridman.position[2] -= 0.2 * (current_time - Prevtime);
+				Gridman.position[2] -= 0.3 * (current_time - Prevtime);
 			}
-			if (Gridman.position[2] > 250) {
+			else {
+				Gridman.position[2] += 0.1 * (current_time - Prevtime);
+			}
+			if (Gridman.position[2] >= 250) {
 				Gridman.position[2] = 250;
 			}
 			break;
 		case 1:
-			Gridman.position[0] += 0.1 * (current_time - Prevtime);
 			if (Gridman.state_collide) {
-				Gridman.position[0] -= 0.2 * (current_time - Prevtime);
+				Gridman.position[0] -= 0.3 * (current_time - Prevtime);
 			}
-			if (Gridman.position[0] > 350) {
+			else {
+				Gridman.position[0] += 0.1 * (current_time - Prevtime);
+			}
+			if (Gridman.position[0] >= 350) {
 				Gridman.position[0] = 350;
 			}
 			break;
 		case 2:
-			Gridman.position[2] -= 0.1 * (current_time - Prevtime);
 			if (Gridman.state_collide) {
-				Gridman.position[2] += 0.2 * (current_time - Prevtime);
+				Gridman.position[2] += 0.3 * (current_time - Prevtime);
 			}
-			if (Gridman.position[2] < -250) {
+			else {
+				Gridman.position[2] -= 0.1 * (current_time - Prevtime);
+			}
+			if (Gridman.position[2] <= -250) {
 				Gridman.position[2] = -250;
 			}
 			break;
 		case 3:
-			Gridman.position[0] -= 0.1 * (current_time - Prevtime);
 			if (Gridman.state_collide) {
-				Gridman.position[0] += 0.2 * (current_time - Prevtime);
+				Gridman.position[0] += 0.3 * (current_time - Prevtime);
 			}
-			if (Gridman.position[0] < -350) {
+			else {
+				Gridman.position[0] -= 0.1 * (current_time - Prevtime);
+			}
+			if (Gridman.position[0] <= -350) {
 				Gridman.position[0] = -350;
 			}
 			break;
 		}
+
+		update_bb();
 
 		if (Gridman.state_collide && Gridman.state_jump == false && Gridman.position[1] == 40) {
 			Gridman.state_jump = true;

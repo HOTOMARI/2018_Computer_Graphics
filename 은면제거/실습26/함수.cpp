@@ -130,7 +130,7 @@ GLvoid CRun_time_Framework::Initial_Ball()
 
 GLvoid CRun_time_Framework::Ball()
 {
-	for (int i = 0; i < 5; ++i) {
+	for (int i = 0; i < ball_count; ++i) {
 		glPushMatrix();
 		glTranslatef(ball[i].position[0], ball[i].position[1], ball[i].position[2]);
 		glColor3f(0, 0, 1);

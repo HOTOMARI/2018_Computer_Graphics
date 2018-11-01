@@ -57,6 +57,8 @@ private:
 	GLfloat current_time;
 	GLint current_frame = 0;
 
+	int ball_count;
+
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 
 public:

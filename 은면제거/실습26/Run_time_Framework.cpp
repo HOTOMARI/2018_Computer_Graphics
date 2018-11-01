@@ -105,6 +105,11 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		dir |= DIR_Z_CW;
 		break;
 
+	case 'b':
+	case'B':
+		ball_count = (ball_count + 1) % 6;
+		break;
+
 
 	case '-':
 		camera.zoom += 30.0;
@@ -254,6 +259,7 @@ GLvoid CRun_time_Framework::Init() {
 
 	Initial_Box();
 	Initial_Ball();
+	ball_count = 0;
 
 	camera_is_front = true;
 
