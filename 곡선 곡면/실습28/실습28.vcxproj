@@ -139,6 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="function.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Run_time_Framework.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Run_time_Framework.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
