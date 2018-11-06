@@ -312,6 +312,51 @@ GLvoid CRun_time_Framework::Update() {
 			}
 			glPopMatrix();
 		}
+
+		if (point_num == 4) {
+			for (int i = 0; i < 3; ++i)
+				point[0][2][i] = point[0][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[1][2][i] = point[1][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[2][2][i] = point[2][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[0][3][i] = point[0][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[1][3][i] = point[1][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[2][3][i] = point[2][1][i];
+		}
+
+		if (point_num == 5) {
+			for (int i = 0; i < 3; ++i)
+				point[1][2][i] = point[1][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[2][2][i] = point[2][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[0][3][i] = point[0][2][i];
+			for (int i = 0; i < 3; ++i)
+				point[1][3][i] = point[1][1][i];
+			for (int i = 0; i < 3; ++i)
+				point[2][3][i] = point[2][1][i];
+		}
+
+		if (point_num == 6) {
+			for (int i = 0; i < 3; ++i)
+				point[0][3][i] = point[0][2][i];
+			for (int i = 0; i < 3; ++i)
+				point[1][3][i] = point[1][2][i];
+			for (int i = 0; i < 3; ++i)
+				point[2][3][i] = point[2][2][i];
+		}
+
+		if (point_num == 7) {
+			for (int i = 0; i < 3; ++i)
+				point[1][3][i] = point[1][2][i];
+			for (int i = 0; i < 3; ++i)
+				point[2][3][i] = point[2][2][i];
+		}
+
 		Prevtime = current_time;
 		current_frame = 0;
 		glutPostRedisplay();
