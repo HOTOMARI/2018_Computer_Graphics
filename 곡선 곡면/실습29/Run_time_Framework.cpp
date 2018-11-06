@@ -13,38 +13,13 @@ GLvoid CRun_time_Framework::draw() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
 	glEnable(GL_DEPTH_TEST);	//깊이테스트
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
-
-	glShadeModel(GL_FLAT);
-
 	glPushMatrix();
-	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	gluLookAt(camera.x, camera.y, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
-	//gluLookAt(0 , 0, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
-	gluLookAt(cos(camera.degree[1] / 180 * PI) * 200, 0, sin(camera.degree[1] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	if ((fabs((int)camera.degree[0]%360) <= 120 && fabs((int)camera.degree[0] % 360) >= 0)||
-		(fabs((int)camera.degree[0] % 360) <= 360 && fabs((int)camera.degree[0] % 360) > 240))
-		gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, -1.0, 0.0);
-	else
-	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+
 	glMultMatrixf(identity);
-
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CW);
-
-	glPushMatrix();
-	QBEY();
-	glPopMatrix();
-
-	glDisable(GL_CULL_FACE);
-
-	glPushMatrix();
-	Box();
-	glPopMatrix();
-
-	glPushMatrix();
-	Ball();
-	glPopMatrix();
+	
+	glRotatef(90, 1, 0, 0);
+	Axis();
+	Draw_Points();
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -67,16 +42,14 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 	// 투영은 직각 투영 또는 원근 투영 중 한개를 설정한다.
 	// 원근 투영을 사용하는 경우: 
-	gluPerspective (60, (float)w / (float)h, 1, 2000);
-	glTranslatef (0, 0, -400);
+	gluPerspective (60, (float)w / (float)h, 1, 1000);
+	glTranslatef (0, 0, -520);
 
 	// 직각 투영인경우
 	// glOrtho (0.0, 800.0, 0.0, 600.0, -1.0, 1.0);
 
 	// 모델링 변환 설정: 디스플레이 콜백 함수에서 모델 변환 적용하기 위하여 Matrix mode 저장
 	glMatrixMode (GL_MODELVIEW);
-
-
 
 	// 관측 변환: 카메라의 위치 설정 (필요한 경우, 다른 곳에 설정 가능) 
 	//gluLookAt(0.0, 0.0, camera_zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
@@ -86,6 +59,7 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
+		if (top_viewmode == false) {
 	case 'z':
 		dir |= DIR_X_CCW;
 		break;
@@ -104,12 +78,6 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	case 'C':
 		dir |= DIR_Z_CW;
 		break;
-
-	case 'b':
-	case'B':
-		ball_count = (ball_count + 1) % 6;
-		break;
-
 
 	case '-':
 		camera.zoom += 30.0;
@@ -160,11 +128,13 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		memset(identity, 0, sizeof(identity));
 		identity[0] = identity[5] = identity[10] = identity[15] = 1;
 		break;
+		}
 	}
 }
 
 GLvoid CRun_time_Framework::KeyboardUp(unsigned char key, int x, int y) {
 	switch (key) {
+		if (top_viewmode == false) {
 	case 'z':
 		dir ^= DIR_X_CCW;
 		break;
@@ -183,6 +153,7 @@ GLvoid CRun_time_Framework::KeyboardUp(unsigned char key, int x, int y) {
 	case 'C':
 		dir ^= DIR_Z_CW;
 		break;
+		}
 	}
 }
 
@@ -215,10 +186,11 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		pre_mouse_x = x;
-	}
-	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
-		dir = 0x00;
+		if (point_num < 8) {
+			point[point_num][0] = x - 400;
+			point[point_num][2] = y - 300;
+			point_num++;
+		}
 	}
 	return GLvoid();
 }
@@ -231,15 +203,6 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 }
 
 GLvoid CRun_time_Framework::Motion(int x, int y){
-	cur_mouse_x = x;
-	if (pre_mouse_x > cur_mouse_x) {
-		dir ^= DIR_Z_CCW;
-		dir |= DIR_Z_CW;
-	}
-	else if (pre_mouse_x < cur_mouse_x) {
-		dir ^= DIR_Z_CW;
-		dir |= DIR_Z_CCW;
-	}
 }
 
 GLvoid CRun_time_Framework::Mousemotion(int x, int y)
@@ -251,15 +214,19 @@ GLvoid CRun_time_Framework::Mousemotion(int x, int y)
 }
 
 GLvoid CRun_time_Framework::Init() {
+	point_num = 0;
+	for (int i = 0; i < 8; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			point[i][j] = 0;
+		}
+	}
+
+	top_viewmode = true;
+
 	srand(time(NULL));
 
 	memset(identity, 0, sizeof(identity));
 	identity[0] = identity[5] = identity[10] = identity[15] = 1;
-	degree = 180.0;
-
-	Initial_Box();
-	Initial_Ball();
-	ball_count = 0;
 
 	camera_is_front = true;
 
@@ -312,7 +279,6 @@ GLvoid CRun_time_Framework::Update() {
 		if (dir & DIR_Z_CCW) {
 			glPushMatrix();
 			{
-				degree += 0.4f * (current_time - Prevtime);
 				glRotatef(0.4f * (current_time - Prevtime), 0.f, 0.f, 1.f);
 				glMultMatrixf(identity);
 				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
@@ -322,17 +288,12 @@ GLvoid CRun_time_Framework::Update() {
 		if (dir & DIR_Z_CW) {
 			glPushMatrix();
 			{
-				degree -= 0.4f * (current_time - Prevtime);
 				glRotatef(-0.4f * (current_time - Prevtime), 0.f, 0.f, 1.f);
 				glMultMatrixf(identity);
 				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
 			}
 			glPopMatrix();
 		}
-
-		Update_Box();
-		Update_Ball();
-
 		Prevtime = current_time;
 		current_frame = 0;
 		glutPostRedisplay();

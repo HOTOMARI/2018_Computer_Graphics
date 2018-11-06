@@ -40,24 +40,17 @@ private:
 	GLUquadricObj *qobj = gluNewQuadric();
 
 	GLfloat identity[16];
-	float degree;
+	GLfloat point[8][3];
 
 	Camera camera;
 
-	Shape box[3];
-	float vector_x;
-	float vector_y;
+	int point_num;
 
-	Shape ball[5];
-
-	float pre_mouse_x;
-	float cur_mouse_x;
+	bool top_viewmode;
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
 	GLint current_frame = 0;
-
-	int ball_count;
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 
@@ -77,15 +70,8 @@ public:
 
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
-	GLvoid QBEY();		// 큐베
-	GLvoid Initial_Box();	// 빨간상자
-	GLvoid Box();
-	GLvoid Update_Box();
-	GLvoid Initial_Ball();	// 파란 공
-	GLvoid Ball();
-	GLvoid Update_Ball();
-	GLvoid Set_Ball_vector(int shape_index);
-	bool collide(RECT, RECT);
+	GLvoid Axis();
+	GLvoid Draw_Points();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
