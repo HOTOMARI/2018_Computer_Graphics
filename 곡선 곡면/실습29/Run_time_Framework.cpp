@@ -16,10 +16,10 @@ GLvoid CRun_time_Framework::draw() {
 	glPushMatrix();
 
 	glMultMatrixf(identity);
-	
+
 	glRotatef(90, 1, 0, 0);
 	Axis();
-	Draw_Points();
+	Draw_Field();
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -187,9 +187,25 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		if (point_num < 8) {
-			point[point_num][0] = x - 400;
-			point[point_num][2] = y - 300;
-			point_num++;
+			if (point_num % 2) {
+				point[2][point_num / 2][0] = x - 400;
+				point[2][point_num / 2][2] = y - 300;
+
+				point[1][point_num / 2][0] = point[0][point_num / 2][0] + (point[2][point_num / 2][0] - point[0][point_num / 2][0]) / 2;
+				point[1][point_num / 2][2] = point[0][point_num / 2][2] + (point[2][point_num / 2][2] - point[0][point_num / 2][2]) / 2;
+
+				int random = rand() % 200 - 100;
+				for (int i = 0; i < 3; ++i) {
+					point[i][point_num / 2][1] = random;
+				}
+
+				point_num++;
+			}
+			else {
+				point[0][point_num / 2][0] = x - 400;
+				point[0][point_num / 2][2] = y - 300;
+				point_num++;
+			}
 		}
 	}
 	return GLvoid();
@@ -215,13 +231,15 @@ GLvoid CRun_time_Framework::Mousemotion(int x, int y)
 
 GLvoid CRun_time_Framework::Init() {
 	point_num = 0;
-	for (int i = 0; i < 8; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			point[i][j] = 0;
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			for (int k = 0; k < 3; ++k) {
+				point[i][j][k] = 0;
+			}
 		}
 	}
 
-	top_viewmode = true;
+	top_viewmode = false;
 
 	srand(time(NULL));
 

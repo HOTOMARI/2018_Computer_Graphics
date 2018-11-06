@@ -29,16 +29,27 @@ GLvoid CRun_time_Framework::Axis()
 	return GLvoid();
 }
 
-GLvoid CRun_time_Framework::Draw_Points()
+
+GLvoid CRun_time_Framework::Draw_Field()
 {
-	glPushMatrix();
-	//glRotatef(90, 1, 0, 0);
-	glPointSize(4.0);
-	for (int i = 0; i < point_num; ++i) {
-		glBegin(GL_POINTS);
-		glVertex3f(point[i][0], point[i][1], point[i][2]);
+	for (int i = 3; i < point_num; i += 2) {
+		// 곡면 제어점 설정 
+		glMap2f(GL_MAP2_VERTEX_3, 0.0, 1.0, 3, 4, 0.0, 1.0, 12, 3, &point[0][0][0]);
+		glEnable(GL_MAP2_VERTEX_3);
+
+		// 그리드를 이용한 곡면 드로잉 
+		glMapGrid2f(10, 0.0, 1.0, 10, 0.0, 1.0);
+
+		// 선을 이용하여 그리드 연결 
+		glEvalMesh2(GL_LINE, 0, 10, 0, 10);
+		glPointSize(4.0); glColor3f(0.0, 0.0, 1.0);
+
+		glBegin(GL_POINTS); 
+		for (int k = 0; k < 3; k++) 
+			for (int j = 0; j < 4; j++) 
+			glVertex3fv(point[k][j]); 
 		glEnd();
+
 	}
-	glPopMatrix();
 	return GLvoid();
 }

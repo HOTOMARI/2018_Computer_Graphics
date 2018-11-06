@@ -40,7 +40,7 @@ private:
 	GLUquadricObj *qobj = gluNewQuadric();
 
 	GLfloat identity[16];
-	GLfloat point[8][3];
+	GLfloat point[3][4][3];
 
 	Camera camera;
 
@@ -71,7 +71,7 @@ public:
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
 	GLvoid Axis();
-	GLvoid Draw_Points();
+	GLvoid Draw_Field();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
