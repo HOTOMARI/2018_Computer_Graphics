@@ -79,6 +79,11 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		dir |= DIR_Z_CW;
 		break;
 
+	case '1':
+		if (point_num == 8)
+			ani_switch = (ani_switch + 1) % 2;
+		break;
+
 	case '-':
 		camera.zoom += 30.0;
 		break;
@@ -240,6 +245,9 @@ GLvoid CRun_time_Framework::Init() {
 	}
 
 	top_viewmode = false;
+	ani_stack = 0;
+	ani_switch = false;
+	ani_up = true;
 
 	srand(time(NULL));
 
@@ -327,8 +335,7 @@ GLvoid CRun_time_Framework::Update() {
 			for (int i = 0; i < 3; ++i)
 				point[2][3][i] = point[2][1][i];
 		}
-
-		if (point_num == 5) {
+		else if (point_num == 5) {
 			for (int i = 0; i < 3; ++i)
 				point[1][2][i] = point[1][1][i];
 			for (int i = 0; i < 3; ++i)
@@ -340,8 +347,7 @@ GLvoid CRun_time_Framework::Update() {
 			for (int i = 0; i < 3; ++i)
 				point[2][3][i] = point[2][1][i];
 		}
-
-		if (point_num == 6) {
+		else if (point_num == 6) {
 			for (int i = 0; i < 3; ++i)
 				point[0][3][i] = point[0][2][i];
 			for (int i = 0; i < 3; ++i)
@@ -349,12 +355,46 @@ GLvoid CRun_time_Framework::Update() {
 			for (int i = 0; i < 3; ++i)
 				point[2][3][i] = point[2][2][i];
 		}
-
-		if (point_num == 7) {
+		else if (point_num == 7) {
 			for (int i = 0; i < 3; ++i)
 				point[1][3][i] = point[1][2][i];
 			for (int i = 0; i < 3; ++i)
 				point[2][3][i] = point[2][2][i];
+		}
+
+		if (ani_switch) {
+			if (ani_up) {
+				ani_stack += 0.1f * (current_time - Prevtime);
+				for (int i = 0; i < 3; ++i) {
+					for (int j = 0; j < 4; ++j) {
+						if (j % 2) {
+							point[i][j][1] += 0.1f * (current_time - Prevtime);
+						}
+						else {
+							point[i][j][1] -= 0.1f * (current_time - Prevtime);
+						}
+					}
+				}
+				if (ani_stack > 200) {
+					ani_up = false;
+				}
+			}
+			else {
+				ani_stack -= 0.1f * (current_time - Prevtime);
+				for (int i = 0; i < 3; ++i) {
+					for (int j = 0; j < 4; ++j) {
+						if (j % 2) {
+							point[i][j][1] -= 0.1f * (current_time - Prevtime);
+						}
+						else {
+							point[i][j][1] += 0.1f * (current_time - Prevtime);
+						}
+					}
+				}
+				if (ani_stack < -200) {
+					ani_up = true;
+				}
+			}
 		}
 
 		Prevtime = current_time;

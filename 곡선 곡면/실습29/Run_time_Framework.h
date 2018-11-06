@@ -14,14 +14,6 @@
 #define DIR_Y_CW 0x10	
 #define DIR_Z_CW 0x20	
 
-struct Shape {
-	float vector[3] = { 0,0,0 };
-	float position[3] = { 0,0,0 };
-	float size;
-	unsigned char dir = 0;
-	GLfloat identity[16];
-};
-
 struct Camera {
 	float degree[3] = { -180,-90,90 };
 	float x = 0;
@@ -47,6 +39,9 @@ private:
 	int point_num;
 
 	bool top_viewmode;
+	float ani_stack;
+	bool ani_switch;
+	bool ani_up;
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
