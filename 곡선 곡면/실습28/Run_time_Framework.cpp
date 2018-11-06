@@ -13,7 +13,9 @@ GLvoid CRun_time_Framework::draw() {
 	glClear(GL_COLOR_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
 	glMatrixMode(GL_MODELVIEW);
 
+	glColor3f(1, 1, 0);
 	Draw_Points();
+	Draw_Curve();
 
 	glutSwapBuffers();
 }
@@ -31,7 +33,9 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
-	
+	case 'r':
+		point_num = 0;
+		break;
 	}
 }
 
@@ -71,8 +75,8 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		if (point_num < 19) {
-			point[point_num].x = x - 400;
-			point[point_num].y = -(y - 300);
+			point[point_num][0] = x - 400;
+			point[point_num][1] = -(y - 300);
 			point_num++;
 		}
 	}
@@ -101,6 +105,11 @@ GLvoid CRun_time_Framework::Mousemotion(int x, int y)
 
 GLvoid CRun_time_Framework::Init() {
 	point_num = 0;
+	for (int i = 0; i < 19; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			point[i][j] = 0;
+		}
+	}
 
 	srand(time(NULL));
 	myself = this;

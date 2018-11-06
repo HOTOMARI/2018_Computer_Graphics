@@ -15,10 +15,6 @@
 #define DIR_Y_CW 0x10	
 #define DIR_Z_CW 0x20	
 
-struct MYPOINT {
-	float x, y;
-};
-
 class CRun_time_Framework {
 private:
 	static CRun_time_Framework* myself;
@@ -26,7 +22,7 @@ private:
 	int m_nHeight;
 	int point_num;
 
-	MYPOINT point[19];
+	GLfloat point[19][3];
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
@@ -51,6 +47,7 @@ public:
 	// 만든 함수
 	GLvoid background(float r, float g, float b);
 	GLvoid Draw_Points();
+	GLvoid Draw_Curve();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
