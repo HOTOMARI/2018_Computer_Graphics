@@ -15,6 +15,10 @@ GLvoid CRun_time_Framework::draw() {
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 	glPushMatrix();
 
+	if (top_viewmode == false) {
+		gluLookAt(200.0, 200.0, 0, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+	}
+
 	glMultMatrixf(identity);
 
 	glRotatef(90, 1, 0, 0);
@@ -41,98 +45,111 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 	glLoadIdentity ();
 
 	// 투영은 직각 투영 또는 원근 투영 중 한개를 설정한다.
-	// 원근 투영을 사용하는 경우: 
-	gluPerspective (60, (float)w / (float)h, 1, 1000);
-	glTranslatef (0, 0, -520);
-
 	// 직각 투영인경우
-	// glOrtho (0.0, 800.0, 0.0, 600.0, -1.0, 1.0);
+	if (top_viewmode)
+		glOrtho(-400.0, 400.0, -300.0, 300.0, -400, 400);
+	// 원근 투영을 사용하는 경우: 
+	else {
+		gluPerspective (60, (float)w / (float)h, 1, 1000);
+		glTranslatef (0, 0, -520);
+	}
 
 	// 모델링 변환 설정: 디스플레이 콜백 함수에서 모델 변환 적용하기 위하여 Matrix mode 저장
 	glMatrixMode (GL_MODELVIEW);
 
 	// 관측 변환: 카메라의 위치 설정 (필요한 경우, 다른 곳에 설정 가능) 
-	//gluLookAt(0.0, 0.0, camera_zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-
 	return GLvoid();
 }
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
-	switch (key) {
-		if (top_viewmode == false) {
-	case 'z':
-		dir |= DIR_X_CCW;
-		break;
-	case 'Z':
-		dir |= DIR_X_CW;
-		break;
-	case 'x':
-		dir |= DIR_Y_CCW;
-		break;
-	case 'X':
-		dir |= DIR_Y_CW;
-		break;
-	case 'c':
-		dir |= DIR_Z_CCW;
-		break;
-	case 'C':
-		dir |= DIR_Z_CW;
-		break;
+	if (top_viewmode == false) {
+		switch (key) {
+		case 'z':
+			dir |= DIR_X_CCW;
+			break;
+		case 'Z':
+			dir |= DIR_X_CW;
+			break;
+		case 'x':
+			dir |= DIR_Y_CCW;
+			break;
+		case 'X':
+			dir |= DIR_Y_CW;
+			break;
+		case 'c':
+			dir |= DIR_Z_CCW;
+			break;
+		case 'C':
+			dir |= DIR_Z_CW;
+			break;
 
-	case '1':
-		if (point_num == 8)
-			ani_switch = (ani_switch + 1) % 2;
-		break;
+		case '1':
+			if (point_num == 8)
+				ani_switch = (ani_switch + 1) % 2;
+			break;
+		case '4':
+			top_viewmode = true;
+			Reshape(800, 600);
+			break;
 
-	case '-':
-		camera.zoom += 30.0;
-		break;
-	case '+':
-		camera.zoom += -30.0;
-		break;
+		case '-':
+			camera.zoom += 30.0;
+			break;
+		case '+':
+			camera.zoom += -30.0;
+			break;
 
-	case 'w':
-		camera.y += 10;
-		break;
-	case 's':
-		camera.y -= 10;
-		break;
-	case 'a':
-		camera.x -= 10;
-		break;
-	case 'd':
-		camera.x += 10;
-		break;
+		case 'w':
+			camera.y += 10;
+			break;
+		case 's':
+			camera.y -= 10;
+			break;
+		case 'a':
+			camera.x -= 10;
+			break;
+		case 'd':
+			camera.x += 10;
+			break;
 
-	case 'n':
-		camera.degree[0] += 10.0;
-		break;
-	case 'N':
-		camera.degree[0] -= 10.0;
-		break;
-	case 'm':
-		camera.degree[1] += 10.0;
-		break;
-	case 'M':
-		camera.degree[1] -= 10.0;
-		break;
-	case ',':
-		camera.degree[2] += 10.0;
-		break;
-	case '<':
-		camera.degree[2] -= 10.0;
-		break;
+		case 'n':
+			camera.degree[0] += 10.0;
+			break;
+		case 'N':
+			camera.degree[0] -= 10.0;
+			break;
+		case 'm':
+			camera.degree[1] += 10.0;
+			break;
+		case 'M':
+			camera.degree[1] -= 10.0;
+			break;
+		case ',':
+			camera.degree[2] += 10.0;
+			break;
+		case '<':
+			camera.degree[2] -= 10.0;
+			break;
 
-	case 'i':
-		camera.degree[0] = -180;
-		camera.degree[1] = -90;
-		camera.degree[2] = 90;
-		camera.zoom = 0;
-		camera.x = 0;
-		camera.y = 0;
-		memset(identity, 0, sizeof(identity));
-		identity[0] = identity[5] = identity[10] = identity[15] = 1;
-		break;
+		case 'i':
+			camera.degree[0] = -180;
+			camera.degree[1] = -90;
+			camera.degree[2] = 90;
+			camera.zoom = 0;
+			camera.x = 0;
+			camera.y = 0;
+			memset(identity, 0, sizeof(identity));
+			identity[0] = identity[5] = identity[10] = identity[15] = 1;
+			break;
+		}
+	}
+	else {
+		switch (key)
+		{
+		case '4':
+			top_viewmode = false;
+			Reshape(800, 600);
+			break;
 		}
 	}
 }
@@ -191,6 +208,20 @@ GLvoid CRun_time_Framework::KeyUpinput(unsigned char key, int x, int y) {
 
 GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		cur_mouse[0] = x;
+		cur_mouse[1] = y;
+		pre_mouse[0] = x;
+		pre_mouse[1] = y;
+
+		if (point_num == 8) {
+			for (int i = 0; i < 3; ++i) {
+				for (int j = 0; j < 4; ++j) {
+					if (Collide(x - 400, y - 300, i, j)) {
+						picked[i * 4 + j] = true;
+					}
+				}
+			}
+		}
 		if (point_num < 8) {
 			if (point_num % 2) {
 				point[2][point_num / 2][0] = x - 400;
@@ -213,6 +244,15 @@ GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 			}
 		}
 	}
+	else if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		if (point_num == 8) {
+			for (int i = 0; i < 3; ++i) {
+				for (int j = 0; j < 4; ++j) {
+					picked[i * 4 + j] = false;
+				}
+			}
+		}
+	}
 	return GLvoid();
 }
 
@@ -224,6 +264,39 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 }
 
 GLvoid CRun_time_Framework::Motion(int x, int y){
+	pre_mouse[0] = cur_mouse[0];
+	pre_mouse[1] = cur_mouse[1];
+	cur_mouse[0] = x;
+	cur_mouse[1] = y;
+
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			if (picked[i * 4 + j]) {
+				point[i][j][0] = x - 400;
+				point[i][j][2] = y - 300;
+			}
+		}
+	}
+
+	if (cur_mouse[1] - pre_mouse[1] > 0) {
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				if (picked[i * 4 + j]) {
+					point[i][j][1] -= 5;
+				}
+			}
+		}
+	}
+	else if (cur_mouse[1] - pre_mouse[1] < 0) {
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 4; ++j) {
+				if (picked[i * 4 + j]) {
+					point[i][j][1] += 5;
+				}
+			}
+		}
+	}
+
 }
 
 GLvoid CRun_time_Framework::Mousemotion(int x, int y)
@@ -244,10 +317,13 @@ GLvoid CRun_time_Framework::Init() {
 		}
 	}
 
-	top_viewmode = false;
+	top_viewmode = true;
 	ani_stack = 0;
 	ani_switch = false;
 	ani_up = true;
+
+	for (int i = 0; i < 12; ++i)
+		picked[i] = false;
 
 	srand(time(NULL));
 
@@ -364,34 +440,34 @@ GLvoid CRun_time_Framework::Update() {
 
 		if (ani_switch) {
 			if (ani_up) {
-				ani_stack += 0.1f * (current_time - Prevtime);
+				ani_stack += 0.2f * (current_time - Prevtime);
 				for (int i = 0; i < 3; ++i) {
 					for (int j = 0; j < 4; ++j) {
-						if (j % 2) {
-							point[i][j][1] += 0.1f * (current_time - Prevtime);
+						if (j==0 || j == 3) {
+							point[i][j][1] += 0.2f * (current_time - Prevtime);
 						}
 						else {
-							point[i][j][1] -= 0.1f * (current_time - Prevtime);
+							point[i][j][1] -= 0.2f * (current_time - Prevtime);
 						}
 					}
 				}
-				if (ani_stack > 200) {
+				if (ani_stack > 100) {
 					ani_up = false;
 				}
 			}
 			else {
-				ani_stack -= 0.1f * (current_time - Prevtime);
+				ani_stack -= 0.2f * (current_time - Prevtime);
 				for (int i = 0; i < 3; ++i) {
 					for (int j = 0; j < 4; ++j) {
-						if (j % 2) {
-							point[i][j][1] -= 0.1f * (current_time - Prevtime);
+						if (j == 0 || j == 3) {
+							point[i][j][1] -= 0.2f * (current_time - Prevtime);
 						}
 						else {
-							point[i][j][1] += 0.1f * (current_time - Prevtime);
+							point[i][j][1] += 0.2f * (current_time - Prevtime);
 						}
 					}
 				}
-				if (ani_stack < -200) {
+				if (ani_stack < -100) {
 					ani_up = true;
 				}
 			}

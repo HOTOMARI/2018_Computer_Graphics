@@ -53,3 +53,10 @@ GLvoid CRun_time_Framework::Draw_Field()
 	}
 	return GLvoid();
 }
+
+bool CRun_time_Framework::Collide(int mouse_x, int mouse_y, int point_i, int point_j)
+{
+	if (pow((point[point_i][point_j][0] - mouse_x), 2) + pow((point[point_i][point_j][2] - mouse_y), 2) < 400)
+		return true;
+	else return false;
+}

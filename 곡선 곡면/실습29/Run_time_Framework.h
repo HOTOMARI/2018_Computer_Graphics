@@ -38,10 +38,14 @@ private:
 
 	int point_num;
 
+	int cur_mouse[2];
+	int pre_mouse[2];
+
 	bool top_viewmode;
 	float ani_stack;
 	bool ani_switch;
 	bool ani_up;
+	bool picked[12];
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
@@ -67,6 +71,7 @@ public:
 	GLvoid background(float r, float g, float b);
 	GLvoid Axis();
 	GLvoid Draw_Field();
+	bool Collide(int mouse_x, int mouse_y, int point_i, int point_j);
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
