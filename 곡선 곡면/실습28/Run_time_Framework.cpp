@@ -80,11 +80,29 @@ GLvoid CRun_time_Framework::Mouse(int button, int state, int x, int y) {
 			point_num++;
 		}
 	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		for (int i = 0; i < point_num; ++i) {
+			if (Collide(x - 400, -(y - 300), i)) {
+				picked[i] = true;
+				break;
+			}
+		}
+	}
+	else if (button == GLUT_RIGHT_BUTTON && state == GLUT_UP) {
+		for (int i = 0; i < 19; ++i)
+			picked[i] = false;
+	}
 	return GLvoid();
 }
 
 GLvoid CRun_time_Framework::Motion(int x, int y)
 {
+	for (int i = 0; i < 19; ++i) {
+		if (picked[i]) {
+			point[i][0] = x - 400;
+			point[i][1] = -(y - 300);
+		}
+	}
 	return GLvoid();
 }
 
@@ -110,6 +128,8 @@ GLvoid CRun_time_Framework::Init() {
 			point[i][j] = 0;
 		}
 	}
+	for (int i = 0; i < 19; ++i)
+		picked[i] = false;
 
 	srand(time(NULL));
 	myself = this;

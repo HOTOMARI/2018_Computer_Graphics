@@ -23,10 +23,14 @@ private:
 	int point_num;
 
 	GLfloat point[19][3];
+	bool picked[19];
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
 	GLint current_frame = 0;
+
+	float pre_mouse[2];
+	float cur_mouse[2];
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 
@@ -48,6 +52,7 @@ public:
 	GLvoid background(float r, float g, float b);
 	GLvoid Draw_Points();
 	GLvoid Draw_Curve();
+	bool Collide(int mouse_x, int mouse_y, int point_i);
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);

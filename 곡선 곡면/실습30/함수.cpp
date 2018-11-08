@@ -15,19 +15,18 @@ GLvoid CRun_time_Framework::ground()
 	glEnable(GL_MAP2_VERTEX_3);
 
 	// 그리드를 이용한 곡면 드로잉 
-	glMapGrid2f(30, 0.0, 1.0, 30, 0.0, 1.0);
+	glMapGrid2f(125, 0.0, 1.0, 125, 0.0, 1.0);
 
 	// 선을 이용하여 그리드 연결 
 	if (ground_line) {
-		glEvalMesh2(GL_LINE, 0, 30, 0, 30);
-		glPointSize(4.0); glColor3f(0.0, 0.0, 1.0);
+		glEvalMesh2(GL_LINE, 0, 125, 0, 125);
 	}
 	// 면을 이용하여 그리드 연결 
 	else {
-		glEvalMesh2(GL_FILL, 0, 30, 0, 30);
-		glPointSize(4.0); glColor3f(0.0, 0.0, 1.0);
+		glEvalMesh2(GL_FILL, 0, 125, 0, 125);
 	}
 
+	glPointSize(4.0); glColor3f(0.0, 0.0, 1.0);
 	glBegin(GL_POINTS);
 	for (int k = 0; k < 10; k++)
 		for (int j = 0; j < 10; j++)
