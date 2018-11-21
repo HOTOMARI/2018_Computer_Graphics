@@ -71,6 +71,7 @@ GLvoid CRun_time_Framework::Draw_Ground()
 	glTranslatef(0, -300, 0);
 	for (int i = 0; i < 50; ++i) {
 		for (int j = 0; j < 50; ++j) {
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, ground[i][j].Specular);
 			glBegin(GL_QUADS);
 			glVertex3f(ground[i][j].left, 0, ground[i][j].top);
 			glVertex3f(ground[i][j].right, 0, ground[i][j].top);
@@ -267,4 +268,84 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 	}
 
 	glPopMatrix();
+}
+
+GLvoid CRun_time_Framework::Make_Snow()
+{
+	if (snow == NULL) {
+		snow = (Snow*)malloc(sizeof(Snow));
+		snow->height = 2000;
+		snow->x = rand() % 50;
+		snow->y = rand() % 50;
+		snow->speed = 1.0;
+		snow->next = NULL;
+	}
+	else {
+		Snow* t;
+		t = snow;
+		while (t->next != NULL) {
+			t = t->next;
+		}
+		t->next = (Snow*)malloc(sizeof(Snow));
+		t = t->next;
+		t->height = 2000;
+		t->x = rand() % 50;
+		t->y = rand() % 50;
+		t->speed = 1.0;
+		t->next = NULL;
+	}
+	return GLvoid();
+}
+
+GLvoid CRun_time_Framework::UpdateSnow()
+{
+	Snow* t = snow;
+	while (t != NULL) {
+		t->height -= t->speed*(current_time - Prevtime);
+		t = t->next;
+	}
+	return GLvoid();
+}
+
+GLvoid CRun_time_Framework::Draw_Snow()
+{
+	Snow* t = snow;
+
+	while (t != NULL) {
+		glPushMatrix();
+		glTranslatef(t->x * 16 - 400, t->height, t->y * 16 - 400);
+		glutSolidSphere(5, 3, 3);
+		glPopMatrix();
+		t = t->next;
+	}
+	return GLvoid();
+}
+
+GLvoid CRun_time_Framework::Delete_Snow()
+{
+	Snow* t = snow;
+	Snow* before = snow;
+
+	while (t != NULL) {
+		if (t->height < -300 && t == snow) {
+			for (int i = 0; i < 3; ++i)
+				ground[t->x][t->y].Specular[i] += 0.1;
+			snow = t->next;
+			delete(t);
+			t = snow;
+			before = snow;
+		}
+		else if (t->height < -300 && t != snow) {
+			for (int i = 0; i < 3; ++i)
+				ground[t->x][t->y].Specular[i] += 0.1;
+			before->next = t->next;
+			delete(t);
+			t = before->next;
+		}
+		else {
+			before = t;
+			t = t->next;
+		}
+	}
+	return GLvoid();
 }

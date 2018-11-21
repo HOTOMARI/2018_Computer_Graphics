@@ -59,6 +59,8 @@ GLvoid CRun_time_Framework::draw() {
 	Draw_Ball();
 	//¿ø»Ô
 	Draw_Cone();
+	//´«
+	Draw_Snow();
 
 	glDisable(GL_LIGHTING);
 
@@ -314,6 +316,8 @@ GLvoid CRun_time_Framework::Init() {
 			ground[i][j].bottom = -400 + 16 * (i + 1);		
 		}
 	}
+	snow = NULL;
+	snowstack = 0;
 
 	srand(time(NULL));
 	myself = this;
@@ -349,6 +353,14 @@ GLvoid CRun_time_Framework::Update() {
 		UpdateLight();
 
 		moon_degree += 0.2*(current_time - Prevtime);
+
+		snowstack += 0.2*(current_time - Prevtime);
+		if (snowstack > 10) {
+			Make_Snow();
+			snowstack = 0;
+		}
+		UpdateSnow();
+		Delete_Snow();
 
 		Prevtime = current_time;
 		current_frame = 0;

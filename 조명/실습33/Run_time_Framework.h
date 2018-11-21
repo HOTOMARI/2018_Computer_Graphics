@@ -19,6 +19,7 @@ struct Ground {
 	GLfloat right;
 	GLfloat top;
 	GLfloat bottom;
+	GLfloat Specular[4] = { 0.0,0.0,0.0,1.0 };
 };
 struct Light {
 	GLfloat position[4] = { 0.0,0.0,0.0,1.0 };
@@ -34,6 +35,14 @@ struct Camera {
 	float x = 0;
 	float y = 0;
 	float zoom = 0;
+};
+
+struct Snow {
+	GLint x = 0;
+	GLint y = 0;
+	GLfloat height = 0.0;
+	GLfloat speed = 0.0;
+	Snow* next;
 };
 
 class CRun_time_Framework {
@@ -56,6 +65,9 @@ private:
 	Ground ground[50][50];
 
 	Light light[2];
+
+	Snow* snow;
+	float snowstack;
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
@@ -86,6 +98,10 @@ public:
 	GLvoid UpdateLight();
 	GLvoid Draw_Ground();
 	GLvoid Draw_Piramid();
+	GLvoid Make_Snow();
+	GLvoid UpdateSnow();
+	GLvoid Draw_Snow();
+	GLvoid Delete_Snow();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
