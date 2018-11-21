@@ -113,26 +113,29 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		move_light = (move_light + 1) % 2;
 		break;
 	case 'c':
-		for (int i = 0; i < 2; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				if (light[i].DiffuseColor[j] < 1.0) {
-					light[i].DiffuseColor[j] += 0.1;
-					if (light[i].DiffuseColor[j] > 1.0) {
-						light[i].DiffuseColor[j] = 1.0;
-					}
+		if (light[0].DiffuseColor[1] < 1.0) {
+			light[0].DiffuseColor[1] += 0.1;
+			if (light[0].DiffuseColor[1] > 1.0) {
+				light[0].DiffuseColor[1] = 1.0;
+			}
+			if (light[1].DiffuseColor[0] < 1.0) {
+				light[1].DiffuseColor[0] += 0.1;
+				if (light[1].DiffuseColor[0] > 1.0) {
+					light[1].DiffuseColor[0] = 1.0;
 				}
 			}
-		}
-		break;
+			break;
 	case 'C':
-		for (int i = 0; i < 2; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				if (light[i].DiffuseColor[j] > 0.0) {
-					light[i].DiffuseColor[j] -= 0.1;
-					if (light[i].DiffuseColor[j] < 0.0) {
-						light[i].DiffuseColor[j] = 0.0;
-					}
-				}
+		if (light[0].DiffuseColor[1] > 0.0) {
+			light[0].DiffuseColor[1] -= 0.1;
+			if (light[0].DiffuseColor[1] < 0.0) {
+				light[0].DiffuseColor[1] = 0.0;
+			}
+		}
+		if (light[1].DiffuseColor[0] > 0.0) {
+			light[1].DiffuseColor[0] -= 0.1;
+			if (light[1].DiffuseColor[0] < 0.0) {
+				light[1].DiffuseColor[0] = 0.0;
 			}
 		}
 		break;
@@ -210,6 +213,8 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		memset(identity, 0, sizeof(identity));
 		identity[0] = identity[5] = identity[10] = identity[15] = 1;
 		break;
+		}
+		
 	}
 }
 

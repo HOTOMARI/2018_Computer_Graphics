@@ -44,14 +44,12 @@ GLvoid CRun_time_Framework::Draw_Cone()
 GLvoid CRun_time_Framework::Init_Light()
 {
 	light[0].degree = 90.0;
-	light[0].AmbientColor[0] = 0.0;
-	light[0].AmbientColor[1] = 1.0;
-	light[0].AmbientColor[2] = 0.0;
+	light[0].AmbientColor[1] = 0.2;
+	light[0].DiffuseColor[1] = 0.8;
 
 	light[1].degree = 270.0;
-	light[1].AmbientColor[0] = 1.0;
-	light[1].AmbientColor[1] = 0.0;
-	light[1].AmbientColor[2] = 0.0;
+	light[1].AmbientColor[0] = 0.2;
+	light[1].DiffuseColor[0] = 0.8;
 	return GLvoid();
 }
 

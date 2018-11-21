@@ -25,8 +25,8 @@ struct Shape {
 
 struct Light {
 	GLfloat position[4] = { 0.0,0.0,0.0,0.0 };
-	GLfloat AmbientColor[4] = { 0.2,0.2,0.2,1.0 };
-	GLfloat DiffuseColor[4] = { 0.8,0.8,0.8,1.0 };
+	GLfloat AmbientColor[4] = { 0.0,0.0,0.0,1.0 };
+	GLfloat DiffuseColor[4] = { 0.0,0.0,0.0,1.0 };
 	GLfloat SpecularColor[4] = { 1.0,1.0,1.0,1.0 };
 	GLfloat degree = 0.0;
 	bool on = true;
