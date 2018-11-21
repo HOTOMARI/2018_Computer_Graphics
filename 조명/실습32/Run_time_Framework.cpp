@@ -48,7 +48,14 @@ GLvoid CRun_time_Framework::draw() {
 	else
 		glDisable(GL_LIGHT1);
 
-	// °ø
+	
+	
+
+	// ¹Ù´Ú
+	Draw_Ground();
+	//ÇÇ¶ó¹Ìµå
+	Draw_Piramid();
+	//´Þ
 	Draw_Ball();
 	//¿ø»Ô
 	Draw_Cone();
@@ -100,17 +107,41 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	case '2':
 		light[1].on = (light[1].on + 1) % 2;
 		break;
-
-	case 'z':
-		light[0].degree += 10.0;
-		light[1].degree += 10.0;
+	case 'b':
+	case 'B':
+		normal = (normal + 1) % 2;
 		break;
+	case 'z':
 	case 'Z':
-		light[0].degree -= 10.0;
-		light[1].degree -= 10.0;
+		move_light = (move_light + 1) % 2;
 		break;
 	case 'x':
-		move_light = (move_light + 1) % 2;
+		if (light[0].AmbientColor[1] < 1.0) {
+			light[0].AmbientColor[1] += 0.1;
+			if (light[0].AmbientColor[1] > 1.0) {
+				light[0].AmbientColor[1] = 1.0;
+			}
+		}
+		if (light[1].AmbientColor[0] < 1.0) {
+			light[1].AmbientColor[0] += 0.1;
+			if (light[1].AmbientColor[0] > 1.0) {
+				light[1].AmbientColor[0] = 1.0;
+			}
+		}
+		break;
+	case 'X':
+		if (light[0].AmbientColor[1] > 0.0) {
+			light[0].AmbientColor[1] -= 0.1;
+			if (light[0].AmbientColor[1] < 0.0) {
+				light[0].AmbientColor[1] = 0.0;
+			}
+		}
+		if (light[1].AmbientColor[0] > 0.0) {
+			light[1].AmbientColor[0] -= 0.1;
+			if (light[1].AmbientColor[0] < 0.0) {
+				light[1].AmbientColor[0] = 0.0;
+			}
+		}
 		break;
 	case 'c':
 		if (light[0].DiffuseColor[1] < 1.0) {
@@ -118,12 +149,13 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 			if (light[0].DiffuseColor[1] > 1.0) {
 				light[0].DiffuseColor[1] = 1.0;
 			}
-			if (light[1].DiffuseColor[0] < 1.0) {
-				light[1].DiffuseColor[0] += 0.1;
-				if (light[1].DiffuseColor[0] > 1.0) {
-					light[1].DiffuseColor[0] = 1.0;
-				}
+		}
+		if (light[1].DiffuseColor[0] < 1.0) {
+			light[1].DiffuseColor[0] += 0.1;
+			if (light[1].DiffuseColor[0] > 1.0) {
+				light[1].DiffuseColor[0] = 1.0;
 			}
+		}
 			break;
 	case 'C':
 		if (light[0].DiffuseColor[1] > 0.0) {
@@ -213,8 +245,7 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		memset(identity, 0, sizeof(identity));
 		identity[0] = identity[5] = identity[10] = identity[15] = 1;
 		break;
-		}
-		
+				
 	}
 }
 
@@ -272,6 +303,17 @@ GLvoid CRun_time_Framework::Init() {
 	camera.y = 50;
 	Init_Light();
 	move_light = false;
+	normal = true;
+	moon_degree = 0;
+
+	for (int i = 0; i < 50; ++i) {
+		for (int j = 0; j < 50; ++j) {
+			ground[i][j].left = -400 + 16 * j;
+			ground[i][j].right = -400 + 16 * (j + 1);
+			ground[i][j].top = -400 + 16 * i;
+			ground[i][j].bottom = -400 + 16 * (i + 1);		
+		}
+	}
 
 	srand(time(NULL));
 	myself = this;
@@ -301,10 +343,13 @@ GLvoid CRun_time_Framework::Update() {
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
 		if (move_light) {
-			light[0].degree += 0.05*(current_time - Prevtime);
-			light[1].degree += 0.05*(current_time - Prevtime);
+			light[0].degree += 0.3*(current_time - Prevtime);
+			light[1].degree += 0.3*(current_time - Prevtime);
 		}
 		UpdateLight();
+
+		moon_degree += 0.2*(current_time - Prevtime);
+
 		Prevtime = current_time;
 		current_frame = 0;
 		glutPostRedisplay();

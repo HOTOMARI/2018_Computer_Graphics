@@ -14,17 +14,14 @@
 #define DIR_Y_CW 0x10	
 #define DIR_Z_CW 0x20	
 
-struct Shape {
-	float rotate = 0;
-	float position[3] = { 0,350,0 };
-	float size = 70;
-	float line = 4;
-	float t = 0;
-	GLfloat identity[16];
+struct Ground {
+	GLfloat left;
+	GLfloat right;
+	GLfloat top;
+	GLfloat bottom;
 };
-
 struct Light {
-	GLfloat position[4] = { 0.0,0.0,0.0,0.0 };
+	GLfloat position[4] = { 0.0,0.0,0.0,1.0 };
 	GLfloat AmbientColor[4] = { 0.0,0.0,0.0,1.0 };
 	GLfloat DiffuseColor[4] = { 0.0,0.0,0.0,1.0 };
 	GLfloat SpecularColor[4] = { 1.0,1.0,1.0,1.0 };
@@ -47,6 +44,7 @@ private:
 
 	bool camera_is_front;
 	bool move_light;
+	bool normal;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
@@ -55,6 +53,8 @@ private:
 
 	Camera camera;
 
+	Ground ground[50][50];
+
 	Light light[2];
 
 	GLfloat Prevtime = 0;
@@ -62,6 +62,8 @@ private:
 	GLint current_frame = 0;
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
+
+	float moon_degree;
 
 public:
 	CRun_time_Framework();
@@ -82,6 +84,8 @@ public:
 	GLvoid Draw_Cone();
 	GLvoid Init_Light();
 	GLvoid UpdateLight();
+	GLvoid Draw_Ground();
+	GLvoid Draw_Piramid();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
