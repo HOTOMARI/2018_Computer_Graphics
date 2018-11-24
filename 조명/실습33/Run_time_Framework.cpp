@@ -42,11 +42,20 @@ GLvoid CRun_time_Framework::draw() {
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light[1].DiffuseColor);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light[1].SpecularColor);
 	glLightfv(GL_LIGHT1, GL_POSITION, light[1].position);
-	glEnable(GL_LIGHT1);
 	if (light[1].on)
 		glEnable(GL_LIGHT1);
 	else
 		glDisable(GL_LIGHT1);
+
+	GLfloat pos[4] = { 0,7000,0,0 };
+	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
+	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
+
+	glLightfv(GL_LIGHT7, GL_AMBIENT, a);
+	glLightfv(GL_LIGHT7, GL_DIFFUSE, d);
+	glLightfv(GL_LIGHT7, GL_SPECULAR, WhiteLight);
+	glLightfv(GL_LIGHT7, GL_POSITION, pos);
+	glEnable(GL_LIGHT7);
 
 	
 	

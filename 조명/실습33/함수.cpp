@@ -8,14 +8,10 @@ GLvoid CRun_time_Framework::background(float r, float g, float b) {
 
 GLvoid CRun_time_Framework::Draw_Ball()
 {
-	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
-	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
 	glPushMatrix();
 
 	glTranslatef(100 * sin(moon_degree / 180.0*PI), 0, -100 * cos(moon_degree / 180.0*PI));
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, a);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, d);
 	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, WhiteLight);
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 80.0f);
 	glutSolidSphere(50, 30, 30);
@@ -24,8 +20,8 @@ GLvoid CRun_time_Framework::Draw_Ball()
 
 GLvoid CRun_time_Framework::Draw_Cone()
 {
-	//glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+	glEnable(GL_COLOR_MATERIAL);
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 	glPushMatrix();
 	glColor3f(0, 1, 0);
@@ -42,6 +38,10 @@ GLvoid CRun_time_Framework::Draw_Cone()
 	glPopMatrix();
 
 	glDisable(GL_COLOR_MATERIAL);
+	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
+	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, a);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, d);
 }
 
 GLvoid CRun_time_Framework::Init_Light()
@@ -85,13 +85,9 @@ GLvoid CRun_time_Framework::Draw_Ground()
 
 GLvoid CRun_time_Framework::Draw_Piramid()
 {
-	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
-	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
 
 	glPushMatrix();
 
-	glMaterialfv(GL_FRONT, GL_AMBIENT, a);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, d);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, WhiteLight);
 
 	glTranslatef(0, -300, 0);
@@ -313,6 +309,7 @@ GLvoid CRun_time_Framework::Draw_Snow()
 
 	while (t != NULL) {
 		glPushMatrix();
+		glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, WhiteLight);
 		glTranslatef(t->x * 16 - 400, t->height, t->y * 16 - 400);
 		glutSolidSphere(5, 3, 3);
 		glPopMatrix();
