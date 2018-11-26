@@ -19,6 +19,7 @@ GLvoid CRun_time_Framework::draw() {
 	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	gluLookAt(camera.x, camera.y, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
 	//gluLookAt(0 , 0, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
+
 	gluLookAt(cos(camera.degree[1] / 180 * PI) * 200, 0, sin(camera.degree[1] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	if ((fabs((int)camera.degree[0]%360) <= 120 && fabs((int)camera.degree[0] % 360) >= 0)||
 		(fabs((int)camera.degree[0] % 360) <= 360 && fabs((int)camera.degree[0] % 360) > 240))
@@ -26,7 +27,7 @@ GLvoid CRun_time_Framework::draw() {
 	else
 	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	//glMultMatrixf(identity);
-
+	
 	glEnable(GL_LIGHTING);		//조명 활성화
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light[0].AmbientColor);
@@ -48,9 +49,6 @@ GLvoid CRun_time_Framework::draw() {
 	else
 		glDisable(GL_LIGHT1);
 
-	
-	
-
 	// 바닥
 	Draw_Ground();
 	//피라미드
@@ -60,7 +58,6 @@ GLvoid CRun_time_Framework::draw() {
 	//원뿔
 	Draw_Cone();
 
-	glDisable(GL_LIGHTING);
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -300,7 +297,7 @@ GLvoid CRun_time_Framework::Init() {
 
 	camera.zoom = 500;
 	camera.x = 0;
-	camera.y = 50;
+	camera.y = 0;
 	Init_Light();
 	move_light = false;
 	normal = true;

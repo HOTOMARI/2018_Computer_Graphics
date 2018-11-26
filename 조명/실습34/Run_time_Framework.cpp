@@ -16,6 +16,7 @@ GLvoid CRun_time_Framework::draw() {
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 
 	glPushMatrix();
+
 	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	gluLookAt(camera.x, camera.y, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
 	//gluLookAt(0 , 0, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
@@ -47,18 +48,6 @@ GLvoid CRun_time_Framework::draw() {
 	else
 		glDisable(GL_LIGHT1);
 
-	GLfloat pos[4] = { 0,7000,0,0 };
-	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
-	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
-
-	glLightfv(GL_LIGHT7, GL_AMBIENT, a);
-	glLightfv(GL_LIGHT7, GL_DIFFUSE, d);
-	glLightfv(GL_LIGHT7, GL_SPECULAR, WhiteLight);
-	glLightfv(GL_LIGHT7, GL_POSITION, pos);
-	glEnable(GL_LIGHT7);
-
-	
-	
 
 	// ¹Ù´Ú
 	Draw_Ground();
@@ -68,8 +57,10 @@ GLvoid CRun_time_Framework::draw() {
 	Draw_Ball();
 	//¿ø»Ô
 	Draw_Cone();
-	//´«
-	Draw_Snow();
+	//ÆÄÆ¼Å¬
+	Draw_Particle();
+	// ·Îº¿
+	Robot();
 
 	glDisable(GL_LIGHTING);
 
@@ -111,6 +102,19 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
+
+	case '6':
+		Gridman.dir = 0;
+		break;
+	case '7':
+		Gridman.dir = 1;
+		break;
+	case '8':
+		Gridman.dir = 2;
+		break;
+	case '9':
+		Gridman.dir = 3;
+		break;
 
 	case '1':
 		light[0].on = (light[0].on + 1) % 2;
@@ -316,6 +320,9 @@ GLvoid CRun_time_Framework::Init() {
 	move_light = false;
 	normal = true;
 	moon_degree = 0;
+	particle = NULL;
+	set_robots();
+	set_objectBB();
 
 	for (int i = 0; i < 50; ++i) {
 		for (int j = 0; j < 50; ++j) {
@@ -325,8 +332,6 @@ GLvoid CRun_time_Framework::Init() {
 			ground[i][j].bottom = -400 + 16 * (i + 1);		
 		}
 	}
-	snow = NULL;
-	snowstack = 0;
 
 	srand(time(NULL));
 	myself = this;
@@ -359,17 +364,22 @@ GLvoid CRun_time_Framework::Update() {
 			light[0].degree += 0.3*(current_time - Prevtime);
 			light[1].degree += 0.3*(current_time - Prevtime);
 		}
+		update_bb();
 		UpdateLight();
+		update_robots();
+		UpdateParticle();
+		Delete_Particle();
+		for (int i = 0; i < 5; ++i) {
+			if (collide(Gridman.bb, objects[i])) {
+				Gridman.state_collide = true;
+				break;
+			}
+			else {
+				Gridman.state_collide = false;
+			}
+		}
 
 		moon_degree += 0.2*(current_time - Prevtime);
-
-		snowstack += 0.2*(current_time - Prevtime);
-		if (snowstack > 10) {
-			Make_Snow();
-			snowstack = 0;
-		}
-		UpdateSnow();
-		Delete_Snow();
 
 		Prevtime = current_time;
 		current_frame = 0;

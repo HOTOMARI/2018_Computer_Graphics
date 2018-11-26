@@ -11,7 +11,6 @@ CRun_time_Framework::CRun_time_Framework() {
 GLvoid CRun_time_Framework::draw() {
 	glClearColor(0, 0, 0, 1); // 바탕색을 지정 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 설정된 색으로 전체를 칠하기 
-
 	glEnable(GL_DEPTH_TEST);	//깊이테스트
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
 
@@ -25,53 +24,16 @@ GLvoid CRun_time_Framework::draw() {
 		gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, -1.0, 0.0);
 	else
 	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	//glMultMatrixf(identity);
+	glMultMatrixf(identity);
 
-	glEnable(GL_LIGHTING);		//조명 활성화
+	// 텍스처 매핑 활성화 
+	glEnable(GL_TEXTURE_2D);
 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light[0].AmbientColor);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light[0].DiffuseColor);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light[0].SpecularColor);
-	glLightfv(GL_LIGHT0, GL_POSITION, light[0].position);
-	if (light[0].on)
-		glEnable(GL_LIGHT0);
-	else
-		glDisable(GL_LIGHT0);
+	glPushMatrix();
+	QBEY();
+	glPopMatrix();
 
-	glLightfv(GL_LIGHT1, GL_AMBIENT, light[1].AmbientColor);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, light[1].DiffuseColor);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, light[1].SpecularColor);
-	glLightfv(GL_LIGHT1, GL_POSITION, light[1].position);
-	if (light[1].on)
-		glEnable(GL_LIGHT1);
-	else
-		glDisable(GL_LIGHT1);
-
-	GLfloat pos[4] = { 0,7000,0,0 };
-	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
-	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
-
-	glLightfv(GL_LIGHT7, GL_AMBIENT, a);
-	glLightfv(GL_LIGHT7, GL_DIFFUSE, d);
-	glLightfv(GL_LIGHT7, GL_SPECULAR, WhiteLight);
-	glLightfv(GL_LIGHT7, GL_POSITION, pos);
-	glEnable(GL_LIGHT7);
-
-	
-	
-
-	// 바닥
-	Draw_Ground();
-	//피라미드
-	Draw_Piramid();
-	//달
-	Draw_Ball();
-	//원뿔
-	Draw_Cone();
-	//눈
-	Draw_Snow();
-
-	glDisable(GL_LIGHTING);
+	glDisable(GL_TEXTURE_2D);
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -103,6 +65,22 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 	// 모델링 변환 설정: 디스플레이 콜백 함수에서 모델 변환 적용하기 위하여 Matrix mode 저장
 	glMatrixMode (GL_MODELVIEW);
 
+	glPushMatrix();
+	{
+		glRotatef(30, 1.f, 0.f, 0.f);
+		glMultMatrixf(identity);
+		glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	{
+		glRotatef(45, 0.f, 1.f, 0.f);
+		glMultMatrixf(identity);
+		glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+	}
+	glPopMatrix();
+
 	// 관측 변환: 카메라의 위치 설정 (필요한 경우, 다른 곳에 설정 가능) 
 	//gluLookAt(0.0, 0.0, camera_zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 
@@ -111,101 +89,41 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
-
-	case '1':
-		light[0].on = (light[0].on + 1) % 2;
-		break;
-	case '2':
-		light[1].on = (light[1].on + 1) % 2;
-		break;
-	case 'b':
-	case 'B':
-		normal = (normal + 1) % 2;
-		break;
 	case 'z':
+		dir |= DIR_X_CCW;
+		break;
 	case 'Z':
-		move_light = (move_light + 1) % 2;
+		dir |= DIR_X_CW;
 		break;
 	case 'x':
-		if (light[0].AmbientColor[1] < 1.0) {
-			light[0].AmbientColor[1] += 0.1;
-			if (light[0].AmbientColor[1] > 1.0) {
-				light[0].AmbientColor[1] = 1.0;
-			}
-		}
-		if (light[1].AmbientColor[0] < 1.0) {
-			light[1].AmbientColor[0] += 0.1;
-			if (light[1].AmbientColor[0] > 1.0) {
-				light[1].AmbientColor[0] = 1.0;
-			}
-		}
+		dir |= DIR_Y_CCW;
 		break;
 	case 'X':
-		if (light[0].AmbientColor[1] > 0.0) {
-			light[0].AmbientColor[1] -= 0.1;
-			if (light[0].AmbientColor[1] < 0.0) {
-				light[0].AmbientColor[1] = 0.0;
-			}
-		}
-		if (light[1].AmbientColor[0] > 0.0) {
-			light[1].AmbientColor[0] -= 0.1;
-			if (light[1].AmbientColor[0] < 0.0) {
-				light[1].AmbientColor[0] = 0.0;
-			}
-		}
+		dir |= DIR_Y_CW;
 		break;
 	case 'c':
-		if (light[0].DiffuseColor[1] < 1.0) {
-			light[0].DiffuseColor[1] += 0.1;
-			if (light[0].DiffuseColor[1] > 1.0) {
-				light[0].DiffuseColor[1] = 1.0;
-			}
-		}
-		if (light[1].DiffuseColor[0] < 1.0) {
-			light[1].DiffuseColor[0] += 0.1;
-			if (light[1].DiffuseColor[0] > 1.0) {
-				light[1].DiffuseColor[0] = 1.0;
-			}
-		}
-			break;
+		dir |= DIR_Z_CCW;
+		break;
 	case 'C':
-		if (light[0].DiffuseColor[1] > 0.0) {
-			light[0].DiffuseColor[1] -= 0.1;
-			if (light[0].DiffuseColor[1] < 0.0) {
-				light[0].DiffuseColor[1] = 0.0;
-			}
-		}
-		if (light[1].DiffuseColor[0] > 0.0) {
-			light[1].DiffuseColor[0] -= 0.1;
-			if (light[1].DiffuseColor[0] < 0.0) {
-				light[1].DiffuseColor[0] = 0.0;
-			}
-		}
+		dir |= DIR_Z_CW;
 		break;
-	case 'v':
-		for (int i = 0; i < 2; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				if (light[i].SpecularColor[j] < 1.0) {
-					light[i].SpecularColor[j] += 0.1;
-					if (light[i].SpecularColor[j] > 1.0) {
-						light[i].SpecularColor[j] = 1.0;
-					}
-				}
-			}
-		}
+
+	case '1':
+		depth = (depth + 1) % 2;
 		break;
-	case 'V':
-		for (int i = 0; i < 2; ++i) {
-			for (int j = 0; j < 3; ++j) {
-				if (light[i].SpecularColor[j] > 0.0) {
-					light[i].SpecularColor[j] -= 0.1;
-					if (light[i].SpecularColor[j] < 0.0) {
-						light[i].SpecularColor[j] = 0.0;
-					}
-				}
-			}
-		}
+	case '2':
+		culling = (culling + 1) % 2;
 		break;
+	case '3':
+		shading = (shading + 1) % 2;
+		break;
+	case '4':
+		top_open = (top_open + 1) % 2;
+		break;
+	case '5':
+		front_open = (front_open + 1) % 2;
+		break;
+
 
 	case '-':
 		camera.zoom += 30.0;
@@ -250,19 +168,35 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		camera.degree[0] = -180;
 		camera.degree[1] = -90;
 		camera.degree[2] = 90;
-		camera.zoom = 500;
+		camera.zoom = 0;
 		camera.x = 0;
-		camera.y = 50;
+		camera.y = 0;
 		memset(identity, 0, sizeof(identity));
 		identity[0] = identity[5] = identity[10] = identity[15] = 1;
 		break;
-				
 	}
 }
 
 GLvoid CRun_time_Framework::KeyboardUp(unsigned char key, int x, int y) {
 	switch (key) {
-
+	case 'z':
+		dir ^= DIR_X_CCW;
+		break;
+	case 'Z':
+		dir ^= DIR_X_CW;
+		break;
+	case 'x':
+		dir ^= DIR_Y_CCW;
+		break;
+	case 'X':
+		dir ^= DIR_Y_CW;
+		break;
+	case 'c':
+		dir ^= DIR_Z_CCW;
+		break;
+	case 'C':
+		dir ^= DIR_Z_CW;
+		break;
 	}
 }
 
@@ -308,27 +242,26 @@ GLvoid CRun_time_Framework::Mouseaction(int button, int state, int x, int y) {
 }
 
 GLvoid CRun_time_Framework::Init() {
+	memset(identity, 0, sizeof(identity));
+	identity[0] = identity[5] = identity[10] = identity[15] = 1;
 
-	camera.zoom = 500;
-	camera.x = 0;
-	camera.y = 0;
-	Init_Light();
-	move_light = false;
-	normal = true;
-	moon_degree = 0;
+	camera_is_front = true;
+	top_open = false;
+	front_open = false;
 
-	for (int i = 0; i < 50; ++i) {
-		for (int j = 0; j < 50; ++j) {
-			ground[i][j].left = -400 + 16 * j;
-			ground[i][j].right = -400 + 16 * (j + 1);
-			ground[i][j].top = -400 + 16 * i;
-			ground[i][j].bottom = -400 + 16 * (i + 1);		
-		}
-	}
-	snow = NULL;
-	snowstack = 0;
+	depth = true;
+	culling = false;
+	shading = true;
+
+	top_rotate = 0;
+	front_rotate = 0;
+	spring_stretch = 0.05;
+	ball_move = 0;
+	spring_ball = 0;
 
 	srand(time(NULL));
+
+
 	myself = this;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
@@ -341,6 +274,7 @@ GLvoid CRun_time_Framework::Init() {
 	glutKeyboardUpFunc(KeyUpinput);
 	glutMouseFunc(Mouseaction);
 	glutIdleFunc(Updatecallback);
+	set_texture(2);
 }
 
 GLvoid CRun_time_Framework::Updatecallback() {
@@ -355,26 +289,134 @@ GLvoid CRun_time_Framework::Update() {
 	current_frame++;
 
 	if (current_time - Prevtime > 1000 / FPS_TIME) {
-		if (move_light) {
-			light[0].degree += 0.3*(current_time - Prevtime);
-			light[1].degree += 0.3*(current_time - Prevtime);
-		}
-		UpdateLight();
 
-		moon_degree += 0.2*(current_time - Prevtime);
-
-		snowstack += 0.2*(current_time - Prevtime);
-		if (snowstack > 10) {
-			Make_Snow();
-			snowstack = 0;
+		if (dir & DIR_X_CCW) {
+			glPushMatrix();
+			{
+				glRotatef(0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
 		}
-		UpdateSnow();
-		Delete_Snow();
+		if (dir & DIR_X_CW) {
+			glPushMatrix();
+			{
+				glRotatef(-0.5f * (current_time - Prevtime), 1.f, 0.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+
+		if (dir & DIR_Y_CCW) {
+			glPushMatrix();
+			{
+				glRotatef(0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+		if (dir & DIR_Y_CW) {
+			glPushMatrix();
+			{
+				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+
+		if (dir & DIR_Z_CCW) {
+			glPushMatrix();
+			{
+				glRotatef(0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+		if (dir & DIR_Z_CW) {
+			glPushMatrix();
+			{
+				glRotatef(-0.5f * (current_time - Prevtime), 0.f, 0.f, 1.f);
+				glMultMatrixf(identity);
+				glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+			}
+			glPopMatrix();
+		}
+
+		glPushMatrix();
+		{
+			glRotatef(0.05f * (current_time - Prevtime), 0.f, 1.f, 0.f);
+			glMultMatrixf(identity);
+			glGetFloatv(GL_MODELVIEW_MATRIX, identity);
+		}
+		glPopMatrix();
+
+		if (top_open) {
+			if (top_rotate < 200) {
+				top_rotate += 1 * (current_time - Prevtime);
+				if (top_rotate > 200)
+					top_rotate = 200;
+			}
+			if (spring_stretch < 0.2) {
+				spring_stretch += 0.005*(current_time - Prevtime);
+				if (spring_stretch > 0.2)
+					spring_stretch = 0.2;
+			}
+			if (spring_ball < 1800) {
+				spring_ball += 0.5*(current_time - Prevtime);
+				if (spring_ball > 1800)
+					spring_ball = 1800;
+			}
+		}
+		else {
+			if (top_rotate > 0) {
+				top_rotate -= 1 * (current_time - Prevtime);
+				if (top_rotate < 0)
+					top_rotate = 0;
+			}
+			if (spring_stretch > 0.05) {
+				spring_stretch -= 0.01*(current_time - Prevtime);
+				if (spring_stretch < 0.05)
+					spring_stretch = 0.05;
+			}
+			if (spring_ball > 0) {
+				spring_ball = 0;
+			}
+		}
+
+		if (front_open) {
+			if (front_rotate < 200) {
+				front_rotate += 1 * (current_time - Prevtime);
+				if (front_rotate > 200)
+					front_rotate = 200;
+			}
+			if (ball_move < 200) {
+				ball_move += 0.5*(current_time - Prevtime);
+				if (ball_move > 200)
+					ball_move = 200;
+			}
+		}
+		else {
+			if (front_rotate > 0) {
+				front_rotate -= 1 * (current_time - Prevtime);
+				if (front_rotate < 0)
+					front_rotate = 0;
+			}
+			if (ball_move > 0) {
+				ball_move -= 1*(current_time - Prevtime);
+				if (ball_move < 0)
+					ball_move = 0;
+			}
+		}
+
 
 		Prevtime = current_time;
 		current_frame = 0;
 		glutPostRedisplay();
-
 	}
 }
 
