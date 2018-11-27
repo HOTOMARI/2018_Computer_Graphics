@@ -14,25 +14,26 @@ GLvoid CRun_time_Framework::draw() {
 
 	glEnable(GL_DEPTH_TEST);	//깊이테스트
 	glDepthFunc(GL_LESS);		//Passes if the fragment's depth value is less than the stored depth value.
-	glEnable(GL_LIGHTING);		//조명 활성화	
 
 	glPushMatrix();
+	gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+	gluLookAt(camera.x, camera.y, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
+	//gluLookAt(0 , 0, 0, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
 
-	//gluLookAt(0, 0, camera.zoom, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	gluLookAt(camera.x, camera.y, camera.zoom, 0.0, 0.0, -100.0, cos(camera.degree[2] / 180 * PI), sin(camera.degree[2] / 180 * PI), 0.0);
 	gluLookAt(cos(camera.degree[1] / 180 * PI) * 200, 0, sin(camera.degree[1] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
-	if ((fabs((int)camera.degree[0] % 360) <= 120 && fabs((int)camera.degree[0] % 360) >= 0) ||
+	if ((fabs((int)camera.degree[0]%360) <= 120 && fabs((int)camera.degree[0] % 360) >= 0)||
 		(fabs((int)camera.degree[0] % 360) <= 360 && fabs((int)camera.degree[0] % 360) > 240))
 		gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, -1.0, 0.0);
 	else
-		gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
+	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	//glMultMatrixf(identity);
+	
+	glEnable(GL_LIGHTING);		//조명 활성화
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light[0].AmbientColor);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, light[0].DiffuseColor);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, light[0].SpecularColor);
 	glLightfv(GL_LIGHT0, GL_POSITION, light[0].position);
-	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, Downvector);
 	if (light[0].on)
 		glEnable(GL_LIGHT0);
 	else
@@ -42,21 +43,27 @@ GLvoid CRun_time_Framework::draw() {
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, light[1].DiffuseColor);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, light[1].SpecularColor);
 	glLightfv(GL_LIGHT1, GL_POSITION, light[1].position);
-	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, Downvector);
+	glEnable(GL_LIGHT1);
 	if (light[1].on)
 		glEnable(GL_LIGHT1);
 	else
 		glDisable(GL_LIGHT1);
 
-	glLightfv(GL_LIGHT2, GL_AMBIENT, light[2].AmbientColor);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, light[2].DiffuseColor);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, light[2].SpecularColor);
-	glLightfv(GL_LIGHT2, GL_POSITION, light[2].position);
-	glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, Downvector);
-	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0);
-	glEnable(GL_LIGHT2);
+	GLfloat pos[4] = { 0,2000,0,0 };
+	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
+	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
 
+	glLightfv(GL_LIGHT7, GL_AMBIENT, a);
+	glLightfv(GL_LIGHT7, GL_DIFFUSE, d);
+	glLightfv(GL_LIGHT7, GL_SPECULAR, WhiteLight);
+	glLightfv(GL_LIGHT7, GL_POSITION, pos);
+	glEnable(GL_LIGHT7);
 
+	// 텍스처 매핑 활성화 
+	glEnable(GL_TEXTURE_2D);
+
+	//skybox
+	Skybox();
 
 	// 바닥
 	Draw_Ground();
@@ -66,10 +73,10 @@ GLvoid CRun_time_Framework::draw() {
 	Draw_Ball();
 	//원뿔
 	Draw_Cone();
-	//파티클
-	Draw_Particle();
-	// 로봇
-	Robot();
+	// 기둥
+	Pilar();
+
+	glDisable(GL_TEXTURE_2D);
 
 	glPopMatrix();
 	glutSwapBuffers();
@@ -92,7 +99,7 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 	// 투영은 직각 투영 또는 원근 투영 중 한개를 설정한다.
 	// 원근 투영을 사용하는 경우: 
-	gluPerspective (60, (float)w / (float)h, 1, 2000);
+	gluPerspective (60, (float)w / (float)h, 1, 5000);
 	glTranslatef (0, 0, -400);
 
 	// 직각 투영인경우
@@ -109,19 +116,6 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	switch (key) {
-
-	case '6':
-		Gridman.dir = 0;
-		break;
-	case '7':
-		Gridman.dir = 1;
-		break;
-	case '8':
-		Gridman.dir = 2;
-		break;
-	case '9':
-		Gridman.dir = 3;
-		break;
 
 	case '1':
 		light[0].on = (light[0].on + 1) % 2;
@@ -327,9 +321,8 @@ GLvoid CRun_time_Framework::Init() {
 	move_light = false;
 	normal = true;
 	moon_degree = 0;
-	particle = NULL;
-	set_robots();
-	set_objectBB();
+	for (int i = 0; i < 5; ++i)
+		Scroll[i] = i * 0.25;
 
 	for (int i = 0; i < 50; ++i) {
 		for (int j = 0; j < 50; ++j) {
@@ -353,6 +346,7 @@ GLvoid CRun_time_Framework::Init() {
 	glutKeyboardUpFunc(KeyUpinput);
 	glutMouseFunc(Mouseaction);
 	glutIdleFunc(Updatecallback);
+	set_texture();
 }
 
 GLvoid CRun_time_Framework::Updatecallback() {
@@ -371,19 +365,11 @@ GLvoid CRun_time_Framework::Update() {
 			light[0].degree += 0.3*(current_time - Prevtime);
 			light[1].degree += 0.3*(current_time - Prevtime);
 		}
-		update_bb();
 		UpdateLight();
-		update_robots();
-		UpdateParticle();
-		Delete_Particle();
+
 		for (int i = 0; i < 5; ++i) {
-			if (collide(Gridman.bb, objects[i])) {
-				Gridman.state_collide = true;
-				break;
-			}
-			else {
-				Gridman.state_collide = false;
-			}
+			Scroll[i] -= 0.0002*(current_time - Prevtime);
+			
 		}
 
 		moon_degree += 0.2*(current_time - Prevtime);

@@ -30,14 +30,14 @@ GLvoid CRun_time_Framework::Draw_Cone()
 	glPushMatrix();
 	glColor3f(0, 1, 0);
 	glTranslatef(light[0].position[0], light[0].position[1], light[0].position[2]);
-	glRotatef(180 - light[0].degree, 0, 1, 0);
+	glRotatef(90 - light[0].degree, 0, 1, 0);
 	gluCylinder(qobj, 20, 0.0, 20, 20, 8);
 	glPopMatrix();
 
 	glPushMatrix();
 	glColor3f(1, 0, 0);
 	glTranslatef(light[1].position[0], light[1].position[1], light[1].position[2]);
-	glRotatef(180 - light[1].degree, 0, 1, 0);
+	glRotatef(90 - light[1].degree, 0, 1, 0);
 	gluCylinder(qobj, 20, 0.0, 20, 20, 8);
 	glPopMatrix();
 
@@ -58,28 +58,43 @@ GLvoid CRun_time_Framework::Init_Light()
 	light[1].AmbientColor[2] = 0.2;
 	light[1].DiffuseColor[2] = 0.8;
 
+	Downvector[0] = 0;
+	Downvector[1] = -1.0;
+	Downvector[2] = 0;
+
 	return GLvoid();
 }
 
 GLvoid CRun_time_Framework::UpdateLight()
 {
-	light[0].position[0] = 300.0*sin(light[0].degree / 180.0*PI);
-	light[0].position[2] = -300.0*cos(light[0].degree / 180.0*PI);
-	light[1].position[0] = 300.0*sin(light[1].degree / 180.0*PI);
-	light[1].position[2] = -300.0*cos(light[1].degree / 180.0*PI);
+	light[0].position[0] = 300.0*cos(light[0].degree / 180.0*PI);
+	light[0].position[2] = 300.0*sin(light[0].degree / 180.0*PI);
+	light[1].position[0] = 300.0*cos(light[1].degree / 180.0*PI);
+	light[1].position[2] = 300.0*sin(light[1].degree / 180.0*PI);
 
-	//light[2].position[0] = Gridman.position[0];
-	//light[2].position[1] = Gridman.position[1]+100;
-	//light[2].position[2] = Gridman.position[2];
+	light[2].position[0] = Gridman.position[0];
+	light[2].position[1] = 0;
+	light[2].position[2] = Gridman.position[2];
+
+
 	return GLvoid();
 }
 
 GLvoid CRun_time_Framework::Draw_Ground()
 {
 	glPushMatrix();
+
+	glLineWidth(5.0);
+	glBegin(GL_LINES);
+	glVertex3f(0, 1000, 0);
+	glVertex3f(0, -1000, 0);
+	glEnd();
+
 	glTranslatef(0, -300, 0);
 	for (int i = 0; i < 50; ++i) {
 		for (int j = 0; j < 50; ++j) {
+			if (normal)
+				glNormal3f(0.0, 1.0, 0.0);
 			glBegin(GL_QUADS);
 			glVertex3f(ground[i][j].left, 0, ground[i][j].top);
 			glVertex3f(ground[i][j].right, 0, ground[i][j].top);
@@ -471,13 +486,6 @@ GLvoid CRun_time_Framework::Robot()
 {
 	glPushMatrix();
 	glTranslatef(Gridman.position[0], Gridman.position[1], Gridman.position[2]);
-
-	glLightfv(GL_LIGHT2, GL_AMBIENT, light[2].AmbientColor);
-	glLightfv(GL_LIGHT2, GL_DIFFUSE, light[2].DiffuseColor);
-	glLightfv(GL_LIGHT2, GL_SPECULAR, light[2].SpecularColor);
-	glLightfv(GL_LIGHT2, GL_POSITION, light[2].position);
-
-	glEnable(GL_LIGHT2);
 
 	glRotatef(Gridman.dir * 90, 0, 1, 0);
 	// ¸Ó¸®

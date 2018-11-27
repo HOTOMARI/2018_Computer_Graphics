@@ -18,6 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Run_time_Framework.cpp" />
+    <ClCompile Include="소스.cpp" />
+    <ClCompile Include="함수.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Run_time_Framework.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{90D4CB91-1DB2-405F-810F-6F98C25B4A72}</ProjectGuid>

@@ -2,6 +2,8 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <time.h>
+#include<stdio.h>
+#include<Windows.h>
 
 #define PI 3.141592
 #define FPS_TIME 60
@@ -22,32 +24,12 @@ struct Ground {
 };
 struct Light {
 	GLfloat position[4] = { 0.0,0.0,0.0,1.0 };
-	GLfloat AmbientColor[4] = { 0.2,0.2,0.2,1.0 };
-	GLfloat DiffuseColor[4] = { 0.2,0.2,0.2,1.0 };
+	GLfloat AmbientColor[4] = { 0.0,0.0,0.0,1.0 };
+	GLfloat DiffuseColor[4] = { 0.0,0.0,0.0,1.0 };
 	GLfloat SpecularColor[4] = { 1.0,1.0,1.0,1.0 };
 	GLfloat degree = 0.0;
 	bool on = true;
 };
-
-struct Particle {
-	GLfloat radius = 0;
-	GLfloat x, z;
-	Particle* next;
-};
-
-struct Robot {
-	float position[3] = { 0,0,0 };
-	float animation = -70;
-	bool animation_state = false;
-	bool state_collide = false;
-	int dir = 0;
-	GLfloat cloak[3][3][3] = { { { -25.0, 0.0, 45.0 },{ 0.0, 0.0, 45.0 },{ 25.0, 0.0, 45.0 } },
-	{ { -25.0, -20.0, 0.0 },{ 0.0, -20.0, 0.0 },{ 25.0, -20.0, 0.0 } },
-	{ { -25.0, -70.0, -45.0 },{ 0.0, -40.0, -45.0 },{ 25.0, -10.0, -45.0 } } };
-	;
-	RECT bb;
-};
-
 
 struct Camera {
 	float degree[3] = { -180,-90,90 };
@@ -70,25 +52,22 @@ private:
 
 	GLfloat identity[16];
 	GLfloat WhiteLight[4] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat Downvector[3] = { 0,-1,0 };
 
 	Camera camera;
 
 	Ground ground[50][50];
 
-	Robot Gridman;
-
-	Particle* particle;
-
 	Light light[3];
 
-	RECT objects[5];
-
-	GLfloat pos[4] = { 0,7000,0,0 };
+	GLfloat Scroll[5];
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
 	GLint current_frame = 0;
+
+	GLuint texture[4];		//텍스처 이름
+	GLubyte *pBytes;				// 데이터를 가리킬 포인터
+	BITMAPINFO *info;				// 비트맵 헤더 저장할 변수
 
 	unsigned char dir = 0;	// 비트연산 동시키 입력
 
@@ -115,16 +94,10 @@ public:
 	GLvoid UpdateLight();
 	GLvoid Draw_Ground();
 	GLvoid Draw_Piramid();
-	GLvoid Draw_Particle();
-	GLvoid Make_Particle();
-	GLvoid UpdateParticle();
-	GLvoid Delete_Particle();
-	GLvoid set_robots();
-	GLvoid update_bb();
-	GLvoid update_robots();
-	GLvoid Robot();
-	GLvoid set_objectBB();
-	bool collide(RECT, RECT);
+	GLubyte * LoadDIBitmap(const char *filename, BITMAPINFO **info);
+	GLvoid set_texture();
+	GLvoid Skybox();
+	GLvoid Pilar();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
