@@ -37,18 +37,13 @@ GLvoid CRun_time_Framework::Draw_Ball()
 
 GLvoid CRun_time_Framework::Draw_Cone()
 {
-	//glEnable(GL_COLOR_MATERIAL);
-	glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-
 	glPushMatrix();
-	glColor3f(0, 1, 0);
 	glTranslatef(light[0].position[0], light[0].position[1], light[0].position[2]);
 	glRotatef(180 - light[0].degree, 0, 1, 0);
 	gluCylinder(qobj, 20, 0.0, 20, 20, 8);
 	glPopMatrix();
 
 	glPushMatrix();
-	glColor3f(1, 0, 0);
 	glTranslatef(light[1].position[0], light[1].position[1], light[1].position[2]);
 	glRotatef(180 - light[1].degree, 0, 1, 0);
 	gluCylinder(qobj, 20, 0.0, 20, 20, 8);
@@ -121,7 +116,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 	{
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, 1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), 1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -132,7 +127,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(-1.0, 0.0, 0.0);
+			glNormal3f(-1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -143,7 +138,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, -1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), -1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -154,7 +149,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(1.0, 0.0, 0.0);
+			glNormal3f(1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -167,7 +162,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 	{
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, 1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), 1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -178,7 +173,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(-1.0, 0.0, 0.0);
+			glNormal3f(-1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -189,7 +184,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, -1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), -1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -200,7 +195,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(1.0, 0.0, 0.0);
+			glNormal3f(1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, -360);
 		glTexCoord2f(0, 1);
@@ -213,7 +208,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 	{
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, 1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), 1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -224,7 +219,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(-1.0, 0.0, 0.0);
+			glNormal3f(-1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -235,7 +230,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, -1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), -1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -246,7 +241,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(1.0, 0.0, 0.0);
+			glNormal3f(1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(-360, 40, 360); 
 		glTexCoord2f(0, 1);
@@ -259,7 +254,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 	{
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, 1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), 1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -270,7 +265,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(-1.0, 0.0, 0.0);
+			glNormal3f(-1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -281,7 +276,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, -1.0);
+			glNormal3f(0.0, 1.0 / sqrt(2), -1.0 / sqrt(2));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -292,7 +287,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(1.0, 0.0, 0.0);
+			glNormal3f(1.0 / sqrt(2), 1.0 / sqrt(2), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(360, 40, 360);
 		glTexCoord2f(0, 1);
@@ -305,7 +300,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 	{
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, 1.0);
+			glNormal3f(0.0, 1.0 / sqrt(17), 4.0/sqrt(17));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(0, 200, 0);
 		glTexCoord2f(0, 1);
@@ -316,7 +311,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(-1.0, 0.0, 0.0);
+			glNormal3f(-4.0 / sqrt(17), 1.0 / sqrt(17), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(0, 200, 0);
 		glTexCoord2f(0, 1);
@@ -327,7 +322,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(0.0, 0.0, -1.0);
+			glNormal3f(0.0, 1.0 / sqrt(17), -4.0 / sqrt(17));
 		glTexCoord2f(0.5, 0);
 		glVertex3f(0, 200, 0);
 		glTexCoord2f(0, 1);
@@ -338,7 +333,7 @@ GLvoid CRun_time_Framework::Draw_Piramid()
 
 		glBegin(GL_POLYGON);
 		if (normal)
-			glNormal3f(1.0, 0.0, 0.0);
+			glNormal3f(4.0 / sqrt(17), 1.0 / sqrt(17), 0.0);
 		glTexCoord2f(0.5, 0);
 		glVertex3f(0, 200, 0);
 		glTexCoord2f(0, 1);

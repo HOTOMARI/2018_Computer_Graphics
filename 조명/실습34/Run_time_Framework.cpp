@@ -56,7 +56,7 @@ GLvoid CRun_time_Framework::draw() {
 	glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 30.0);
 	glEnable(GL_LIGHT2);
 
-
+	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
 
 	// ¹Ù´Ú
 	Draw_Ground();

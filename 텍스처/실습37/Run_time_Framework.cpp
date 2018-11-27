@@ -28,6 +28,11 @@ GLvoid CRun_time_Framework::draw() {
 	gluLookAt(0, sin(camera.degree[0] / 180 * PI) * 200, cos(camera.degree[0] / 180 * PI) * 200, 0.0, 0.0, -100.0, 0.0, 1.0, 0.0);
 	//glMultMatrixf(identity);
 	
+	// 텍스처 매핑 활성화 
+	glEnable(GL_TEXTURE_2D);
+	//skybox
+	Skybox();
+
 	glEnable(GL_LIGHTING);		//조명 활성화
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light[0].AmbientColor);
@@ -49,7 +54,7 @@ GLvoid CRun_time_Framework::draw() {
 	else
 		glDisable(GL_LIGHT1);
 
-	GLfloat pos[4] = { 0,2000,0,0 };
+	GLfloat pos[4] = { 0,2000,1,0 };
 	GLfloat a[] = { 0.2,0.2,0.2,1.0 };
 	GLfloat d[] = { 0.8,0.8,0.8,1.0 };
 
@@ -59,11 +64,7 @@ GLvoid CRun_time_Framework::draw() {
 	glLightfv(GL_LIGHT7, GL_POSITION, pos);
 	glEnable(GL_LIGHT7);
 
-	// 텍스처 매핑 활성화 
-	glEnable(GL_TEXTURE_2D);
-
-	//skybox
-	Skybox();
+	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
 
 	// 바닥
 	Draw_Ground();
@@ -77,6 +78,7 @@ GLvoid CRun_time_Framework::draw() {
 	Pilar();
 
 	glDisable(GL_TEXTURE_2D);
+	glDisable(GL_LIGHTING);
 
 	glPopMatrix();
 	glutSwapBuffers();
