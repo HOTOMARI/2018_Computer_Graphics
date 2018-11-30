@@ -698,9 +698,9 @@ GLvoid CRun_time_Framework::update_carts()
 	for (int k = 0; k < 3; ++k) {
 		
 		if (point[cart[k].nowline][1] <= point[(cart[k].nowline + 1) % set_pointsnum][1])
-			cart[k].t += 0.001 * (current_time - Prevtime);
+			cart[k].t += 0.0002 * (current_time - Prevtime);
 		else
-			cart[k].t += 0.003 * (current_time - Prevtime);
+			cart[k].t += 0.0007 * (current_time - Prevtime);
 		
 		if (cart[k].t >= 1.0) {
 			cart[k].nowline++;
@@ -766,32 +766,19 @@ GLvoid CRun_time_Framework::update_carts()
 
 			glPushMatrix();
 			{
-				double chk = acos((cart[k].pos[0] - tmpPOS[0]) / sqrt(pow((cart[k].pos[0] - tmpPOS[0]), 2) + pow((cart[k].pos[1] - tmpPOS[1]), 2) + pow((cart[k].pos[2] - tmpPOS[2]), 2))) * 180 / PI;
-				if ((cart[k].pos[2] - tmpPOS[2]) <= 0) {
-					glRotatef(chk, 0, 1, 0);
-				}
-				else {
-					glRotatef(-chk, 0, 1, 0);
-				}
+				float vec[3] = { (cart[k].pos[0] - tmpPOS[0]) ,(cart[k].pos[1] - tmpPOS[1]) ,(cart[k].pos[2] - tmpPOS[2]) };
+				float sizeofvec = sqrt(pow(vec[0], 2) + pow(vec[1], 2) + pow(vec[2], 2));
+				float degree = acos(vec[0] / sizeofvec) * 180 / PI;
+				 
+				glRotatef( - degree, 0, vec[2] / sqrt(pow(vec[1], 2) + pow(vec[2], 2)), -vec[1] / sqrt(pow(vec[1], 2) + pow(vec[2], 2)));
+
 				glMultMatrixf(cart[k].identity);
 				glGetFloatv(GL_MODELVIEW_MATRIX, cart[k].identity);
 			}
 			glPopMatrix();
 
 
-			glPushMatrix();
-			{
-				double chk = acos((cart[k].pos[0] - tmpPOS[0]) / sqrt(pow((cart[k].pos[0] - tmpPOS[0]), 2) + pow((cart[k].pos[1] - tmpPOS[1]), 2) + pow((cart[k].pos[2] - tmpPOS[2]), 2))) * 180 / PI;
-				if (chk > 180 - chk) {
-					glRotatef(180-chk, 0, 0, 1);
-				}
-				else {
-					glRotatef(chk, 0, 0, 1);
-				}
-				glMultMatrixf(cart[k].identity);
-				glGetFloatv(GL_MODELVIEW_MATRIX, cart[k].identity);
-			}
-			glPopMatrix();
+		
 
 		}
 
