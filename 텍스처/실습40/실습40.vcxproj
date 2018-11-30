@@ -20,9 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{F2AD36DB-488C-44F1-BB75-4BFFB1146871}</ProjectGuid>
+    <ProjectGuid>{99FD46AA-B4BC-49AA-A5CB-C20F4B8A9B0C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>로봇소풍</RootNamespace>
+    <RootNamespace>실습40</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,12 +139,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="컴그숙제2김호진.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="컴그숙제2김호진.cpp" />
-    <ClCompile Include="컴그숙제2김호진_main.cpp" />
-    <ClCompile Include="컴그숙제2김호진_func.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

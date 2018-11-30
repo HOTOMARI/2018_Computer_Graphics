@@ -1,4 +1,4 @@
-#include "Run_time_Framework.h"
+#include "컴그숙제2김호진.h"
 
 extern int kind;
 
@@ -33,6 +33,12 @@ GLvoid CRun_time_Framework::draw() {
 				(Gridman[0].position[0] + sin(Gridman[0].dir*90.0 / 180.0*PI) * 400) + sin(Gridman[0].dir*90.0 / 180.0*PI)*2000.0, Gridman[0].position[1], (Gridman[0].position[2] + cos(Gridman[0].dir*90.0 / 180.0*PI) * 400) + cos(Gridman[0].dir*90.0 / 180.0*PI)*2000.0,
 				0, 1.0, 0);
 		}
+		else if (nowCamera == 2) {
+			
+			gluLookAt(cart[0].pos[0], cart[0].pos[1], cart[0].pos[2],
+				cart_nextP[0], cart_nextP[1], cart_nextP[2],
+				0, 1.0, 0);
+		}
 	}
 	else {
 		if (play_mode == 0)
@@ -64,7 +70,13 @@ GLvoid CRun_time_Framework::draw() {
 		glLineWidth(1);
 	}
 	*/
+	// 텍스처 매핑 활성화 
+	glEnable(GL_TEXTURE_2D);
+	//skybox
+	Skybox();
 
+	//눈
+	Draw_Snow();
 	// 바닥
 	ground();
 	// 나무
@@ -73,14 +85,21 @@ GLvoid CRun_time_Framework::draw() {
 	draw_points();
 	// 경로
 	draw_rails();
+	// 기둥
+	draw_pillars();
 
 	if (play_mode == 2) {
 		// 로봇
 		Robot();
 		// 총알
 		draw_bullets();
+		// 롤러코스터
+		if (nowCamera != 2)
+			draw_carts();
+		// 텍스처 기둥
+		Pilar();
 	}
-
+	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 	glutSwapBuffers();
 	return GLvoid();
@@ -103,8 +122,9 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 	// 투영은 직각 투영 또는 원근 투영 중 한개를 설정한다.
 	// 원근 투영을 사용하는 경우: 
 	if (play_mode == 2) {
-		gluPerspective(60, (float)w / (float)h, 1, 2000);
-		glTranslatef(0, 0, -400);
+		gluPerspective(60, (float)w / (float)h, 1, 5000);
+		if (nowCamera != 2)
+			glTranslatef(0, 0, -400);
 	}
 
 	// 직각 투영인경우
@@ -122,6 +142,10 @@ GLvoid CRun_time_Framework::Reshape(int w, int h) {
 GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 	if (play_mode == 2) {
 		switch (key) {
+		case '4':
+			weather = (weather + 1) % 3;
+			break;
+
 		case 't':
 			play_mode = 0;
 			Reshape(800, 800);
@@ -129,12 +153,15 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 
 		case '1':
 			nowCamera = 0;
+			Reshape(800, 800);
 			break;
 		case '2':
 			nowCamera = 1;
+			Reshape(800, 800);
 			break;
 		case '3':
 			nowCamera = 2;
+			Reshape(800, 800);
 			break;
 
 		case 's':
@@ -208,7 +235,16 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		case 'q':
 			if (set_pointsnum >= 2) {
 				play_mode = 2;
+
+				for (int i = 0; i < set_pointsnum; ++i) {
+					pillar[i].left = point[i][0] - 20;
+					pillar[i].right = pillar[i].left + 40;
+					pillar[i].top = point[i][2] - 20;
+					pillar[i].bottom = pillar[i].top + 40;
+				}
+
 				Reshape(800,800);
+				tunnel = rand() % (set_pointsnum - 1);
 			}
 			break;
 		}
@@ -346,6 +382,14 @@ GLvoid CRun_time_Framework::Mousemotion(int x, int y)
 
 GLvoid CRun_time_Framework::Init() {
 	srand(time(NULL));
+
+	memset(identity, 0, sizeof(identity));
+	identity[0] = identity[5] = identity[10] = identity[15] = 1;
+
+	cart[0].t = 0.4;
+	cart[1].t = 0.2;
+	cart[2].t = 0.0;
+
 	set_trees();
 	set_robots();
 
@@ -358,10 +402,17 @@ GLvoid CRun_time_Framework::Init() {
 	combined = false;
 	comb_t = 0;
 
+	weather = 0;
+	snow = NULL;
+	snowstack = 0;
+
 	camera.zoom = 500;
 	camera.x = 0;
 	camera.y = 50;
 	nowCamera = 0;
+
+	for (int i = 0; i < 5; ++i)
+		Scroll[i] = i * 0.25;
 
 	myself = this;
 	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
@@ -376,6 +427,7 @@ GLvoid CRun_time_Framework::Init() {
 	glutMouseFunc(Mouseaction);
 	glutMotionFunc(Mousemotion);
 	glutIdleFunc(Updatecallback);
+	set_texture();
 }
 
 GLvoid CRun_time_Framework::Updatecallback() {
@@ -393,10 +445,10 @@ GLvoid CRun_time_Framework::Update() {
 
 		if (play_mode == 2) {
 			update_bb();
-			// 로봇 & 나무
+			// 로봇 & 나무 & 기둥
 			for (int j = 0; j < 2; ++j) {
 				for (int i = 0; i < 10; ++i) {
-					if (collide(Gridman[j].bb, object[i])) {
+					if (collide(Gridman[j].bb, object[i]) || collide(Gridman[j].bb, pillar[i])) {
 						Gridman[j].state_collide = true;
 						break;
 					}
@@ -405,6 +457,7 @@ GLvoid CRun_time_Framework::Update() {
 					}
 				}
 			}
+			
 			// 로봇 & 로봇
 			if (collide(Gridman[0].bb, Gridman[1].bb)) {
 				combined = true;
@@ -426,13 +479,33 @@ GLvoid CRun_time_Framework::Update() {
 						break;
 					}
 				}
+				// 총알 & 기둥
+				for (int i = 0; i < set_pointsnum; ++i) {
+					if (collide(pillar[i], t->bb)) {
+						t->hit = true;
+						break;
+					}
+				}
 				t = t->next;
 			}
 			update_robots();
 			go_comb();
 			update_bullets();
 			delete_bullets();
+			update_carts();
+
+			for (int i = 0; i < 5; ++i) {
+				Scroll[i] -= 0.0002*(current_time - Prevtime);
+			}
 		}
+
+		snowstack += 0.2*(current_time - Prevtime);
+		if (snowstack > 5) {
+			Make_Snow();
+			snowstack = 0;
+		}
+		UpdateSnow();
+		Delete_Snow();
 
 		Prevtime = current_time;
 		current_frame = 0;

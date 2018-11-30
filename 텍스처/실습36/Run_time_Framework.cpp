@@ -49,6 +49,8 @@ GLvoid CRun_time_Framework::draw() {
 	else
 		glDisable(GL_LIGHT1);
 
+	glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
+
 	// 텍스처 매핑 활성화 
 	glEnable(GL_TEXTURE_2D);
 

@@ -2,6 +2,8 @@
 #include <GL/freeglut.h>
 #include <math.h>
 #include <time.h>
+#include<stdio.h>
+#include<Windows.h>
 
 #define PI 3.141592
 #define FPS_TIME 60
@@ -48,6 +50,20 @@ struct Bullet {
 	Bullet* next;
 };
 
+struct Cart {
+	float t = 0.0;
+	float pos[3] = { 0,0,0 };
+	int nowline = 0;
+	GLfloat identity[16] = { 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1 };
+};
+
+struct Snow {
+	GLint x = 0;
+	GLint y = 0;
+	GLfloat height = 0.0;
+	GLfloat speed = 0.0;
+	Snow* next;
+};
 
 class CRun_time_Framework {
 private:
@@ -62,11 +78,22 @@ private:
 	bool picked[10];
 	GLfloat pick_tmp[3];
 
+	GLfloat Scroll[5];
+	GLuint texture[6];		//텍스처 이름
+	GLubyte *pBytes;				// 데이터를 가리킬 포인터
+	BITMAPINFO *info;				// 비트맵 헤더 저장할 변수
+
 	bool camera_is_front;
 	int nowCamera;
+	
+	int weather;
+	Snow* snow;
+	float snowstack;
 
 	bool combined;
 	float comb_t;
+
+	int tunnel;
 
 	GLUquadricObj *qobj = gluNewQuadric();
 
@@ -78,6 +105,9 @@ private:
 	Robot Gridman[2];
 	Bullet* bullets;
 	RECT object[10];
+	RECT pillar[10];
+	Cart cart[3];
+	GLfloat cart_nextP[3];
 
 	GLfloat Prevtime = 0;
 	GLfloat current_time;
@@ -114,9 +144,20 @@ public:
 	GLvoid draw_bullets();
 	GLvoid delete_bullets();
 	GLvoid draw_points();
+	GLvoid draw_pillars();
 	GLvoid draw_rails();
+	GLvoid draw_carts();
+	GLvoid update_carts();
+	GLvoid Make_Snow();
+	GLvoid UpdateSnow();
+	GLvoid Draw_Snow();
+	GLvoid Delete_Snow();
 	float calc_Bezier(float, float, float, float);
 	bool collide(RECT, RECT);
+	GLubyte * LoadDIBitmap(const char *filename, BITMAPINFO **info);
+	GLvoid set_texture();
+	GLvoid Skybox();
+	GLvoid Pilar();
 
 	// 콜백 함수
 	static GLvoid Resize(int w, int h);
