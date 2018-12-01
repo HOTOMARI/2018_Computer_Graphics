@@ -49,7 +49,6 @@ private:
 	bool normal;
 
 	GLUquadricObj *qobj = gluNewQuadric();
-	
 
 	GLfloat identity[16];
 	GLfloat WhiteLight[4] = { 1.0, 1.0, 1.0, 1.0 };
