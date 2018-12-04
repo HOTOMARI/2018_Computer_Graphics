@@ -109,11 +109,11 @@ GLvoid CRun_time_Framework::KeyboardDown(unsigned char key, int x, int y) {
 		break;
 	case 'b':
 	case 'B':
-		normal = (normal + 1) % 2;
+		set_texture();
 		break;
 	case 'z':
 	case 'Z':
-		move_light = (move_light + 1) % 2;
+		moon_degree += 10;
 		break;
 	case 'x':
 		if (light[0].AmbientColor[1] < 1.0) {
@@ -319,7 +319,7 @@ GLvoid CRun_time_Framework::Init() {
 
 	srand(time(NULL));
 	myself = this;
-	glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
+	//glutSetKeyRepeat(GLUT_KEY_REPEAT_OFF);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH); // 디스플레이 모드 설정
 	glutInitWindowPosition(100, 100); // 윈도우의 위치지정
 	glutInitWindowSize(800, 600); // 윈도우의 크기 지정
@@ -356,7 +356,7 @@ GLvoid CRun_time_Framework::Update() {
 			
 		}
 
-		moon_degree += 0.1*(current_time - Prevtime);
+		//moon_degree += 0.1*(current_time - Prevtime);
 
 		Prevtime = current_time;
 		current_frame = 0;
